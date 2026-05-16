@@ -1216,5 +1216,6 @@
     <string name="attachment_choice_location">Asukoht</string>
     <string name="attachment_choice_camera">Kaamera</string>
     <string name="attachment_choice_video">Video</string>
-    <string name="attachment_choice_recording">Häälsõnum</string>
+    <string name="attachment_choice_recording">Salvestis</string>
+    <string name="start_group_chat">Alusta vestlusrühma</string>
 </resources>
