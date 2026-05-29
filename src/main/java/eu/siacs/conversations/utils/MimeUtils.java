@@ -125,6 +125,8 @@ public final class MimeUtils {
         add("application/vnd.openxmlformats-officedocument.presentationml.presentation", "pptx");
         add("application/vnd.openxmlformats-officedocument.presentationml.template", "potx");
         add("application/vnd.openxmlformats-officedocument.presentationml.slideshow", "ppsx");
+        add("application/vnd.recordare.musicxml", "mxl");
+        add("application/vnd.recordare.musicxml+xml", "musicxml");
         add("application/vnd.rim.cod", "cod");
         add("application/vnd.smaf", "mmf");
         add("application/vnd.stardivision.calc", "sdc");

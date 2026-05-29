@@ -95,6 +95,10 @@ public class MediaAdapter extends ListAdapter<Attachment, MediaAdapter.MediaView
                     .addAll(SLIDE_SHOW_MIMES)
                     .build();
 
+    public static final Collection<String> SHEET_MUSIC =
+            Arrays.asList(
+                    "application/vnd.recordare.musicxml", "application/vnd.recordare.musicxml+xml");
+
     private static final List<String> ARCHIVE_MIMES =
             Arrays.asList(
                     "application/x-7z-compressed",
@@ -186,6 +190,9 @@ public class MediaAdapter extends ListAdapter<Attachment, MediaAdapter.MediaView
         } else if (Arrays.asList("application/x-pcapng", "application/vnd.tcpdump.pcap")
                 .contains(mime)) {
             return R.drawable.ic_lan_24dp;
+        } else if (SHEET_MUSIC.contains(mime)) {
+            return R.drawable.ic_audio_file_48dp;
+
         } else {
             return R.drawable.ic_help_center_48dp;
         }

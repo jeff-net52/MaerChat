@@ -21,6 +21,7 @@ import eu.siacs.conversations.entities.Message;
 import eu.siacs.conversations.entities.MucOptions;
 import eu.siacs.conversations.entities.RtpSessionStatus;
 import eu.siacs.conversations.entities.Transferable;
+import eu.siacs.conversations.ui.adapter.MediaAdapter;
 import eu.siacs.conversations.ui.util.QuoteHelper;
 import eu.siacs.conversations.worker.ExportBackupWorker;
 import eu.siacs.conversations.xmpp.Jid;
@@ -425,6 +426,8 @@ public class UIHelper {
             return context.getString(R.string.pdf_document);
         } else if (MimeUtils.WORD_DOCUMENT_MIMES.contains(mime)) {
             return context.getString(R.string.word_document);
+        } else if (MediaAdapter.SHEET_MUSIC.contains(mime)) {
+            return context.getString(R.string.sheet_music);
         } else if (mime.equals("application/vnd.android.package-archive")) {
             return context.getString(R.string.apk);
         } else if (mime.equals(ExportBackupWorker.MIME_TYPE)) {
