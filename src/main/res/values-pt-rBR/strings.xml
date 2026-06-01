@@ -80,7 +80,6 @@
     <string name="clear_conversation_history">Limpar histórico da conversa</string>
     <string name="clear_histor_msg">Deseja apagar todas as mensagens desta conversa?\n\n<b>Atenção:</b> Isto não afetará mensagens armazenadas em outros dispositivos ou servidores.</string>
     <string name="delete_file_dialog">Apagar arquivo</string>
-    <string name="delete_file_dialog_msg">Tem certeza de que deseja apagar este arquivo? \n \n<b>Atenção:</b> Isto não apagará cópias deste arquivo armazenadas em outros dispositivos ou servidores.</string>
     <string name="choose_presence">Selecionar dispositivo</string>
     <string name="send_unencrypted_message">Enviar mensagem sem criptografia</string>
     <string name="send_message">Enviar mensagem</string>

@@ -82,9 +82,6 @@
 \n
 \n<b>Atenție:</b> Această acțiune nu va afecta mesajele aflate pe alte dispozitive sau servere.</string>
     <string name="delete_file_dialog">Șterge fișierul</string>
-    <string name="delete_file_dialog_msg">Sigur doriți să ștergeți acest fișier\?
-\n
-\n<b>Atenție:</b> Această acțiune nu va șterge copiile acestui fișier care sunt stocate pe alte dispozitive sau servere. </string>
     <string name="choose_presence">Alege dispozitiv</string>
     <string name="send_unencrypted_message">Trimite mesaj necriptat</string>
     <string name="send_message">Trimite mesaj</string>

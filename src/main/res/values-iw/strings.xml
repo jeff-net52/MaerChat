@@ -325,7 +325,6 @@
     <string name="openpgp_error">OpenKeychain יצר שגיאה.</string>
     <string name="pref_prevent_screenshots_summary">הסתר את תוכן האפליקציה במחליף האפליקציות וחסום צילומי מסך</string>
     <string name="openkeychain_required_long"><![CDATA[%1$s משתמש ב-<b>OpenKeychain</b> כדי להצפין ולפענח הודעות ולנהל את המפתחות הציבוריים שלך.<br><br>הוא מורשה תחת GPLv3+ וזמין ב-F-Droid וב-Google Play.<br><br><small>(אנא הפעל מחדש את %1$s לאחר מכן.)</small>]]></string>
-    <string name="delete_file_dialog_msg">האם אתה בטוח שברצונך למחוק את הקובץ הזה?\n\n<b>אזהרה:</b> פעולה זו לא תמחק עותקים של קובץ זה המאוחסנים במכשירים או שרתים אחרים.</string>
     <string name="pref_call_ringtone_summary">רינגטון לשיחות נכנסות</string>
     <string name="pref_notification_grace_period">תקופת החסד</string>
     <string name="account_status_regis_not_sup">הרישום אינו נתמך על ידי השרת</string>

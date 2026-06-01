@@ -82,9 +82,6 @@
 \n 
 \n<b>Pozōr:</b> To niy wpływo na wiadōmości trzimane na inkszych maszinach abo serwerach.</string>
     <string name="delete_file_dialog">Wymaż zbiōr</string>
-    <string name="delete_file_dialog_msg">Na zicher wymazać tyn zbiōr\?
-\n
-\n<b>Pozōr:</b> To niy wpływo na kopije zbioru trzimane na inkszych maszinach abo serwerach. </string>
     <string name="choose_presence">Ôbier maszina</string>
     <string name="send_unencrypted_message">Wyślij wiadōmość bez szyfrowanio</string>
     <string name="send_message">Wyślij wiadōmość</string>

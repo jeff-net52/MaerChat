@@ -82,9 +82,6 @@
 \n
 \n<b>Varování</b>Toto neovlivní zprávy uložené na jiných zařízeních či serverech.</string>
     <string name="delete_file_dialog">Smazat soubor</string>
-    <string name="delete_file_dialog_msg">Opravdu chcete smazat tento soubor\?
-\n
-\n<b>Varování</b>Toto neovlivní kopie uložené na jiných zařízeních či serverech. </string>
     <string name="choose_presence">Vybrat přístroj</string>
     <string name="send_unencrypted_message">Odeslat nešifrovanou zprávu</string>
     <string name="send_message">Odeslat zprávu</string>

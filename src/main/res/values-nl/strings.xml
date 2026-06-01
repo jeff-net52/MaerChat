@@ -78,9 +78,6 @@
     <string name="action_clear_history">Geschiedenis wissen</string>
     <string name="clear_conversation_history">Gespreksgeschiedenis wissen</string>
     <string name="delete_file_dialog">Bestand verwijderen</string>
-    <string name="delete_file_dialog_msg">Weet je zeker dat je dit bestand wil verwijderen?
-\n
-\n<b>Waarschuwing:</b> Dit zal kopieën van dit bericht die opgeslagen zijn op andere apparaten of servers niet verwijderen. </string>
     <string name="choose_presence">Apparaat kiezen</string>
     <string name="send_unencrypted_message">Verstuur onversleuteld bericht</string>
     <string name="send_message">Verstuur bericht</string>

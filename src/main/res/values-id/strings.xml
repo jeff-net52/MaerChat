@@ -78,7 +78,6 @@
 \n
 \n<b>Peringatan:</b> Ini tidak akan mempengaruhi pesan yang tersimpan di perangkat atau server lain.</string>
     <string name="delete_file_dialog">Hapus file</string>
-    <string name="delete_file_dialog_msg">Anda yakin ingin menghapus file ini?\n\n<b>Peringatan:</b> Ini tidak akan menghapus salinan dari file ini yang disimpan di perangkat atau server lain.</string>
     <string name="choose_presence">Pilih perangkat</string>
     <string name="send_unencrypted_message">Kirim pesan tak-terenkripsi</string>
     <string name="send_message">Kirim pesan</string>

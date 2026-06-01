@@ -430,9 +430,6 @@
     <string name="title_pref_quiet_hours_start_time">زمان آغاز</string>
     <string name="private_message_to">به %s</string>
     <string name="rtp_state_reconnecting">دوباره وصل می‌شود</string>
-    <string name="delete_file_dialog_msg">آیا می‌خواهید این پرونده را پاک کنید؟
-\n
-\n<b>هشدار:</b> با این کار نسخه‌های این پرونده که روی دستگاه‌ها یا سرورهای دیگر هستند پاک نمی‌شود. </string>
     <string name="outgoing_call_timestamp">تماس خروجی · %s</string>
     <string name="pref_up_push_server_title">سرور Push</string>
     <plurals name="n_missed_calls_from_x">

@@ -191,7 +191,6 @@
     <string name="mgmt_account_publish_avatar">Objavi profilnu sliku</string>
     <string name="server_info_unavailable">nedostupno</string>
     <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s +%2$d drugih su pročitali do ovdje</string>
-    <string name="delete_file_dialog_msg">Jesi li siguran/sigurna da želiš obrisati ovu datoteku?\n\n<b>Upozorenje:</b> Kopije ove datoteke spremljene na drugim uređajima ili serverima neće biti obrisane.</string>
     <string name="mgmt_account_delete_confirm_text">Jesi li siguran/sigurna da želiš obrisati račun? Brisanje računa briše svu povijest razgovora</string>
     <string name="channel_full_jid_example">kanal@konferencija.primjer.hr/nadimak</string>
     <string name="notification_restored_backup_subtitle">Ne zaboravi aktivirati račun.</string>

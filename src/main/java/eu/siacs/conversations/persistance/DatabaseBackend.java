@@ -17,6 +17,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.crypto.axolotl.AxolotlService;
 import eu.siacs.conversations.crypto.axolotl.FingerprintStatus;
@@ -29,6 +31,7 @@ import eu.siacs.conversations.entities.Message;
 import eu.siacs.conversations.entities.PresenceTemplate;
 import eu.siacs.conversations.services.QuickConversationsService;
 import eu.siacs.conversations.services.ShortcutService;
+import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.CryptoHelper;
 import eu.siacs.conversations.utils.CursorUtils;
 import eu.siacs.conversations.utils.FtsUtils;
@@ -1467,6 +1470,11 @@ public class DatabaseBackend extends SQLiteOpenHelper {
             }
         }
         return builder.build();
+    }
+
+    public ListenableFuture<List<String>> getMessagesWithFileFuture(final File file) {
+        return Futures.submit(
+                () -> getMessagesWithFile(file), XmppConnectionService.DATABASE_READER);
     }
 
     private void markFileAsDeleted(final List<String> uuids) {

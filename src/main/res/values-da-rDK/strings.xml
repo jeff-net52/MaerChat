@@ -79,9 +79,6 @@
     <string name="clear_conversation_history">Ryd chat historik</string>
     <string name="clear_histor_msg">Vil du slette alle beskeder i denne chat? \n \n<b>Advarsel:</b> Dette vil ikke påvirke beskeder gemt på andre enheder eller servere.</string>
     <string name="delete_file_dialog">Slet fil</string>
-    <string name="delete_file_dialog_msg">Er du sikker på, at du vil slette denne fil\?
-\n
-\n<b>Advarsel:</b> Dette sletter ikke kopier af denne fil, der er gemt på andre enheder eller servere. </string>
     <string name="choose_presence">Vælg enhed</string>
     <string name="send_unencrypted_message">Send ukrypteret besked</string>
     <string name="send_message">Send besked</string>

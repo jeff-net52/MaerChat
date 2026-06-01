@@ -78,9 +78,6 @@
     <string name="clear_conversation_history">Esborra l\'historial del xat</string>
     <string name="clear_histor_msg">Vols suprimir tots els missatges d\'aquest xat?\n\n<b>Avís:</b> Això no afectarà els missatges emmagatzemats en altres dispositius o servidors.</string>
     <string name="delete_file_dialog">Eliminar fitxer</string>
-    <string name="delete_file_dialog_msg">Estàs segur que vols esborrar aquest fitxer\?
-\n
-\n<b>Advertiment:</b> Això no eliminarà les còpies d\'aquest fitxer que estiguin emmagatzemades en altres dispositius o servidors. </string>
     <string name="choose_presence">Tria el dispositiu</string>
     <string name="send_unencrypted_message">Envia un missatge de text clar</string>
     <string name="send_message">Envia un missatge</string>

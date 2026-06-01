@@ -79,9 +79,6 @@
     <string name="clear_conversation_history">Limpar historial da charla</string>
     <string name="clear_histor_msg">Queres eliminar todas as mensaxes desta conversa?\n\n<b>Aviso:</b> Isto non lle afecta ás mensaxes gardadas noutros dispositivos ou servidores.</string>
     <string name="delete_file_dialog">Eliminar ficheiro</string>
-    <string name="delete_file_dialog_msg">Tes a certeza de querer eliminar este ficheiro\?
-\n
-\n<b>Aviso:</b> Esto non eliminará as copias de este ficheiro que están gardadas noutros dispositivos ou servidores. </string>
     <string name="choose_presence">Escoller dispositivo</string>
     <string name="send_unencrypted_message">Enviar mensaxe sen cifrar</string>
     <string name="send_message">Enviar mensaxe</string>

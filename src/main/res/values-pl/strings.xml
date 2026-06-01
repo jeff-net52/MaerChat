@@ -83,9 +83,6 @@
 \n
 \n<b>Ostrzeżenie:</b> To nie ma wpływu na wiadomości składowane na innych urządzeniach lub serwerach.</string>
     <string name="delete_file_dialog">Usuń plik</string>
-    <string name="delete_file_dialog_msg">Czy na pewno usunąć ten plik\?
-\n
-\n<b>Uwaga:</b> Działanie nie wpływa na kopie pliku przechowywane na innych urządzeniach lub serwerach. </string>
     <string name="choose_presence">Wybierz urządzenie</string>
     <string name="send_unencrypted_message">Wyślij wiadomość czystym tekstem</string>
     <string name="send_message">Wyślij wiadomość</string>

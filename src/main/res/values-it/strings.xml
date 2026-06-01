@@ -82,7 +82,6 @@
 \n
 \n<b>Attenzione:</b> ciò non influenzerà i messaggi salvati su altri dispositivi o server.</string>
     <string name="delete_file_dialog">Elimina file</string>
-    <string name="delete_file_dialog_msg">Sei sicuro di voler eliminare questo file?\n\n<b>Attenzione:</b> non verranno eliminate copie di questo file memorizzate in altri dispositivi o server. </string>
     <string name="choose_presence">Scegli un dispositivo</string>
     <string name="send_unencrypted_message">Invia messaggio in chiaro</string>
     <string name="send_message">Invia messaggio</string>

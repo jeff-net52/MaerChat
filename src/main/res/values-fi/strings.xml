@@ -80,9 +80,6 @@
 \n
 \n<b>Varoitus:</b> Muilla laitteilla tai palvelimilla säilytettyjä kopioita ei poisteta.</string>
     <string name="delete_file_dialog">Poista tiedosto</string>
-    <string name="delete_file_dialog_msg">Haluatko varmasti poistaa tämän tiedoston\?
-\n
-\n<b>Varoitus:</b> Muilla laitteilla tai palvelimilla olevia kopioita ei poisteta. </string>
     <string name="choose_presence">Valitse laite</string>
     <string name="send_unencrypted_message">Lähetä selkeä tekstiviesti</string>
     <string name="send_message">Lähetä viesti</string>

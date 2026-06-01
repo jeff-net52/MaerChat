@@ -80,9 +80,6 @@
 \n
 \n<b>Cảnh báo:</b> Việc này sẽ không ảnh hưởng đến các tin nhắn được lưu trữ trên các thiết bị hoặc máy chủ khác.</string>
     <string name="delete_file_dialog">Xoá tệp</string>
-    <string name="delete_file_dialog_msg">Bạn có chắc bạn muốn xoá tệp này không\?
-\n
-\n<b>Cảnh báo:</b> Việc này sẽ không xoá các bản sao được lưu trữ trên các thiết bị hoặc máy chủ khác của tệp này. </string>
     <string name="choose_presence">Chọn thiết bị</string>
     <string name="send_unencrypted_message">Gửi tin nhắn không mã hoá</string>
     <string name="send_message">Gửi tin nhắn</string>

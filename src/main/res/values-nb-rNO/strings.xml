@@ -457,7 +457,6 @@
     <string name="preparing_images">Gjør klar til å sende bildene</string>
     <string name="clear_histor_msg">Ønsker du å slette alle meldingene i denne samtalen?\n\n<b>OBS!</b> Dette vil ikke påvirke meldinger som er lagret på andre enheter eller servere.</string>
     <string name="delete_file_dialog">Slett filen</string>
-    <string name="delete_file_dialog_msg">Er du sikker på at du vil slette denne filen?\n\n<b>OBS!</b> Dette vil ikke slette andre kopier av filen, lagret på andre enheter eller servere.</string>
     <string name="archive_this_chat">Slett samtalen etterpå</string>
     <string name="send_encrypted_message">Send kryptert melding</string>
     <string name="your_nick_has_been_changed">Kallenavnet ditt har blitt endret</string>

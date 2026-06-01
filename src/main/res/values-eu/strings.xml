@@ -65,7 +65,6 @@
     <string name="action_clear_history">Historia garbitu</string>
     <string name="clear_conversation_history">Elkarrizketa historia garbitu</string>
     <string name="delete_file_dialog">Fitxategia ezabatu</string>
-    <string name="delete_file_dialog_msg">Fitxategi hau ezabatu nahi al duzu?\n\n<b>Abisua:</b> Honek ez du beste gailu edo zerbitzarietan gordetako fitxategi honen kopiak ezabatuko.</string>
     <string name="choose_presence">Gailua aukeratu</string>
     <string name="send_unencrypted_message">Enkriptatu gabeko mezua bidali</string>
     <string name="send_message">Mezua bidali</string>

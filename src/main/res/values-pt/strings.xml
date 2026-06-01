@@ -436,7 +436,6 @@
     <string name="account_status_stream_error">Erro de stream</string>
     <string name="account_status_stream_opening_error">Erro na abertura da stream</string>
     <string name="openpgp_has_been_published">Chave pública OpenPGP publicada.</string>
-    <string name="delete_file_dialog_msg">Tem a certeza que quer apagar este ficheiro?\n\n<b>Aviso:</b> Isto não irá apagar cópias deste ficheiro que estão guardadas noutros dispositivos ou servidores.</string>
     <string name="preparing_image">Preparando para enviar a imagem</string>
     <string name="your_nick_has_been_changed">O seu nickname foi alterado</string>
     <string name="contacts_have_no_pgp_keys">Não foi possível encriptar a sua mensagem porque os contactos não estão a anunciar a sua chave pública.\n\n<small>Por favor peça-lhes para configurarem o OpenPGP.</small></string>

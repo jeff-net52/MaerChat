@@ -81,9 +81,6 @@
 \n 
 \n<b>Varning:</b> Det här påverkar inte meddelanden som finns lagrade på andra enheter eller servrar.</string>
     <string name="delete_file_dialog">Ta bort fil</string>
-    <string name="delete_file_dialog_msg">Är du säker på att du vill ta bort den här filen\?
-\n
-\n<b>Varning:</b> Den här åtgärden kommer inte att ta bort kopior av den här filen som finns lagrad på andra enheter eller servrar. </string>
     <string name="choose_presence">Välj enhet</string>
     <string name="send_unencrypted_message">Skicka ett meddelande i klartext</string>
     <string name="send_message">Skicka meddelande</string>

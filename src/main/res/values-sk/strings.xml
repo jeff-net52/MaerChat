@@ -82,7 +82,6 @@
 \n
 \n<b>Upozornenie:</b>Nebude to mať vplyv na správy uložené na ostatných zariadeniach alebo serveroch.</string>
     <string name="delete_file_dialog">Zmazať súbor</string>
-    <string name="delete_file_dialog_msg">Ste si istý, že chcete tento súbor zmazať?\n\n<b>Upozornenie:</b>Nevymažú sa kópie súborov, ktoré sú uložené na ostatných zariadeniach alebo serveroch.</string>
     <string name="choose_presence">Zvoliť zariadenie</string>
     <string name="send_unencrypted_message">Poslať nezašifrovanú správu</string>
     <string name="send_message">Poslať správu</string>

@@ -81,7 +81,6 @@
 \n
 \n<b>Προσοχή:</b> Αυτή η ενέργεια δεν θα επηρεάσει μηνύματα που είναι αποθηκευμένα σε άλλες συσκευές ή εξυπηρετητές.</string>
     <string name="delete_file_dialog">Διαγραφή αρχείου</string>
-    <string name="delete_file_dialog_msg">Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το αρχείο;\n\n<b>Προειδοποίηση:</b> Αυτό δεν θα διαγράψει τα αντίγραφα αυτού του αρχείου που είναι αποθηκευμένα σε άλλες συσκευές ή διακομιστές.</string>
     <string name="choose_presence">Επιλογή συσκευής</string>
     <string name="send_unencrypted_message">Αποστολή μη κρυπτογραφημένου μηνύματος</string>
     <string name="send_message">Αποστολή μηνύματος</string>

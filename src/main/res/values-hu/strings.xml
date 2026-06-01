@@ -81,7 +81,6 @@
 \n
 \n<b>Figyelmeztetés:</b> Ez nem fogja érinteni a más eszközökön vagy kiszolgálókon tárolt üzeneteket.</string>
     <string name="delete_file_dialog">Fájl törlése</string>
-    <string name="delete_file_dialog_msg">Biztosan törölni szeretné ezt a fájlt?\n\n<b>Figyelmeztetés:</b> Ez nem fogja törölni a fájlnak azon másolatait, amelyek más eszközökön vagy kiszolgálókon vannak tárolva.</string>
     <string name="choose_presence">Eszköz kiválasztása</string>
     <string name="send_unencrypted_message">Titkosítatlan üzenet küldése</string>
     <string name="send_message">Üzenet küldése</string>

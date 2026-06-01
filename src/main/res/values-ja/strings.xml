@@ -80,7 +80,6 @@
 \n
 \n<b>警告:</b> 他のデバイスやサーバーに保存されているメッセージのコピーには影響しません。</string>
     <string name="delete_file_dialog">ファイルを削除</string>
-    <string name="delete_file_dialog_msg">このファイルを削除してもよろしいですか?\n\n<b>警告:</b> これは、他のデバイスやサーバーに保存されているファイルのコピーは削除しません。</string>
     <string name="choose_presence">デバイスを選択</string>
     <string name="send_unencrypted_message">暗号化されないメッセージを送信</string>
     <string name="send_message">メッセージを送信</string>

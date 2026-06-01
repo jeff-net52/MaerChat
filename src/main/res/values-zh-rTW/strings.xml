@@ -906,9 +906,6 @@
     <string name="data_saver_enabled_explained">您的作業系統正在限制 %1$s 在背景存取網際網路。若要接收新訊息的通知，您應該允許 %1$s 在「數據節省」開啟時無限制地存取。
 \n在可能的狀況下，%1$s 仍會努力地節省數據。</string>
     <string name="pref_broadcast_last_activity">最後在線</string>
-    <string name="delete_file_dialog_msg">您確定要刪除此檔案嗎？
-\n
-\n<b>警告：</b>這將不會影響儲存在其他裝置或伺服器上的檔案複本。 </string>
     <string name="contact_has_no_pgp_key">無法加密您的訊息，因為您的聯絡人並未宣布他們的公開金鑰。
 \n
 \n<small>請要求您的聯絡人設定 OpenPGP。</small></string>

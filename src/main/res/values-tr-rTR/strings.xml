@@ -81,7 +81,6 @@
 \n 
 \n<b>Uyarı:</b> Bu eylem, diğer aygıt ve sunucularda kayıtlı mesajları etkilemeyecektir.</string>
     <string name="delete_file_dialog">Dosyayı sil</string>
-    <string name="delete_file_dialog_msg">Bu dosyayı silmek istediğinizden emin misiniz? \n\n<b>Uyarı:</b> Bu eylem, bu dosyanın diğer aygıt ve sunucularda kayıtlı kopyalarını silmeyecektir.</string>
     <string name="choose_presence">Aygıt seç</string>
     <string name="send_unencrypted_message">Açık metin olarak ileti gönder</string>
     <string name="send_message">Mesajı gönder</string>

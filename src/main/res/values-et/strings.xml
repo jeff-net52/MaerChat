@@ -80,9 +80,6 @@
 \n
 \n<b>Hoiatus:</b> See ei mõjuta muudes seadmetes ja serverites salvestatud samade sõnumite koopiaid.</string>
     <string name="delete_file_dialog">Kustuta fail</string>
-    <string name="delete_file_dialog_msg">Kas sa soovid selle faili?
-\n
-\n<b>Hoiatus:</b> See ei mõjuta muudes seadmetes ja serverites salvestatud sama faili koopiaid. </string>
     <string name="archive_this_chat">Kustuta vestus hiljem</string>
     <string name="choose_presence">Vali seade</string>
     <string name="send_unencrypted_message">Saada sõnum krüptimata tekstina</string>

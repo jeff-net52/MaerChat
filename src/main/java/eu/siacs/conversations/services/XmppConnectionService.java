@@ -208,7 +208,7 @@ public class XmppConnectionService extends Service {
             new SerialSingleThreadExecutor("VideoCompression");
     private final SerialSingleThreadExecutor mDatabaseWriterExecutor =
             new SerialSingleThreadExecutor("DatabaseWriter");
-    private final SerialSingleThreadExecutor mDatabaseReaderExecutor =
+    public static final SerialSingleThreadExecutor DATABASE_READER =
             new SerialSingleThreadExecutor("DatabaseReader");
     private final SerialSingleThreadExecutor mNotificationExecutor =
             new SerialSingleThreadExecutor("NotificationExecutor");
@@ -1559,8 +1559,7 @@ public class XmppConnectionService extends Service {
     private ListenableFuture<Set<String>> getExistingUrlsForPath(
             final String account, final String path) {
         return Futures.submit(
-                () -> databaseBackend.getExistingUrlsForPath(account, path),
-                mDatabaseReaderExecutor);
+                () -> databaseBackend.getExistingUrlsForPath(account, path), DATABASE_READER);
     }
 
     public ListenableFuture<Void> encryptIfNeededAndSend(final Message message) {
@@ -1882,7 +1881,7 @@ public class XmppConnectionService extends Service {
                                 "finished restoring messages in " + diffMessageRestore + "ms");
                         updateConversationUi();
                     };
-            mDatabaseReaderExecutor.execute(
+            DATABASE_READER.execute(
                     runnable); // will contain one write command (expiry) but that's fine
         }
     }
@@ -2092,7 +2091,7 @@ public class XmppConnectionService extends Service {
                         }
                     }
                 };
-        mDatabaseReaderExecutor.execute(runnable);
+        DATABASE_READER.execute(runnable);
     }
 
     public List<Account> getAccounts() {
@@ -2189,7 +2188,7 @@ public class XmppConnectionService extends Service {
                 loadMessagesFromDb = false;
             }
             if (async) {
-                mDatabaseReaderExecutor.execute(
+                DATABASE_READER.execute(
                         () ->
                                 postProcessConversation(
                                         conversation, loadMessagesFromDb, joinAfterCreate, query));
@@ -2221,7 +2220,7 @@ public class XmppConnectionService extends Service {
         }
         existing.setAccount(account);
         final var loadMessagesFromDb = restoreFromArchive(existing);
-        mDatabaseReaderExecutor.execute(
+        DATABASE_READER.execute(
                 () ->
                         postProcessConversation(
                                 existing,

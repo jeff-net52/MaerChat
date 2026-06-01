@@ -81,9 +81,6 @@
 \n
 \n<b>Achtung:</b> Dies beeinflusst nicht Nachrichten, die auf anderen Geräten oder Servern gespeichert sind.</string>
     <string name="delete_file_dialog">Datei löschen</string>
-    <string name="delete_file_dialog_msg">Bist du sicher, dass du diese Datei löschen möchtest\?
-\n
-\n<b>Achtung:</b> Dies löscht keine Kopien dieser Datei, die auf anderen Geräten oder Servern gespeichert sind. </string>
     <string name="choose_presence">Gerät auswählen</string>
     <string name="send_unencrypted_message">Unverschlüsselt schreiben…</string>
     <string name="send_message">Nachricht senden</string>

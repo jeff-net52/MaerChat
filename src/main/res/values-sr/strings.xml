@@ -82,9 +82,6 @@
 \n
 \n<b>Упозорење:</b> Ово неће утицати на поруке смештене на осталим уређајима или серверима.</string>
     <string name="delete_file_dialog">Обриши фајл</string>
-    <string name="delete_file_dialog_msg">Да ли си сигуран/на да желиш да обришеш овај фајл?
-\n
-\n<b>Упозорење:</b> Ово неће утицати на копије овог фајла смештене на осталим уређајима или серверима. </string>
     <string name="choose_presence">Изабери уређај</string>
     <string name="send_unencrypted_message">Пошаљи нешифровану поруку</string>
     <string name="send_message">Пошаљи поруку</string>

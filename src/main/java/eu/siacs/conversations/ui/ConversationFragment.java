@@ -88,6 +88,7 @@ import eu.siacs.conversations.R;
 import eu.siacs.conversations.crypto.PgpEngine;
 import eu.siacs.conversations.crypto.axolotl.AxolotlService;
 import eu.siacs.conversations.crypto.axolotl.FingerprintStatus;
+import eu.siacs.conversations.databinding.DialogDeleteFileBinding;
 import eu.siacs.conversations.databinding.DialogModerationBinding;
 import eu.siacs.conversations.databinding.FragmentConversationBinding;
 import eu.siacs.conversations.databinding.ItemMediaChoiceBinding;
@@ -102,6 +103,7 @@ import eu.siacs.conversations.entities.ReadByMarker;
 import eu.siacs.conversations.entities.Transferable;
 import eu.siacs.conversations.entities.TransferablePlaceholder;
 import eu.siacs.conversations.http.HttpDownloadConnection;
+import eu.siacs.conversations.persistance.DatabaseBackend;
 import eu.siacs.conversations.persistance.FileBackend;
 import eu.siacs.conversations.services.CallIntegrationConnectionService;
 import eu.siacs.conversations.services.QuickConversationsService;
@@ -1702,7 +1704,7 @@ public class ConversationFragment extends XmppFragment
                 yield true;
             }
             case R.id.delete_file -> {
-                deleteFile(selectedMessage);
+                deleteFileDialog(selectedMessage);
                 yield true;
             }
             case R.id.save_file -> {
@@ -2408,27 +2410,56 @@ public class ConversationFragment extends XmppFragment
         builder.create().show();
     }
 
-    private void deleteFile(final Message message) {
-        final MaterialAlertDialogBuilder builder =
-                new MaterialAlertDialogBuilder(requireActivity());
+    private void deleteFileDialog(final Message message) {
+        final var storageLocation = message.getRelativeFilePath();
+        if (storageLocation == null) {
+            return;
+        }
+        final var future =
+                DatabaseBackend.getInstance(requireContext())
+                        .getMessagesWithFileFuture(storageLocation.file());
+        Futures.addCallback(
+                future,
+                new FutureCallback<>() {
+                    @Override
+                    public void onSuccess(List<String> result) {
+                        deleteFileDialog(message, result.size() > 1);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Throwable t) {
+                        Log.e(Config.LOGTAG, "could not retrieve messages count", t);
+                        deleteFileDialog(message, false);
+                    }
+                },
+                ContextCompat.getMainExecutor(requireContext()));
+    }
+
+    private void deleteFileDialog(final Message message, final boolean shared) {
+        final DialogDeleteFileBinding binding =
+                DataBindingUtil.inflate(
+                        getLayoutInflater(), R.layout.dialog_delete_file, null, false);
+        binding.shared.setVisibility(shared ? View.VISIBLE : View.GONE);
+        final var builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setNegativeButton(R.string.cancel, null);
         builder.setTitle(R.string.delete_file_dialog);
-        builder.setMessage(R.string.delete_file_dialog_msg);
+        builder.setView(binding.getRoot());
         builder.setPositiveButton(
                 R.string.confirm,
                 (dialog, which) -> {
-                    if (requireXmppActivity()
-                            .xmppConnectionService
-                            .getFileBackend()
-                            .deleteFile(message)) {
-                        message.setDeleted(true);
-                        requireXmppActivity().xmppConnectionService.evictPreview(message.getUuid());
-                        requireXmppActivity().xmppConnectionService.updateMessage(message, false);
-                        requireConversationsActivity().onConversationsListItemUpdated();
-                        refresh();
-                    }
+                    deleteFile(message);
                 });
         builder.create().show();
+    }
+
+    private void deleteFile(final Message message) {
+        if (requireXmppActivity().xmppConnectionService.getFileBackend().deleteFile(message)) {
+            message.setDeleted(true);
+            requireXmppActivity().xmppConnectionService.evictPreview(message.getUuid());
+            requireXmppActivity().xmppConnectionService.updateMessage(message, false);
+            requireConversationsActivity().onConversationsListItemUpdated();
+            refresh();
+        }
     }
 
     private void saveFile(final Message message) {
