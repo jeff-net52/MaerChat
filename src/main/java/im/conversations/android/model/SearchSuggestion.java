@@ -7,6 +7,8 @@ public sealed interface SearchSuggestion {
 
     record Text(String text) implements SearchSuggestion {}
 
+    record Note() implements SearchSuggestion {}
+
     sealed interface Sortable extends SearchSuggestion {
         Jid address();
     }

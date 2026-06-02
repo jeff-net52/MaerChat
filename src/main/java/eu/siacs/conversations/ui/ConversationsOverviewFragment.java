@@ -487,14 +487,31 @@ public class ConversationsOverviewFragment extends XmppFragment {
         }
         final var service = requireXmppActivity().xmppConnectionService;
         final List<SearchSuggestion.Sortable> suggestions;
+        final boolean noteToSelf;
         if (service != null) {
-            final var provider = new SearchSuggestionProvider(service.getAccounts());
+            final var accounts = service.getAccounts();
+            final var matchInAccount =
+                    Iterables.any(
+                            accounts,
+                            a ->
+                                    a != null
+                                            && a.isEnabled()
+                                            && CharSequences.containsAll(
+                                                    a.getJid().asBareJid().toString(), search));
+            noteToSelf =
+                    matchInAccount
+                            || CharSequences.containsAll(getString(R.string.note_to_self), search);
+            final var provider = new SearchSuggestionProvider(accounts);
             suggestions = provider.suggest(search);
         } else {
+            noteToSelf = false;
             suggestions = Collections.emptyList();
         }
         // we do not want to spam the list with tens of results of searching for individual letters
         if (suggestions.size() <= 8 || search.length() >= 3) {
+            if (noteToSelf) {
+                builder.add(new SearchSuggestion.Note());
+            }
             builder.addAll(
                     new Ordering<SearchSuggestion.Sortable>() {
                         @Override
@@ -547,6 +564,22 @@ public class ConversationsOverviewFragment extends XmppFragment {
                                     contact.getAccount(), contact.getAddress(), false, true);
             this.hideSearchView();
             requireXmppActivity().switchToConversation(conversation);
+        } else if (suggestion instanceof SearchSuggestion.Note) {
+            this.hideSearchView();
+            final var picker = new AccountPickerDialog.Enabled(requireXmppActivity());
+            picker.pick(
+                    a -> {
+                        final var contact = a.getSelfContact();
+                        final var conversation =
+                                requireXmppActivity()
+                                        .xmppConnectionService
+                                        .findOrCreateConversation(
+                                                contact.getAccount(),
+                                                contact.getAddress(),
+                                                false,
+                                                true);
+                        requireXmppActivity().switchToConversation(conversation);
+                    });
         }
     }
 

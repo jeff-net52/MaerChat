@@ -90,6 +90,11 @@ public class SearchSuggestionAdapter
             holder.binding.searchSuggestion.setText(uri.asJid());
             holder.binding.address.setVisibility(ViewGroup.GONE);
             holder.binding.icon.setImageResource(R.drawable.ic_link_24dp);
+        } else if (searchSuggestion instanceof SearchSuggestion.Note) {
+            holder.binding.searchSuggestion.setMaxLines(1);
+            holder.binding.searchSuggestion.setText(R.string.note_to_self);
+            holder.binding.address.setVisibility(ViewGroup.GONE);
+            holder.binding.icon.setImageResource(R.drawable.ic_sticky_note_24dp);
         }
     }
 
