@@ -415,8 +415,6 @@
     </plurals>
     <string name="pref_quick_action_summary">\"Senden\"-Schaltfläche durch Schnell-Tasten ersetzen</string>
     <string name="pref_quick_action">Schnell-Tasten</string>
-    <string name="none">Keine</string>
-    <string name="recently_used">Zuletzt verwendet</string>
     <string name="choose_quick_action">Schnell-Taste auswählen</string>
     <string name="search_contacts">Kontakte durchsuchen</string>
     <string name="send_private_message">Private Nachricht senden</string>

@@ -376,8 +376,6 @@
         <item quantity="other">%d certificaten verwijderd</item>
     </plurals>
     <string name="pref_quick_action">Snelle actie</string>
-    <string name="none">Geen</string>
-    <string name="recently_used">Recent gebruikt</string>
     <string name="choose_quick_action">Snelle actie kiezen</string>
     <string name="search_contacts">Contacten zoeken</string>
     <string name="send_private_message">Privébericht sturen</string>

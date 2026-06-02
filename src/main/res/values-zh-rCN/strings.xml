@@ -411,8 +411,6 @@
     </plurals>
     <string name="pref_quick_action_summary">将“发送”按钮替换为快捷操作</string>
     <string name="pref_quick_action">快捷操作</string>
-    <string name="none">无</string>
-    <string name="recently_used">最近用过</string>
     <string name="choose_quick_action">选择快捷操作</string>
     <string name="search_contacts">搜索联系人</string>
     <string name="send_private_message">发送私信</string>

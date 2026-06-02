@@ -232,7 +232,6 @@
     <string name="conference_technical_problems">شما از این گفتگوی گروهی به خاطر دلایل فنی خارج شده‌اید</string>
     <string name="new_password">رمز تازه</string>
     <string name="search_contacts">جستجوی مخاطبان</string>
-    <string name="recently_used">تازگی به‌کاررفته</string>
     <string name="regenerate_omemo_key">ساختن دوبارهٔ کلید OMEMO</string>
     <string name="open_x_file">گشودن %s</string>
     <string name="download_x_file">بارگیری %s</string>
@@ -260,7 +259,6 @@
     <string name="only_one_call_at_a_time">تنها یک تماس در هر زمان ممکن است.</string>
     <string name="contacts_and_n_more_have_read_up_to_this_point">%1$s +%2$d تا این‌جا خوانده‌اند</string>
     <string name="server_info_blocking">XEP-0191: Blocking Command</string>
-    <string name="none">هیچ</string>
     <string name="error_out_of_memory">حافظه کم آمد. تصویر خیلی بزرگ است</string>
     <string name="title_activity_about_x">دربارهٔ %s</string>
     <string name="contact_already_exists">این مخاطب از قبل وجود دارد</string>

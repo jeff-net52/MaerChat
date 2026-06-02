@@ -391,8 +391,6 @@
     </plurals>
     <string name="pref_quick_action_summary">以快速動作取代「傳送」按鈕</string>
     <string name="pref_quick_action">快速動作</string>
-    <string name="none">無</string>
-    <string name="recently_used">最近使用</string>
     <string name="choose_quick_action">選擇快速動作</string>
     <string name="search_contacts">搜尋聯絡人</string>
     <string name="send_private_message">傳送私密訊息</string>

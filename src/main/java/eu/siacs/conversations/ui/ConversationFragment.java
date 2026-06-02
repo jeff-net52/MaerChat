@@ -181,32 +181,38 @@ public class ConversationFragment extends XmppFragment
                 MessageAdapter.OnContactPictureLongClicked,
                 MessageAdapter.OnContactPictureClicked {
 
-    private static final List<AttachmentChoice> ATTACHMENT_CHOICES =
+    public static final List<AttachmentChoice> ATTACHMENT_CHOICES =
             Arrays.asList(
                     new AttachmentChoice(
                             R.drawable.ic_image_24dp,
                             R.string.attachment_choice_gallery,
-                            AttachmentChoice.Type.PICTURE),
+                            AttachmentChoice.Type.PICTURE,
+                            true),
                     new AttachmentChoice(
                             R.drawable.ic_description_24dp,
                             R.string.attachment_choice_file,
-                            AttachmentChoice.Type.FILE),
+                            AttachmentChoice.Type.FILE,
+                            false),
                     new AttachmentChoice(
                             R.drawable.ic_location_pin_24dp,
                             R.string.attachment_choice_location,
-                            AttachmentChoice.Type.LOCATION),
+                            AttachmentChoice.Type.LOCATION,
+                            true),
                     new AttachmentChoice(
                             R.drawable.ic_camera_alt_24dp,
                             R.string.attachment_choice_camera,
-                            AttachmentChoice.Type.CAMERA),
+                            AttachmentChoice.Type.CAMERA,
+                            true),
                     new AttachmentChoice(
                             R.drawable.ic_videocam_24dp,
                             R.string.attachment_choice_video,
-                            AttachmentChoice.Type.VIDEO),
+                            AttachmentChoice.Type.VIDEO,
+                            false),
                     new AttachmentChoice(
                             R.drawable.ic_mic_24dp,
                             R.string.attachment_choice_recording,
-                            AttachmentChoice.Type.RECORDING));
+                            AttachmentChoice.Type.RECORDING,
+                            true));
 
     private static Instant ackModeration = Instant.MIN;
 
@@ -228,7 +234,6 @@ public class ConversationFragment extends XmppFragment
     public static final int ATTACHMENT_CHOICE_INVALID = 0x0306;
     public static final int ATTACHMENT_CHOICE_RECORD_VIDEO = 0x0307;
 
-    public static final String RECENTLY_USED_QUICK_ACTION = "recently_used_quick_action";
     public static final String STATE_CONVERSATION_UUID =
             ConversationFragment.class.getName() + ".uuid";
     public static final String STATE_SCROLL_POSITION =
@@ -1950,10 +1955,6 @@ public class ConversationFragment extends XmppFragment
     }
 
     public void attachFile(final int attachmentChoice) {
-        attachFile(attachmentChoice, true);
-    }
-
-    public void attachFile(final int attachmentChoice, final boolean updateRecentlyUsed) {
         if (attachmentChoice == ATTACHMENT_CHOICE_RECORD_VOICE) {
             if (!hasPermissions(
                     attachmentChoice,
@@ -1973,9 +1974,6 @@ public class ConversationFragment extends XmppFragment
             if (!hasPermissions(attachmentChoice, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 return;
             }
-        }
-        if (updateRecentlyUsed) {
-            storeRecentlyUsedQuickAction(attachmentChoice);
         }
         final int encryption = conversation.getNextEncryption();
         final int mode = conversation.getMode();
@@ -2037,20 +2035,6 @@ public class ConversationFragment extends XmppFragment
             }
         } else {
             invokeAttachFileIntent(attachmentChoice);
-        }
-    }
-
-    private void storeRecentlyUsedQuickAction(final int attachmentChoice) {
-        try {
-            requireXmppActivity()
-                    .getPreferences()
-                    .edit()
-                    .putString(
-                            RECENTLY_USED_QUICK_ACTION,
-                            SendButtonAction.of(attachmentChoice).toString())
-                    .apply();
-        } catch (IllegalArgumentException e) {
-            // just do not save
         }
     }
 
@@ -3042,7 +3026,7 @@ public class ConversationFragment extends XmppFragment
             }
         }
         if (ConversationsActivity.POST_ACTION_RECORD_VOICE.equals(postInitAction)) {
-            attachFile(ATTACHMENT_CHOICE_RECORD_VOICE, false);
+            attachFile(ATTACHMENT_CHOICE_RECORD_VOICE);
             return;
         }
         final Message message =

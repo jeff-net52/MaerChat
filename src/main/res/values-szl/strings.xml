@@ -427,8 +427,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Zastōmp knefel wysyłanio gibkōm akcyjōm</string>
     <string name="pref_quick_action">Gibko akcyjo</string>
-    <string name="none">Brak</string>
-    <string name="recently_used">Ôstatnio używano</string>
     <string name="choose_quick_action">Ôbier gibko akcyjo</string>
     <string name="search_contacts">Przeszukej kōntakty</string>
     <string name="send_private_message">Wyślij wiadōmość prywatno</string>

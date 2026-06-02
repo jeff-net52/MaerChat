@@ -409,8 +409,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Nahradit tlačítko odeslání rychlou akcí</string>
     <string name="pref_quick_action">Rychlá akce</string>
-    <string name="none">Žádná</string>
-    <string name="recently_used">Naposledy použitá</string>
     <string name="choose_quick_action">Vybrat rychlou akci</string>
     <string name="search_contacts">Prohledat kontakty</string>
     <string name="send_private_message">Poslat soukromou zprávu</string>

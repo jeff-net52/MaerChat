@@ -399,8 +399,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Korvaa \"Lähetä\"-nappi pikatoiminnolla</string>
     <string name="pref_quick_action">Pikatoiminto</string>
-    <string name="none">Ei mikään</string>
-    <string name="recently_used">Viimeksi käytetty</string>
     <string name="choose_quick_action">Valitse pikatoiminto</string>
     <string name="send_private_message">Lähetä yksityisviesti</string>
     <string name="user_has_left_conference">%1$s poistui ryhmäkeskustelusta</string>

@@ -602,8 +602,6 @@
     <string name="pref_input_options">Sisend</string>
     <string name="pref_enter_is_send">Sisestusklahv saadab</string>
     <string name="pref_enter_is_send_summary">Kasuta sisestusklahvi saatmiseks. Lisaks toimib saatmiseks ka Ctrl+Enter, ka siis kui see valik pole kasutusel.</string>
-    <string name="none">Määramata</string>
-    <string name="recently_used">Viimatikasutatu</string>
     <string name="choose_quick_action">Vali kiirtoiming</string>
     <string name="search_contacts">Otsi kontakte</string>
     <string name="pref_presence_settings">Kättesaadavus</string>

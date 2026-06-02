@@ -428,8 +428,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Заменить кнопку \"Отправить\" кнопкой быстрого действия</string>
     <string name="pref_quick_action">Быстрое действие</string>
-    <string name="none">Нет</string>
-    <string name="recently_used">Последнее выбранное</string>
     <string name="choose_quick_action">Выбрать быстрое действие</string>
     <string name="search_contacts">Поиск контактов</string>
     <string name="send_private_message">Отправить личное сообщение</string>

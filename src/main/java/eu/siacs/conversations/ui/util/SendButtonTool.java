@@ -39,6 +39,7 @@ import eu.siacs.conversations.AppSettings;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.ui.Activities;
+import im.conversations.android.model.AttachmentChoice;
 import im.conversations.android.xmpp.model.stanza.Presence;
 
 public class SendButtonTool {
@@ -64,7 +65,7 @@ public class SendButtonTool {
                 if (conference && c.getNextCounterpart() != null) {
                     return SendButtonAction.CANCEL;
                 } else {
-                    return new AppSettings(context).getQuickAction();
+                    return sendButtonAction(new AppSettings(context).getQuickAction());
                 }
             } else {
                 return SendButtonAction.TEXT;
@@ -81,6 +82,16 @@ public class SendButtonTool {
             case RECORD_VIDEO -> R.drawable.ic_videocam_24dp;
             case RECORD_VOICE -> R.drawable.ic_mic_24dp;
             case CANCEL -> R.drawable.ic_cancel_24dp;
+        };
+    }
+
+    private static SendButtonAction sendButtonAction(final AttachmentChoice.Type attachment) {
+        return switch (attachment) {
+            case CAMERA -> SendButtonAction.TAKE_PHOTO;
+            case PICTURE -> SendButtonAction.CHOOSE_PICTURE;
+            case LOCATION -> SendButtonAction.SEND_LOCATION;
+            case RECORDING -> SendButtonAction.RECORD_VOICE;
+            default -> SendButtonAction.TEXT;
         };
     }
 

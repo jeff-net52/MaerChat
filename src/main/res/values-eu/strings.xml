@@ -342,8 +342,6 @@
         <item quantity="other">%d ziurtagiri ezabatuak</item>
     </plurals>
     <string name="pref_quick_action">Ekintza azkarra</string>
-    <string name="none">Bat ere ez</string>
-    <string name="recently_used">Azkenengo aldiz erabilitakoa</string>
     <string name="choose_quick_action">Ekintza azkarra aukeratu</string>
     <string name="search_contacts">Kontaktuak bilatu</string>
     <string name="send_private_message">Mezu pribatua bidali</string>

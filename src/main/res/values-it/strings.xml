@@ -419,8 +419,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Sostituisci il tasto \"Invio\" con un\'azione rapida</string>
     <string name="pref_quick_action">Azione rapida</string>
-    <string name="none">Nessuno</string>
-    <string name="recently_used">Usati recentemente</string>
     <string name="choose_quick_action">Scegli azione rapida</string>
     <string name="search_contacts">Cerca contatti</string>
     <string name="send_private_message">Invia messaggio privato</string>

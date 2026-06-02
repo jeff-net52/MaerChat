@@ -403,8 +403,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Substituir el botó \"Enviar\" per una acció ràpida</string>
     <string name="pref_quick_action">Acció ràpida</string>
-    <string name="none">Cap</string>
-    <string name="recently_used">Ús més recent</string>
     <string name="choose_quick_action">Trieu una acció ràpida</string>
     <string name="search_contacts">Buscar contactes</string>
     <string name="send_private_message">Envia un missatge privat</string>

@@ -408,8 +408,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Αντικατάσταση του κουμπιού \"Αποστολή\" με γρήγορη ενέργεια</string>
     <string name="pref_quick_action">Γρήγορη Ενέργεια</string>
-    <string name="none">Κανένα</string>
-    <string name="recently_used">Πιο πρόσφατα χρησιμοποιημένη</string>
     <string name="choose_quick_action">Επιλογή γρήγορης ενέργειας</string>
     <string name="search_contacts">Αναζήτηση επαφών</string>
     <string name="send_private_message">Αποστολή ιδιωτικού μηνύματος</string>

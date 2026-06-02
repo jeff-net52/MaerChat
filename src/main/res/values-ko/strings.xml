@@ -265,8 +265,6 @@
         <item quantity="other">%d 인증서 삭제됨 </item>
     </plurals>
     <string name="pref_quick_action">빠른 동작</string>
-    <string name="none">없음</string>
-    <string name="recently_used">최근 사용된 항목</string>
     <string name="choose_quick_action">빠른 동작 선택</string>
     <string name="send_private_message">개인 메세지 전송</string>
     <string name="username">사용자 이름</string>

@@ -408,8 +408,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Thay thế nút \"Gửi\" bằng hành động nhanh</string>
     <string name="pref_quick_action">Thao tác nhanh</string>
-    <string name="none">Không có</string>
-    <string name="recently_used">Dùng gần đây nhất</string>
     <string name="choose_quick_action">Chọn thao tác nhanh</string>
     <string name="search_contacts">Tìm kiếm liên hệ</string>
     <string name="send_private_message">Gửi tin nhắn cá nhân</string>

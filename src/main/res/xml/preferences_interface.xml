@@ -42,10 +42,8 @@
         <ListPreference
             android:defaultValue="@string/quick_action"
             android:dialogTitle="@string/choose_quick_action"
-            android:entries="@array/quick_actions"
-            android:entryValues="@array/quick_action_values"
             android:icon="@drawable/ic_send_time_extension_24dp"
-            android:key="quick_action"
+            android:key="quick_action_button"
             android:summary="@string/pref_quick_action_summary"
             android:title="@string/pref_quick_action" />
         <SwitchPreferenceCompat

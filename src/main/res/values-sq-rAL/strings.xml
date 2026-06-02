@@ -328,8 +328,6 @@
     <string name="dialog_manage_certs_title">Hiqi dëshmitë</string>
     <string name="dialog_manage_certs_positivebutton">Fshije përzgjedhjen</string>
     <string name="pref_quick_action">Veprim i Shpejtë</string>
-    <string name="none">Asnjë</string>
-    <string name="recently_used">Më të përdorur së fundi</string>
     <string name="choose_quick_action">Zgjidhni veprim të shpejtë</string>
     <string name="search_contacts">Kërko te kontaktet</string>
     <string name="send_private_message">Dërgo mesazh privat</string>

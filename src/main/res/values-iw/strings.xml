@@ -230,8 +230,6 @@
         <item quantity="other">%d חתימות נמחקו</item>
     </plurals>
     <string name="pref_quick_action">פעולה מהירה</string>
-    <string name="none">כלום</string>
-    <string name="recently_used">לפי השימוש האחרון</string>
     <string name="choose_quick_action">בחר פעולה מהירה</string>
     <string name="send_private_message">שלח הודעה פרטית</string>
     <string name="username">שם משתמש</string>

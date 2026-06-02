@@ -3,14 +3,15 @@ package im.conversations.android.model;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;
 
-public record AttachmentChoice(@DrawableRes int icon, @StringRes int name, Type type) {
+public record AttachmentChoice(
+        @DrawableRes int icon, @StringRes int name, Type type, boolean quickAction) {
 
     public enum Type {
-        FILE,
-        PICTURE,
-        CAMERA,
-        VIDEO,
+        RECORDING,
         LOCATION,
-        RECORDING
+        CAMERA,
+        PICTURE,
+        FILE,
+        VIDEO
     }
 }

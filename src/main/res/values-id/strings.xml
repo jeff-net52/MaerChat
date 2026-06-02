@@ -339,8 +339,6 @@
         <item quantity="other">%d sertifikat dihapus</item>
     </plurals>
     <string name="pref_quick_action">Aksi Cepat</string>
-    <string name="none">Tak satupun</string>
-    <string name="recently_used">Maling sering digunakan</string>
     <string name="choose_quick_action">Pilih aksi cepat</string>
     <string name="send_private_message">Kirim pesan pribadi</string>
     <string name="username">Username</string>

@@ -411,8 +411,6 @@
     </plurals>
     <string name="pref_quick_action_summary">Erstat \"Send\" knap med hurtig handling</string>
     <string name="pref_quick_action">Hurtig handling</string>
-    <string name="none">Ingen</string>
-    <string name="recently_used">Senest brugt</string>
     <string name="choose_quick_action">Vælg hurtig handling</string>
     <string name="search_contacts">Find kontakter</string>
     <string name="send_private_message">Send privat besked</string>

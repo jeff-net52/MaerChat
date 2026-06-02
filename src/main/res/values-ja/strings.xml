@@ -412,8 +412,6 @@
     </plurals>
     <string name="pref_quick_action_summary">“送信”ボタンをクイックアクションで置き換えます</string>
     <string name="pref_quick_action">クイックアクション</string>
-    <string name="none">なし</string>
-    <string name="recently_used">最近使用した</string>
     <string name="choose_quick_action">クイックアクションを選択</string>
     <string name="search_contacts">連絡先を検索</string>
     <string name="send_private_message">非公開メッセージを送信</string>

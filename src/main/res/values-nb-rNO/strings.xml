@@ -292,8 +292,6 @@
         <item quantity="other">%d sertifikater slettet</item>
     </plurals>
     <string name="pref_quick_action">Hurtighandling</string>
-    <string name="none">Ingen</string>
-    <string name="recently_used">Senest brukt</string>
     <string name="choose_quick_action">Velg hurtighendelse</string>
     <string name="send_private_message">Send privat melding</string>
     <string name="username">Brukernavn</string>

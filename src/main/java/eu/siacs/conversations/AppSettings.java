@@ -16,11 +16,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import eu.siacs.conversations.persistance.FileBackend;
 import eu.siacs.conversations.services.QuickConversationsService;
-import eu.siacs.conversations.ui.ConversationFragment;
-import eu.siacs.conversations.ui.util.SendButtonAction;
 import eu.siacs.conversations.utils.Compatibility;
 import eu.siacs.conversations.utils.Random;
 import eu.siacs.conversations.xmpp.Jid;
+import im.conversations.android.model.AttachmentChoice;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -77,7 +76,7 @@ public class AppSettings {
     public static final String VIDEO_COMPRESSION = "video_compression";
     public static final String AUTO_SEND_RECORDING = "auto_send_recording";
     public static final String USE_SHARED_STORAGE = "use_shared_storage";
-    public static final String QUICK_ACTION = "quick_action";
+    public static final String QUICK_ACTION = "quick_action_button";
 
     private static final String ACCEPT_INVITES_FROM_STRANGERS = "accept_invites_from_strangers";
     private static final String NOTIFICATIONS_FROM_STRANGERS = "notifications_from_strangers";
@@ -393,28 +392,20 @@ public class AppSettings {
         return getStringPreference(VIDEO_COMPRESSION, R.string.video_compression);
     }
 
-    public SendButtonAction getQuickAction() {
+    public AttachmentChoice.Type getQuickAction() {
         final var setting = getStringPreference(QUICK_ACTION, R.string.quick_action);
-        if (Strings.isNullOrEmpty(setting) || "none".equals(setting)) {
-            return SendButtonAction.TEXT;
-        }
-        final String asString;
-        if ("recent".equals(setting)) {
-            asString =
-                    getStringPreference(
-                            ConversationFragment.RECENTLY_USED_QUICK_ACTION, R.string.quick_action);
-        } else {
-            asString = setting;
+        if (Strings.isNullOrEmpty(setting)) {
+            return getDefaultQuickAction();
         }
         try {
-            return SendButtonAction.valueOf(asString);
+            return AttachmentChoice.Type.valueOf(setting);
         } catch (final IllegalArgumentException e) {
             return getDefaultQuickAction();
         }
     }
 
-    private SendButtonAction getDefaultQuickAction() {
-        return SendButtonAction.valueOf(context.getString(R.string.quick_action));
+    private AttachmentChoice.Type getDefaultQuickAction() {
+        return AttachmentChoice.Type.valueOf(context.getString(R.string.quick_action));
     }
 
     public Optional<Duration> getAutomaticMessageDeletion() {
