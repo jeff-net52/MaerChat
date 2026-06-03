@@ -12,6 +12,7 @@ public record AttachmentChoice(
         CAMERA,
         PICTURE,
         FILE,
-        VIDEO
+        VIDEO,
+        CONTACT
     }
 }

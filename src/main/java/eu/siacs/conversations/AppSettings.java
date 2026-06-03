@@ -162,6 +162,10 @@ public class AppSettings {
         return getBooleanPreference(AUTO_SEND_RECORDING, R.bool.auto_send_recording);
     }
 
+    public boolean isQuickActionRecordingAuto() {
+        return isAutoSendRecording() && getQuickAction() == AttachmentChoice.Type.RECORDING;
+    }
+
     public boolean isCallIntegration() {
         return getBooleanPreference(CALL_INTEGRATION, R.bool.call_integration);
     }

@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -74,6 +75,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -155,6 +157,8 @@ import eu.siacs.conversations.xmpp.manager.ModerationManager;
 import eu.siacs.conversations.xmpp.manager.MultiUserChatManager;
 import eu.siacs.conversations.xmpp.manager.PresenceManager;
 import im.conversations.android.model.AttachmentChoice;
+import im.conversations.android.provider.ApplicationProvider;
+import im.conversations.android.provider.VCardProvider;
 import im.conversations.android.xmpp.model.muc.Role;
 import im.conversations.android.xmpp.model.stanza.Presence;
 import im.conversations.android.xmpp.model.state.Composing;
@@ -198,6 +202,11 @@ public class ConversationFragment extends XmppFragment
                             AttachmentChoice.Type.LOCATION,
                             true),
                     new AttachmentChoice(
+                            R.drawable.ic_person_24dp,
+                            R.string.attachment_choice_contact,
+                            AttachmentChoice.Type.CONTACT,
+                            false),
+                    new AttachmentChoice(
                             R.drawable.ic_camera_alt_24dp,
                             R.string.attachment_choice_camera,
                             AttachmentChoice.Type.CAMERA,
@@ -232,6 +241,7 @@ public class ConversationFragment extends XmppFragment
     public static final int ATTACHMENT_CHOICE_LOCATION = 0x0305;
     public static final int ATTACHMENT_CHOICE_INVALID = 0x0306;
     public static final int ATTACHMENT_CHOICE_RECORD_VIDEO = 0x0307;
+    public static final int ATTACHMENT_CHOICE_CONTACT = 0x0308;
 
     public static final String STATE_CONVERSATION_UUID =
             ConversationFragment.class.getName() + ".uuid";
@@ -1197,6 +1207,17 @@ public class ConversationFragment extends XmppFragment
                         Attachment.of(getActivity(), geo, Attachment.Type.LOCATION));
                 toggleInputMethod();
                 break;
+            case ATTACHMENT_CHOICE_CONTACT:
+                final Uri vCard;
+                try {
+                    vCard = new VCardProvider(requireContext()).vCardFromPickIntent(data.getData());
+                } catch (final IllegalArgumentException e) {
+                    Log.d(Config.LOGTAG, "could not find vcf uri", e);
+                    return;
+                }
+                mediaPreviewAdapter.addMediaPreviews(Attachment.of(vCard, "text/x-vcard"));
+                toggleInputMethod();
+                break;
             case REQUEST_INVITE_TO_CONVERSATION:
                 XmppActivity.ConferenceInvite invite = XmppActivity.ConferenceInvite.parse(data);
                 if (invite != null) {
@@ -1343,9 +1364,15 @@ public class ConversationFragment extends XmppFragment
         this.binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_conversation, container, false);
         final var viewIdBuilder = new ImmutableList.Builder<Integer>();
+        final var showContactHideRecording =
+                QuickConversationsService.isContactListIntegration(requireContext())
+                        && (new AppSettings(requireContext()).isQuickActionRecordingAuto());
         for (final var attachmentChoice : ATTACHMENT_CHOICES) {
-            if (!ConversationMenuConfigurator.microphoneAvailable
-                    && attachmentChoice.type() == AttachmentChoice.Type.RECORDING) {
+            if (attachmentChoice.type() == AttachmentChoice.Type.RECORDING
+                    && showContactHideRecording) {
+                continue;
+            } else if (attachmentChoice.type() == AttachmentChoice.Type.CONTACT
+                    && !showContactHideRecording) {
                 continue;
             }
             final int id = View.generateViewId();
@@ -1899,6 +1926,7 @@ public class ConversationFragment extends XmppFragment
                     case LOCATION -> ATTACHMENT_CHOICE_LOCATION;
                     case RECORDING -> ATTACHMENT_CHOICE_RECORD_VOICE;
                     case VIDEO -> ATTACHMENT_CHOICE_RECORD_VIDEO;
+                    case CONTACT -> ATTACHMENT_CHOICE_CONTACT;
                 });
         setAttachmentChoicesVisibility(false);
     }
@@ -1967,6 +1995,10 @@ public class ConversationFragment extends XmppFragment
                     attachmentChoice,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA)) {
+                return;
+            }
+        } else if (attachmentChoice == ATTACHMENT_CHOICE_CONTACT) {
+            if (!hasPermissions(attachmentChoice, Manifest.permission.READ_CONTACTS)) {
                 return;
             }
         } else if (attachmentChoice != ATTACHMENT_CHOICE_LOCATION) {
@@ -2042,49 +2074,50 @@ public class ConversationFragment extends XmppFragment
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         final PermissionUtils.PermissionResult permissionResult =
                 PermissionUtils.removeBluetoothConnect(permissions, grantResults);
-        if (grantResults.length > 0) {
-            if (allGranted(permissionResult.grantResults)) {
-                switch (requestCode) {
-                    case REQUEST_START_DOWNLOAD:
-                        if (this.mPendingDownloadableMessage != null) {
-                            startDownloadable(this.mPendingDownloadableMessage);
-                        }
-                        break;
-                    case REQUEST_ADD_EDITOR_CONTENT:
-                        if (this.mPendingEditorContent != null) {
-                            attachEditorContentToConversation(this.mPendingEditorContent);
-                        }
-                        break;
-                    case REQUEST_COMMIT_ATTACHMENTS:
-                        commitAttachments();
-                        break;
-                    case REQUEST_START_AUDIO_CALL:
-                        triggerRtpSession(RtpSessionActivity.ACTION_MAKE_VOICE_CALL);
-                        break;
-                    case REQUEST_START_VIDEO_CALL:
-                        triggerRtpSession(RtpSessionActivity.ACTION_MAKE_VIDEO_CALL);
-                        break;
-                    default:
-                        attachFile(requestCode);
-                        break;
-                }
-            } else {
-                @StringRes int res;
-                String firstDenied =
-                        getFirstDenied(permissionResult.grantResults, permissionResult.permissions);
-                if (Manifest.permission.RECORD_AUDIO.equals(firstDenied)) {
-                    res = R.string.no_microphone_permission;
-                } else if (Manifest.permission.CAMERA.equals(firstDenied)) {
-                    res = R.string.no_camera_permission;
-                } else {
-                    res = R.string.no_storage_permission;
-                }
-                Toast.makeText(
-                                getActivity(),
-                                getString(res, getString(R.string.app_name)),
-                                Toast.LENGTH_SHORT)
-                        .show();
+        if (grantResults.length == 0) {
+            return;
+        }
+        if (allGranted(permissionResult.grantResults)) {
+            switch (requestCode) {
+                case REQUEST_START_DOWNLOAD:
+                    if (this.mPendingDownloadableMessage != null) {
+                        startDownloadable(this.mPendingDownloadableMessage);
+                    }
+                    break;
+                case REQUEST_ADD_EDITOR_CONTENT:
+                    if (this.mPendingEditorContent != null) {
+                        attachEditorContentToConversation(this.mPendingEditorContent);
+                    }
+                    break;
+                case REQUEST_COMMIT_ATTACHMENTS:
+                    commitAttachments();
+                    break;
+                case REQUEST_START_AUDIO_CALL:
+                    triggerRtpSession(RtpSessionActivity.ACTION_MAKE_VOICE_CALL);
+                    break;
+                case REQUEST_START_VIDEO_CALL:
+                    triggerRtpSession(RtpSessionActivity.ACTION_MAKE_VIDEO_CALL);
+                    break;
+                default:
+                    attachFile(requestCode);
+                    break;
             }
+        } else {
+            final var firstDenied =
+                    getFirstDenied(permissionResult.grantResults, permissionResult.permissions);
+            @StringRes
+            final int res =
+                    switch (firstDenied) {
+                        case Manifest.permission.RECORD_AUDIO -> R.string.no_microphone_permission;
+                        case Manifest.permission.CAMERA -> R.string.no_camera_permission;
+                        case Manifest.permission.READ_CONTACTS -> R.string.no_contacts_permission;
+                        case null, default -> R.string.no_storage_permission;
+                    };
+            Toast.makeText(
+                            getActivity(),
+                            getString(res, getString(R.string.app_name)),
+                            Toast.LENGTH_SHORT)
+                    .show();
         }
         if (writeGranted(grantResults, permissions)) {
             final var service = getXmppConnectionService();
@@ -2276,6 +2309,25 @@ public class ConversationFragment extends XmppFragment
                     case ATTACHMENT_CHOICE_LOCATION:
                         {
                             yield new Intent(requireContext(), ShareLocationActivity.class);
+                        }
+                    case ATTACHMENT_CHOICE_CONTACT:
+                        {
+                            final var pickIntent = new Intent(Intent.ACTION_PICK);
+                            pickIntent.setDataAndType(
+                                    ContactsContract.Contacts.CONTENT_URI,
+                                    ContactsContract.Contacts.CONTENT_TYPE);
+                            final var rawApplicationIds =
+                                    new ApplicationProvider(requireContext()).resolve(pickIntent);
+                            Log.d(Config.LOGTAG, "applicationIds " + rawApplicationIds);
+                            final var applicationIds =
+                                    Sets.intersection(
+                                            rawApplicationIds,
+                                            ApplicationProvider.KNOWN_CONTACTS_APP);
+                            if (applicationIds.isEmpty()) {
+                                yield pickIntent;
+                            }
+                            pickIntent.setPackage(Iterables.getFirst(applicationIds, null));
+                            yield pickIntent;
                         }
                     default:
                         throw new IllegalStateException("Invalid attachment code");

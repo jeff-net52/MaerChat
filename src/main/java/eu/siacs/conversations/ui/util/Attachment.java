@@ -195,6 +195,10 @@ public final class Attachment implements Parcelable {
                 mime);
     }
 
+    public static List<Attachment> of(final Uri uri, final String mime) {
+        return Collections.singletonList(new Attachment(UUID.randomUUID(), uri, Type.FILE, mime));
+    }
+
     public static List<Attachment> extractAttachments(
             final Context context, final Intent intent, Type type) {
         List<Attachment> uris = new ArrayList<>();
