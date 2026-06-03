@@ -1550,15 +1550,16 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         return builder.build();
     }
 
-    public Set<String> getExistingUrlsForPath(final String account, final String path) {
+    public Set<String> getExistingUrlsForPath(
+            final String account, final String path, final int encryption) {
         final var builder = new ImmutableList.Builder<Message.FileParams>();
         SQLiteDatabase db = this.getReadableDatabase();
         final String sql =
                 "select body from messages join conversations on"
                     + " messages.conversationUuid=conversations.uuid where relativeFilePath=? and"
-                    + " conversations.accountUuid=? and messages.status<>0 ORDER BY"
-                    + " messages.timeSent desc LIMIT 3";
-        final String[] args = {path, account};
+                    + " conversations.accountUuid=? and messages.status<>0 and"
+                    + " messages.encryption=? ORDER BY messages.timeSent desc LIMIT 3";
+        final String[] args = {path, account, String.valueOf(encryption)};
         try (final Cursor cursor = db.rawQuery(sql, args)) {
             while (cursor.moveToNext()) {
                 builder.add(Message.FileParams.of(cursor.getString(0)));

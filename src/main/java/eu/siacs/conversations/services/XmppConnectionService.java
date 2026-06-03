@@ -1504,12 +1504,21 @@ public class XmppConnectionService extends Service {
             return;
         }
         final var file = fileBackend.getFile(message, false);
-        final var candidates = getExistingUrlsForPath(account.getUuid(), file.getAbsolutePath());
-        final var availableCandidates =
-                Futures.transformAsync(
-                        candidates,
-                        urls -> mHttpConnectionManager.checkAvailability(account, urls),
-                        MoreExecutors.directExecutor());
+        final var encryption = message.getEncryption();
+        final ListenableFuture<Set<String>> availableCandidates;
+        if (encryption == Message.ENCRYPTION_AXOLOTL || encryption == Message.ENCRYPTION_NONE) {
+            final var candidates =
+                    getExistingUrlsForPath(account.getUuid(), file.getAbsolutePath(), encryption);
+            availableCandidates =
+                    Futures.transformAsync(
+                            candidates,
+                            urls -> mHttpConnectionManager.checkAvailability(account, urls),
+                            MoreExecutors.directExecutor());
+        } else {
+            // PGP files are encrypted per recipient
+            availableCandidates = Futures.immediateFuture(Collections.emptySet());
+        }
+
         Futures.addCallback(
                 availableCandidates,
                 new FutureCallback<>() {
@@ -1557,9 +1566,10 @@ public class XmppConnectionService extends Service {
     }
 
     private ListenableFuture<Set<String>> getExistingUrlsForPath(
-            final String account, final String path) {
+            final String account, final String path, final int encryption) {
         return Futures.submit(
-                () -> databaseBackend.getExistingUrlsForPath(account, path), DATABASE_READER);
+                () -> databaseBackend.getExistingUrlsForPath(account, path, encryption),
+                DATABASE_READER);
     }
 
     public ListenableFuture<Void> encryptIfNeededAndSend(final Message message) {
