@@ -1613,20 +1613,19 @@ public class NotificationService {
     }
 
     private PendingIntent createShowLocationIntent(final Message message) {
-        Iterable<Intent> intents =
-                GeoHelper.createGeoIntentsFromMessage(mXmppConnectionService, message);
-        for (final Intent intent : intents) {
-            if (intent.resolveActivity(mXmppConnectionService.getPackageManager()) != null) {
-                return PendingIntent.getActivity(
-                        mXmppConnectionService,
-                        generateRequestCode(message.getConversation(), 18),
-                        intent,
-                        s()
-                                ? PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-                                : PendingIntent.FLAG_UPDATE_CURRENT);
-            }
+        final Intent intent;
+        try {
+            intent = GeoHelper.showLocationIntent(mXmppConnectionService, message);
+        } catch (final IllegalArgumentException e) {
+            return null;
         }
-        return null;
+        return PendingIntent.getActivity(
+                mXmppConnectionService,
+                generateRequestCode(message.getConversation(), 18),
+                intent,
+                s()
+                        ? PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+                        : PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private PendingIntent createContentIntent(

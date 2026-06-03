@@ -159,7 +159,6 @@ import im.conversations.android.xmpp.model.muc.Role;
 import im.conversations.android.xmpp.model.stanza.Presence;
 import im.conversations.android.xmpp.model.state.Composing;
 import im.conversations.android.xmpp.model.state.Paused;
-import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -2234,56 +2233,58 @@ public class ConversationFragment extends XmppFragment
     }
 
     protected void invokeAttachFileIntent(final int attachmentChoice) {
-        Intent intent = new Intent();
-        boolean chooser = false;
-        switch (attachmentChoice) {
-            case ATTACHMENT_CHOICE_CHOOSE_IMAGE:
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setType("image/*");
-                chooser = true;
-                break;
-            case ATTACHMENT_CHOICE_RECORD_VIDEO:
-                intent.setAction(MediaStore.ACTION_VIDEO_CAPTURE);
-                break;
-            case ATTACHMENT_CHOICE_TAKE_PHOTO:
-                final File takePhotoFile = new FileBackend.Cache(requireContext()).takePicture();
-                pendingTakePhotoUri.push(Uri.fromFile(takePhotoFile));
-                intent.putExtra(
-                        MediaStore.EXTRA_OUTPUT,
-                        FileBackend.getUriForFile(requireContext(), takePhotoFile));
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                break;
-            case ATTACHMENT_CHOICE_CHOOSE_FILE:
-                chooser = true;
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                break;
-            case ATTACHMENT_CHOICE_RECORD_VOICE:
-                intent = new Intent(getActivity(), RecordingActivity.class);
-                break;
-            case ATTACHMENT_CHOICE_LOCATION:
-                intent = GeoHelper.getFetchIntent(requireContext());
-                break;
-        }
-        final Context context = getActivity();
-        if (context == null) {
-            return;
-        }
+        final var attachIntent =
+                switch (attachmentChoice) {
+                    case ATTACHMENT_CHOICE_CHOOSE_IMAGE:
+                        {
+                            final var intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                            intent.setType("image/*");
+                            yield Intent.createChooser(
+                                    intent, getString(R.string.perform_action_with));
+                        }
+                    case ATTACHMENT_CHOICE_RECORD_VIDEO:
+                        {
+                            yield new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                        }
+                    case ATTACHMENT_CHOICE_TAKE_PHOTO:
+                        {
+                            final var intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            final var takePhotoFile =
+                                    new FileBackend.Cache(requireContext()).takePicture();
+                            pendingTakePhotoUri.push(Uri.fromFile(takePhotoFile));
+                            intent.putExtra(
+                                    MediaStore.EXTRA_OUTPUT,
+                                    FileBackend.getUriForFile(requireContext(), takePhotoFile));
+                            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            yield intent;
+                        }
+                    case ATTACHMENT_CHOICE_CHOOSE_FILE:
+                        {
+                            final var intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType(ViewUtil.WILDCARD);
+                            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            yield Intent.createChooser(
+                                    intent, getString(R.string.perform_action_with));
+                        }
+                    case ATTACHMENT_CHOICE_RECORD_VOICE:
+                        {
+                            yield new Intent(requireContext(), RecordingActivity.class);
+                        }
+                    case ATTACHMENT_CHOICE_LOCATION:
+                        {
+                            yield new Intent(requireContext(), ShareLocationActivity.class);
+                        }
+                    default:
+                        throw new IllegalStateException("Invalid attachment code");
+                };
         try {
-            if (chooser) {
-                startActivityForResult(
-                        Intent.createChooser(intent, getString(R.string.perform_action_with)),
-                        attachmentChoice);
-            } else {
-                startActivityForResult(intent, attachmentChoice);
-            }
+            startActivityForResult(attachIntent, attachmentChoice);
         } catch (final ActivityNotFoundException e) {
-            Toast.makeText(context, R.string.no_application_found, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), R.string.no_application_found, Toast.LENGTH_LONG)
+                    .show();
         }
     }
 

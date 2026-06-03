@@ -2,6 +2,7 @@ package eu.siacs.conversations.ui.adapter;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -1394,18 +1395,22 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         ViewUtil.view(activity, file, message.getUuid());
     }
 
-    private void showLocation(Message message) {
-        for (Intent intent : GeoHelper.createGeoIntentsFromMessage(activity, message)) {
-            if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                getContext().startActivity(intent);
-                return;
-            }
+    private void showLocation(final Message message) {
+        final Intent intent;
+        try {
+            intent = GeoHelper.showLocationIntent(getContext(), message);
+        } catch (final IllegalArgumentException e) {
+            return;
         }
-        Toast.makeText(
-                        activity,
-                        R.string.no_application_found_to_display_location,
-                        Toast.LENGTH_SHORT)
-                .show();
+        try {
+            getContext().startActivity(intent);
+        } catch (final ActivityNotFoundException e) {
+            Toast.makeText(
+                            getContext(),
+                            R.string.no_application_found_to_display_location,
+                            Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     public void updatePreferences() {
