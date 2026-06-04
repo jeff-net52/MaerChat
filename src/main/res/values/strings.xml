@@ -451,7 +451,6 @@
         <item quantity="one">%d certificate deleted</item>
         <item quantity="other">%d certificates deleted</item>
     </plurals>
-    <string name="pref_quick_action_summary">Replace “Send” button with quick action</string>
     <string name="pref_quick_action">Quick Action</string>
     <string name="choose_quick_action">Choose quick action</string>
     <string name="search_contacts">Search contacts</string>

@@ -852,7 +852,6 @@
     <string name="hide_offline">Fshih të shkëputurat</string>
     <string name="pref_chat_states_summary">Bëjuni të ditur kontakteve tuaj, kur shkruani mesazhe për ta</string>
     <string name="pref_dont_trust_system_cas_title">Mos beso DA sistemi</string>
-    <string name="pref_quick_action_summary">Zëvendëso butonin “Dërgoje” me veprim të shpejtë</string>
     <string name="pref_show_connection_options_summary">Kur ujdiset një llogari, shfaq rregullime të zgjeruara lidhjeje</string>
     <string name="hostname_example">xmpp.example.com</string>
     <string name="fetching_mam_prefs">Po sillen parapëlqime arkivimi. Ju lutemi, pritni…</string>

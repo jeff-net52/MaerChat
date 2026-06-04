@@ -409,7 +409,6 @@
     <plurals name="toast_delete_certificates">
         <item quantity="other">%d 个证书已删除</item>
     </plurals>
-    <string name="pref_quick_action_summary">将“发送”按钮替换为快捷操作</string>
     <string name="pref_quick_action">快捷操作</string>
     <string name="choose_quick_action">选择快捷操作</string>
     <string name="search_contacts">搜索联系人</string>

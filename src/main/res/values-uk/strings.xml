@@ -410,7 +410,6 @@
         <item quantity="many">%d сертифікатів вилучено</item>
         <item quantity="other">%d сертифікатів вилучено</item>
     </plurals>
-    <string name="pref_quick_action_summary">Замінювати кнопку надсилання швидкими діями</string>
     <string name="pref_quick_action">Швидкі дії</string>
     <string name="choose_quick_action">Вибрати швидку дію</string>
     <string name="search_contacts">Шукати в контактах</string>

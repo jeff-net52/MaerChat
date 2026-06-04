@@ -44,7 +44,6 @@
             android:dialogTitle="@string/choose_quick_action"
             android:icon="@drawable/ic_send_time_extension_24dp"
             android:key="quick_action_button"
-            android:summary="@string/pref_quick_action_summary"
             android:title="@string/pref_quick_action" />
         <SwitchPreferenceCompat
             android:defaultValue="@bool/scroll_to_bottom"

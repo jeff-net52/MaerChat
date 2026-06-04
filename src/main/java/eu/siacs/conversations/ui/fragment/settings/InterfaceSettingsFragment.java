@@ -4,7 +4,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import com.google.android.material.color.DynamicColors;
+import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import eu.siacs.conversations.AppSettings;
@@ -49,6 +51,7 @@ public class InterfaceSettingsFragment extends XmppPreferenceFragment {
                     requireSettingsActivity().setDynamicColors(Boolean.TRUE.equals(newValue));
                     return true;
                 });
+        quickAction.setSummaryProvider(new QuickActionSummaryProvider());
         final var quickActionsEntryValues = new CharSequence[QUICK_ACTIONS.size()];
         final var quickActionEntries = new CharSequence[QUICK_ACTIONS.size()];
         int i = 0;
@@ -84,5 +87,29 @@ public class InterfaceSettingsFragment extends XmppPreferenceFragment {
                 String.format(
                         "%s is not %s",
                         activity.getClass().getName(), SettingsActivity.class.getName()));
+    }
+
+    private static class QuickActionSummaryProvider
+            implements Preference.SummaryProvider<ListPreference> {
+
+        @Nullable
+        @Override
+        public CharSequence provideSummary(@NonNull ListPreference preference) {
+            final var value = preference.getValue();
+            if (Strings.isNullOrEmpty(value)) {
+                return null;
+            }
+            final AttachmentChoice.Type type;
+            try {
+                type = AttachmentChoice.Type.valueOf(value);
+            } catch (final IllegalArgumentException e) {
+                return null;
+            }
+            final var attachmentChoice = QUICK_ACTIONS.get(type);
+            if (attachmentChoice == null) {
+                return null;
+            }
+            return preference.getContext().getString(attachmentChoice.name());
+        }
     }
 }

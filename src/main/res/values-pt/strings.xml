@@ -519,7 +519,6 @@
     <string name="non_anonymous">Fazer endereços XMPP visíveis para todos</string>
     <string name="word_document">documento de Word</string>
     <string name="audiobook">Audiobook</string>
-    <string name="pref_quick_action_summary">Troca o botão \"Enviar\" pela ação rápida</string>
     <string name="search_group_chats">Pesquisar conversas em grupo</string>
     <string name="pref_away_when_screen_off_summary">Mostra como Ausente quando o dispositivo está bloqueado</string>
     <string name="moderated">Tornar o canal moderado</string>

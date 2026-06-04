@@ -410,7 +410,6 @@
     <plurals name="toast_delete_certificates">
         <item quantity="other">%d個の証明書を削除しました</item>
     </plurals>
-    <string name="pref_quick_action_summary">“送信”ボタンをクイックアクションで置き換えます</string>
     <string name="pref_quick_action">クイックアクション</string>
     <string name="choose_quick_action">クイックアクションを選択</string>
     <string name="search_contacts">連絡先を検索</string>

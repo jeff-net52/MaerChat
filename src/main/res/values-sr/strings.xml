@@ -416,7 +416,6 @@
         <item quantity="few">%d сертификата обрисана</item>
         <item quantity="other">%d сертификата обрисано</item>
     </plurals>
-    <string name="pref_quick_action_summary">Замени дугме за слање брзом радњом</string>
     <string name="pref_quick_action">Брза радња</string>
     <string name="choose_quick_action">Изаберите брзу радњу</string>
     <string name="search_contacts">Претражи контакте</string>

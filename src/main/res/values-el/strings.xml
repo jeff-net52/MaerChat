@@ -406,7 +406,6 @@
         <item quantity="one">%d πιστοποιητικό διαγράφηκε</item>
         <item quantity="other">%d πιστοποιητικά διαγράφηκαν</item>
     </plurals>
-    <string name="pref_quick_action_summary">Αντικατάσταση του κουμπιού \"Αποστολή\" με γρήγορη ενέργεια</string>
     <string name="pref_quick_action">Γρήγορη Ενέργεια</string>
     <string name="choose_quick_action">Επιλογή γρήγορης ενέργειας</string>
     <string name="search_contacts">Αναζήτηση επαφών</string>

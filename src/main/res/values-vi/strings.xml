@@ -406,7 +406,6 @@
     <plurals name="toast_delete_certificates">
         <item quantity="other">Đã xoá %d chứng nhận</item>
     </plurals>
-    <string name="pref_quick_action_summary">Thay thế nút \"Gửi\" bằng hành động nhanh</string>
     <string name="pref_quick_action">Thao tác nhanh</string>
     <string name="choose_quick_action">Chọn thao tác nhanh</string>
     <string name="search_contacts">Tìm kiếm liên hệ</string>

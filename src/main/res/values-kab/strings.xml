@@ -411,7 +411,6 @@
         <item quantity="one">%d n uselkin yettwakkes</item>
         <item quantity="other">%d n iselkinen ttwakksen</item>
     </plurals>
-    <string name="pref_quick_action_summary">Semselsi taqeffalt \"Azen\" s tigawt taruradt</string>
     <string name="choose_quick_action">Fren tigawt taruradt</string>
     <string name="search_group_chats">Nadi deg idiwenniyen n ugraw</string>
     <string name="send_private_message">Azen izen uslig</string>

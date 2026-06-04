@@ -417,7 +417,6 @@
         <item quantity="many">Cancellati %d certificati</item>
         <item quantity="other">Cancellati %d certificati</item>
     </plurals>
-    <string name="pref_quick_action_summary">Sostituisci il tasto \"Invio\" con un\'azione rapida</string>
     <string name="pref_quick_action">Azione rapida</string>
     <string name="choose_quick_action">Scegli azione rapida</string>
     <string name="search_contacts">Cerca contatti</string>

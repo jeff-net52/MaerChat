@@ -406,7 +406,6 @@
         <item quantity="one">%d сертификат е изтрит</item>
         <item quantity="other">%d сертификата са изтрити</item>
     </plurals>
-    <string name="pref_quick_action_summary">Замяна на бутона „Изпращане“ с бързо действие</string>
     <string name="pref_quick_action">Бързо действие</string>
     <string name="choose_quick_action">Изберете бързо действие</string>
     <string name="search_contacts">Търсене в контактите</string>

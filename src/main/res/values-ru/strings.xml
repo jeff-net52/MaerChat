@@ -426,7 +426,6 @@
         <item quantity="many">Удалено %d сертификатов</item>
         <item quantity="other">Удалено %d сертификатов</item>
     </plurals>
-    <string name="pref_quick_action_summary">Заменить кнопку \"Отправить\" кнопкой быстрого действия</string>
     <string name="pref_quick_action">Быстрое действие</string>
     <string name="choose_quick_action">Выбрать быстрое действие</string>
     <string name="search_contacts">Поиск контактов</string>

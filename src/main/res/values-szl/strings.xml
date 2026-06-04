@@ -425,7 +425,6 @@
         <item quantity="few">Wymazane %d certyfikaty</item>
         <item quantity="other">Wymazane %d certyfikatōw</item>
     </plurals>
-    <string name="pref_quick_action_summary">Zastōmp knefel wysyłanio gibkōm akcyjōm</string>
     <string name="pref_quick_action">Gibko akcyjo</string>
     <string name="choose_quick_action">Ôbier gibko akcyjo</string>
     <string name="search_contacts">Przeszukej kōntakty</string>

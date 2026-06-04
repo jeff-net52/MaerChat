@@ -832,7 +832,6 @@
     <string name="hosted_on">gehost op %s</string>
     <string name="unable_to_find_server">Kan server niet vinden.</string>
     <string name="unable_to_establish_secure_connection">Kan geen veilige verbinding tot stand brengen.</string>
-    <string name="pref_quick_action_summary">Knop “Verzenden” vervangen door snelle actie</string>
     <string name="user_has_left_conference">%1$s heeft de groepschat verlaten</string>
     <string name="search_group_chats">Groepschats doorzoeken</string>
     <string name="captcha_required">CAPTCHA vereist</string>

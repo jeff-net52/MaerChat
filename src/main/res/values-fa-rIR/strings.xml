@@ -179,7 +179,6 @@
     <string name="contact_has_read_up_to_this_point">%s تا این‌جا خوانده است</string>
     <string name="omemo_fingerprint_x509_selected_message">v\\اثر انگشت OMEMO (منبع پیام)</string>
     <string name="video_call">تماس ویدیویی</string>
-    <string name="pref_quick_action_summary">جایگزینی دکمهٔ «ارسال» با کنش‌های سریع</string>
     <string name="file_transmission_cancelled">انتقال پرونده لغو شد</string>
     <string name="x_file_offered_for_download">%s برای بارگیری پیشنهاد شده</string>
     <string name="ongoing_video_call">تماس ویدیویی جاری</string>

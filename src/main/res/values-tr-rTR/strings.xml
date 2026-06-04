@@ -417,7 +417,6 @@
         <item quantity="one">%d sertifikaları silindi</item>
         <item quantity="other">%d sertifikaları silindi</item>
     </plurals>
-    <string name="pref_quick_action_summary">\"Gönder\" tuşunu kısayol ile değiştir</string>
     <string name="pref_quick_action">Kısayol</string>
     <string name="choose_quick_action">Kısayolu seç</string>
     <string name="search_contacts">Kişilerde ara</string>

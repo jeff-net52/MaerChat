@@ -401,7 +401,6 @@
         <item quantity="many">%d certificats esborrats</item>
         <item quantity="other">%d certificats esborrats</item>
     </plurals>
-    <string name="pref_quick_action_summary">Substituir el botó \"Enviar\" per una acció ràpida</string>
     <string name="pref_quick_action">Acció ràpida</string>
     <string name="choose_quick_action">Trieu una acció ràpida</string>
     <string name="search_contacts">Buscar contactes</string>

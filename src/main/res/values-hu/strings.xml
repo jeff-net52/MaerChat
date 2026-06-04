@@ -397,7 +397,6 @@
         <item quantity="one">%d tanúsítvány törölve</item>
         <item quantity="other">%d tanúsítvány törölve</item>
     </plurals>
-    <string name="pref_quick_action_summary">Küldés gomb cseréje gyors művelettel</string>
     <string name="pref_quick_action">Gyors művelet</string>
     <string name="choose_quick_action">Gyors művelet kiválasztása</string>
     <string name="search_contacts">Partnerek keresése</string>
