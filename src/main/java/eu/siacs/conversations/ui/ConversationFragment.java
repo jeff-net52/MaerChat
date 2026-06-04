@@ -1213,6 +1213,8 @@ public class ConversationFragment extends XmppFragment
                 try {
                     vCard = new VCardProvider(requireContext()).vCardFromPickIntent(data.getData());
                 } catch (final IllegalArgumentException e) {
+                    Toast.makeText(requireContext(), R.string.invalid_contact, Toast.LENGTH_LONG)
+                            .show();
                     Log.d(Config.LOGTAG, "could not find vcf uri", e);
                     return;
                 }
