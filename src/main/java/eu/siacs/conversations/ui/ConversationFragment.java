@@ -86,6 +86,7 @@ import de.gultsch.common.MiniUri;
 import de.gultsch.common.Patterns;
 import eu.siacs.conversations.AppSettings;
 import eu.siacs.conversations.Config;
+import eu.siacs.conversations.Conversations;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.crypto.PgpEngine;
 import eu.siacs.conversations.crypto.axolotl.AxolotlService;
@@ -1366,7 +1367,8 @@ public class ConversationFragment extends XmppFragment
         final var viewIdBuilder = new ImmutableList.Builder<Integer>();
         final var showContactHideRecording =
                 QuickConversationsService.isContactListIntegration(requireContext())
-                        && (new AppSettings(requireContext()).isQuickActionRecordingAuto());
+                        && new AppSettings(requireContext()).isQuickActionRecordingAuto()
+                        && Conversations.getInstance(requireContext()).isMicrophoneAvailable();
         for (final var attachmentChoice : ATTACHMENT_CHOICES) {
             if (attachmentChoice.type() == AttachmentChoice.Type.RECORDING
                     && showContactHideRecording) {

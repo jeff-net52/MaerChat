@@ -29,8 +29,6 @@
 
 package eu.siacs.conversations.ui.util;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -41,13 +39,6 @@ import eu.siacs.conversations.entities.Conversational;
 import eu.siacs.conversations.entities.Message;
 
 public class ConversationMenuConfigurator {
-
-    public static boolean microphoneAvailable = false;
-
-    public static void reloadFeatures(Context context) {
-        microphoneAvailable =
-                context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE);
-    }
 
     public static void configureEncryptionMenu(@NonNull Conversation conversation, Menu menu) {
         final MenuItem menuSecure = menu.findItem(R.id.action_security);
