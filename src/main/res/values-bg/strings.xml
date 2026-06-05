@@ -81,7 +81,6 @@
 \n
 \n<b>Внимание:</b> Това няма да изтрие съобщенията, които се съхраняват на други устройства или сървъри.</string>
     <string name="delete_file_dialog">Изтриване на файла</string>
-    <string name="delete_file_dialog_msg">Наистина ли искате да изтриете този файл?\n\n<b>Внимание:</b> Това няма да изтрие копията на файла, които се съхраняват на други устройства или сървъри.</string>
     <string name="choose_presence">Изберете устройство</string>
     <string name="send_unencrypted_message">Изпр. на нешифр. съобщение</string>
     <string name="send_message">Изпращане на съобщение</string>
