@@ -1211,4 +1211,7 @@
     <string name="attachment_choice_video">Video</string>
     <string name="attachment_choice_recording">Grabando</string>
     <string name="start_group_chat">Iniciar chat grupal</string>
+    <string name="delete_file_dialog_shared">Este archivo se ha compartido con otros chats.</string>
+    <string name="delete_file_dialog_confirm">¿Estás seguro de que quieres eliminar este archivo?</string>
+    <string name="delete_file_dialog_copies">Esto no eliminará las copias de este archivo que estén almacenadas en otros dispositivos o servidores.</string>
 </resources>
