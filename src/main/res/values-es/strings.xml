@@ -1214,4 +1214,8 @@
     <string name="delete_file_dialog_shared">Este archivo se ha compartido con otros chats.</string>
     <string name="delete_file_dialog_confirm">¿Estás seguro de que quieres eliminar este archivo?</string>
     <string name="delete_file_dialog_copies">Esto no eliminará las copias de este archivo que estén almacenadas en otros dispositivos o servidores.</string>
+    <string name="sheet_music">partitura</string>
+    <string name="attachment_choice_contact">Contacto</string>
+    <string name="note_to_self">Nota personal</string>
+    <string name="invalid_contact">No se pudo analizar el contacto</string>
 </resources>
