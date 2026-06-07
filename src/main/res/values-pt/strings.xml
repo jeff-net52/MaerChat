@@ -1203,4 +1203,11 @@
     <string name="attachment_choice_video">Vídeo</string>
     <string name="attachment_choice_recording">Gravação</string>
     <string name="start_group_chat">Começar conversa de grupo</string>
+    <string name="delete_file_dialog_shared">Este ficheiro foi partilhado com outros chats.</string>
+    <string name="delete_file_dialog_confirm">Tem a certeza que quer apagar este ficheiro?</string>
+    <string name="delete_file_dialog_copies">Isto não irá apagar as cópias deste ficheiro que estão armazenadas em outros dispositivos ou servidores.</string>
+    <string name="sheet_music">partituras musicais</string>
+    <string name="attachment_choice_contact">Contacto</string>
+    <string name="note_to_self">Nota pessoal</string>
+    <string name="invalid_contact">Não foi possível processar o contacto</string>
 </resources>
