@@ -1231,4 +1231,11 @@
     <string name="attachment_choice_video">Видео</string>
     <string name="attachment_choice_recording">Снимак</string>
     <string name="start_group_chat">Покрени групну преписку</string>
+    <string name="delete_file_dialog_shared">Овај фајл је подељен са другим препискама.</string>
+    <string name="delete_file_dialog_confirm">Да ли си сигуран/на да желиш да обришеш овај фајл?</string>
+    <string name="delete_file_dialog_copies">Ово неће обрисати копије овог фајла које су сачуване на другим уређајима или серверима.</string>
+    <string name="sheet_music">ноте</string>
+    <string name="attachment_choice_contact">Контакт</string>
+    <string name="note_to_self">Белешка за себе</string>
+    <string name="invalid_contact">Није могуће ишчитати контакт</string>
 </resources>
