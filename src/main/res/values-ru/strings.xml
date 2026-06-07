@@ -1242,4 +1242,18 @@
     <string name="select_all">Выбрать все</string>
     <string name="search_in_chats">Поиск в беседах</string>
     <string name="search_for_x_in_chats">Поиск \"%s\" в беседах</string>
+    <string name="start_group_chat">Начать конференцию</string>
+    <string name="delete_file_dialog_shared">Этот файл был опубликован в других беседах.</string>
+    <string name="delete_file_dialog_confirm">Удалить этот файл?</string>
+    <string name="delete_file_dialog_copies">Это действие не удалит копии данного файла, которые хранятся на других устройствах или серверах.</string>
+    <string name="sheet_music">ноты</string>
+    <string name="attachment_choice_gallery">Галерея</string>
+    <string name="attachment_choice_file">Файл</string>
+    <string name="attachment_choice_location">Местоположение</string>
+    <string name="attachment_choice_camera">Камера</string>
+    <string name="attachment_choice_video">Видео</string>
+    <string name="attachment_choice_recording">Аудиозапись</string>
+    <string name="attachment_choice_contact">Контакт</string>
+    <string name="note_to_self">Заметка себе</string>
+    <string name="invalid_contact">Невозможно разобрать контакт</string>
 </resources>
