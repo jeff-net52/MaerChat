@@ -1212,4 +1212,11 @@
     <string name="attachment_choice_video">Video</string>
     <string name="attachment_choice_recording">Salvestis</string>
     <string name="start_group_chat">Alusta vestlusrühma</string>
+    <string name="delete_file_dialog_shared">See fail on jagatud muude vestlustega.</string>
+    <string name="delete_file_dialog_confirm">Kas oled kindel, et soovid selle faili kustutada?</string>
+    <string name="delete_file_dialog_copies">Sellega ei kustutata faili koopiaid, mis võivad olla salvestatud teistes nutiseadmetes või serverites.</string>
+    <string name="sheet_music">Partituurifail</string>
+    <string name="attachment_choice_contact">Kontakt</string>
+    <string name="note_to_self">Märge iseendale</string>
+    <string name="invalid_contact">Kontaktandmete töötlemine ei õnnestunud</string>
 </resources>
