@@ -1200,4 +1200,18 @@
     <string name="select_all">Välj alla</string>
     <string name="search_in_chats">Sök i chattar</string>
     <string name="search_for_x_in_chats">Sök efter \"%s\" i chattar</string>
+    <string name="start_group_chat">Påbörja gruppchatt</string>
+    <string name="delete_file_dialog_shared">Den här filen har delats med andra chattar.</string>
+    <string name="delete_file_dialog_confirm">Är du säker på att du vill radera den här filen?</string>
+    <string name="attachment_choice_gallery">Galleri</string>
+    <string name="attachment_choice_file">Fil</string>
+    <string name="attachment_choice_location">Plats</string>
+    <string name="attachment_choice_camera">Kamera</string>
+    <string name="attachment_choice_video">Video</string>
+    <string name="attachment_choice_recording">Inspelning</string>
+    <string name="attachment_choice_contact">Kontakt</string>
+    <string name="sheet_music">noter</string>
+    <string name="note_to_self">Anteckning till mig själv</string>
+    <string name="invalid_contact">Kunde inte tolka kontakten</string>
+    <string name="delete_file_dialog_copies">Det här kommer att ta bort kopior av den här filen som lagras i andra enheter eller servrar.</string>
 </resources>
