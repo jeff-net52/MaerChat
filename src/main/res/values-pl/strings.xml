@@ -1226,4 +1226,11 @@
     <string name="attachment_choice_video">Wideo</string>
     <string name="attachment_choice_recording">Nagranie</string>
     <string name="start_group_chat">Rozpocznij rozmowę grupową</string>
+    <string name="delete_file_dialog_shared">Ten plik został udostępniony w innych rozmowach.</string>
+    <string name="delete_file_dialog_confirm">Czy na pewno chcesz usunąć ten plik?</string>
+    <string name="delete_file_dialog_copies">To nie spowoduje usunięcia kopii tego pliku przechowywanych na innych urządzeniach lub serwerach.</string>
+    <string name="sheet_music">nuty</string>
+    <string name="attachment_choice_contact">Kontakt</string>
+    <string name="note_to_self">Notatka dla siebie</string>
+    <string name="invalid_contact">Nie udało się przetworzyć kontaktu</string>
 </resources>
