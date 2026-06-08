@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 2.20.1
+
+* Add 'Note to self' as search suggestion
+* Minor bug fixes
+
 ### Version 2.20.0
 
 * Provide search bar for easier access to search on home screen
