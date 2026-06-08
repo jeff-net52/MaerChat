@@ -1214,4 +1214,11 @@
     <string name="attachment_choice_video">Video</string>
     <string name="attachment_choice_recording">Înregistrare voce</string>
     <string name="start_group_chat">Discuție de grup</string>
+    <string name="delete_file_dialog_shared">Acest fișier a fost partajat în alte discuții.</string>
+    <string name="delete_file_dialog_confirm">Sigur doriți să ștergeți acest fișier?</string>
+    <string name="delete_file_dialog_copies">Nu se vor șterge copiile acestui fișier care sunt stocate pe alte dispozitive sau servere.</string>
+    <string name="sheet_music">partitură muzicală</string>
+    <string name="attachment_choice_contact">Contact</string>
+    <string name="note_to_self">Notă pentru sine</string>
+    <string name="invalid_contact">Nu s-a putut citii contactul</string>
 </resources>
