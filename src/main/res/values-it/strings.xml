@@ -1206,4 +1206,18 @@
     <string name="select_all">Seleziona tutto</string>
     <string name="search_in_chats">Cerca nelle chat</string>
     <string name="search_for_x_in_chats">Cerca \"%s\" nelle chat</string>
+    <string name="start_group_chat">Inizia chat di gruppo</string>
+    <string name="delete_file_dialog_shared">Questo file è stato condiviso con altre chat.</string>
+    <string name="delete_file_dialog_confirm">Vuoi davvero eliminare questo file?</string>
+    <string name="delete_file_dialog_copies">Ciò non eliminerà le copie di questo file memorizzate in altri dispositivi o server.</string>
+    <string name="sheet_music">partitura</string>
+    <string name="attachment_choice_gallery">Galleria</string>
+    <string name="attachment_choice_file">File</string>
+    <string name="attachment_choice_location">Posizione</string>
+    <string name="attachment_choice_camera">Fotocamera</string>
+    <string name="attachment_choice_video">Video</string>
+    <string name="attachment_choice_recording">Registrazione</string>
+    <string name="attachment_choice_contact">Contatto</string>
+    <string name="note_to_self">Nota personale</string>
+    <string name="invalid_contact">Impossibile leggere il contatto</string>
 </resources>
