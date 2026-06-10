@@ -119,7 +119,7 @@
     <string name="pref_advanced_options">Rozšířené</string>
     <string name="pref_never_send_crash_summary">Zasíláním detailů o důvodu selhání pomůžete dalšímu vývoji</string>
     <string name="pref_confirm_messages">Potvrzovat zprávy</string>
-    <string name="pref_confirm_messages_summary">Nechat kontaky vědět kdy jste dostali a přečetli jejich zprávy</string>
+    <string name="pref_confirm_messages_summary">Pokud je povoleno, vaše kontakty uvidí, kdy jste si přečetli jejich zprávy.</string>
     <string name="pref_ui_options">UI</string>
     <string name="openpgp_error">Chyba OpenKeychain.</string>
     <string name="bad_key_for_encryption">Chybný klíč pro šifrování.</string>
@@ -1123,4 +1123,23 @@
     <string name="welcome_header">Začněte používat Conversations</string>
     <string name="server_invite">Pozvat na server</string>
     <string name="contact_has_paused_their_notifications">%s má pozastavené notifikace</string>
+    <string name="start_group_chat">Zahájit skupinový chat</string>
+    <string name="delete_file_dialog_shared">Tento soubor byl sdílen s dalšími chaty.</string>
+    <string name="delete_file_dialog_confirm">Jste si jisti, že chcete tento soubor smazat?</string>
+    <string name="delete_file_dialog_copies">Tímto nedojde k odstranění kopií tohoto souboru uložených na jiných zařízeních nebo serverech.</string>
+    <plurals name="delete_files_dialog">
+        <item quantity="one">Smazat soubor</item>
+        <item quantity="few">Smazat %d soubory</item>
+        <item quantity="many">Smazat %d souborů</item>
+        <item quantity="other">Smazat %d souborů</item>
+    </plurals>
+    <plurals name="delete_files_dialog_msg">
+        <item quantity="one">Jste si jisti, že chcete smazat tento soubor?</item>
+        <item quantity="few">Jste si jisti, že chcete smazat tyto soubory?</item>
+        <item quantity="many">Jste si jisti, že chcete smazat tyto soubory?</item>
+        <item quantity="other">Jste si jisti, že chcete smazat tyto soubory?</item>
+    </plurals>
+    <string name="account_status_airplane_mode">Režim letadlo</string>
+    <string name="account_status_regis_invalid_captcha">Neplatná CAPTCHA</string>
+    <string name="account_status_tls_error_untrusted">Nedůvěryhodný certifikát</string>
 </resources>
