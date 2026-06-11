@@ -449,7 +449,7 @@
     <string name="pref_show_connection_options_summary">Показывать расширенные настройки соединения при настройке аккаунта</string>
     <string name="hostname_example">xmpp.example.com</string>
     <string name="action_add_account_with_certificate">Войти с помощью сертификата</string>
-    <string name="unable_to_parse_certificate">Невозможно прочитать сертификат</string>
+    <string name="unable_to_parse_certificate">Невозможно обработать сертификат</string>
     <string name="mam_prefs">Настройки архивирования</string>
     <string name="server_side_mam_prefs">Настройки архивирования на сервере</string>
     <string name="fetching_mam_prefs">Получение настроек архивирования. Подождите…</string>
@@ -933,7 +933,7 @@
     <string name="failed_deliveries">Недоставленные сообщения</string>
     <string name="more_options">Ещё</string>
     <string name="no_application_found">Не найдено приложения</string>
-    <string name="unable_to_parse_invite">Невозможно разобрать приглашение</string>
+    <string name="unable_to_parse_invite">Невозможно обработать приглашение</string>
     <string name="server_does_not_support_easy_onboarding_invites">Сервер не поддерживает создание приглашений</string>
     <string name="no_active_accounts_support_this">Ни один активный аккаунт не поддерживает эту функцию</string>
     <string name="backup_started_message">Резервное копирование начато. Вы получите уведомление, как только оно будет завершено.</string>
@@ -1255,5 +1255,5 @@
     <string name="attachment_choice_recording">Аудиозапись</string>
     <string name="attachment_choice_contact">Контакт</string>
     <string name="note_to_self">Заметка себе</string>
-    <string name="invalid_contact">Невозможно разобрать контакт</string>
+    <string name="invalid_contact">Невозможно обработать контакт</string>
 </resources>
