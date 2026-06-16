@@ -1192,4 +1192,11 @@
     <string name="attachment_choice_video">Vídeo</string>
     <string name="attachment_choice_recording">Gravando</string>
     <string name="start_group_chat">Crear conversa en grupo</string>
+    <string name="delete_file_dialog_shared">Compartiuse este ficheiro con outras conversas.</string>
+    <string name="delete_file_dialog_confirm">Tes certeza de querer eliminar este ficheiro?</string>
+    <string name="delete_file_dialog_copies">Isto non vai eliminar as copias do ficheiro que se gardan noutros dispositivos ou servidores.</string>
+    <string name="sheet_music">partitura</string>
+    <string name="attachment_choice_contact">Contacto</string>
+    <string name="note_to_self">Nota persoal</string>
+    <string name="invalid_contact">Non se puido ler o contacto</string>
 </resources>
