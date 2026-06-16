@@ -88,7 +88,13 @@ public class AndroidDNSClient extends AbstractDnsClient {
 
     protected ListenableFuture<DnsQueryResult> queryAsFuture(
             final DnsMessage.Builder queryBuilder) {
-        final var dnsServers = getDNSServers();
+        final List<DNSServer> dnsServers;
+        try {
+            dnsServers = getDNSServers();
+        } catch (final RuntimeException e) {
+            // likely DeadSystemExceptions from working on a dead ConnectivityManager
+            return Futures.immediateFailedFuture(e);
+        }
         final DnsMessage question = newQuestion(queryBuilder).build();
         final var rawFuture = queryAsFuture(question, new LinkedList<>(dnsServers));
         // allow for enough time to hit 2 servers over UDP and TCP one after another
@@ -179,13 +185,12 @@ public class AndroidDNSClient extends AbstractDnsClient {
             Log.e(Config.LOGTAG, "no DNS servers found. Context not ready");
             return Collections.emptyList();
         }
-        final ConnectivityManager connectivityManager =
-                c.getSystemService(ConnectivityManager.class);
+        final var connectivityManager = c.getSystemService(ConnectivityManager.class);
         if (connectivityManager == null) {
             Log.w(Config.LOGTAG, "no DNS servers found. ConnectivityManager was null");
             return Collections.emptyList();
         }
-        final Network activeNetwork = connectivityManager.getActiveNetwork();
+        final var activeNetwork = connectivityManager.getActiveNetwork();
         final List<DNSServer> activeDnsServers =
                 activeNetwork == null
                         ? Collections.emptyList()
