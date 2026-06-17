@@ -1684,7 +1684,7 @@ public class ConversationFragment extends XmppFragment
                 showErrorMessage.setVisible(true);
             }
             final String mime = m.isFileOrImage() ? m.getMimeType() : null;
-            if ((m.isGeoUri() && GeoHelper.openInOsmAnd(getActivity(), m))
+            if ((m.isGeoUri() && GeoHelper.isResolveUniversalUri(getActivity(), m))
                     || (mime != null && mime.startsWith("audio/"))) {
                 openWith.setVisible(true);
             }

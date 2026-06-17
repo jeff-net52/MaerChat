@@ -219,4 +219,31 @@ public class MiniUriTest {
         Assert.assertNotNull(readbackHttp);
         Assert.assertEquals(address, readbackHttp.asJid());
     }
+
+    @Test
+    public void geoUri() {
+        final var uri = MiniUri.asMiniUri("geo:37.786971,-122.399677;u=35");
+        Assert.assertTrue(uri instanceof MiniUri.Geo);
+        final var geo = (MiniUri.Geo) uri;
+        Assert.assertEquals(37.786971, geo.getLatitude(), 0.0);
+        Assert.assertEquals(-122.399677, geo.getLongitude(), 0.0);
+        Assert.assertEquals(35, (long) geo.getUncertainty().get());
+    }
+
+    @Test
+    public void geoUriWithZoom() {
+        final var uri = MiniUri.asMiniUri("geo:37.78918,-122.40335?z=14");
+        Assert.assertTrue(uri instanceof MiniUri.Geo);
+        final var geo = (MiniUri.Geo) uri;
+        Assert.assertEquals(37.78918, geo.getLatitude(), 0.0);
+        Assert.assertEquals(-122.40335, geo.getLongitude(), 0.0);
+        Assert.assertEquals(14, (long) geo.getZoom().get());
+    }
+
+    @Test
+    public void geoUriWithLabel() {
+        final var uri = new MiniUri.Geo(123.45, -67.89);
+        Assert.assertEquals(
+                "geo:123.45,-67.89?q=123.45,-67.89(Here)", uri.asUniveralsUri("Here").toString());
+    }
 }

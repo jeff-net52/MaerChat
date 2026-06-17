@@ -3,6 +3,7 @@ package de.gultsch.common;
 import android.net.Uri;
 import com.google.common.base.Joiner;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -14,7 +15,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.escape.CharEscaper;
 import com.google.common.primitives.Chars;
+import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
+import eu.siacs.conversations.utils.CharSequences;
 import eu.siacs.conversations.xmpp.Jid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -31,6 +34,7 @@ import java.util.regex.Pattern;
 import okhttp3.HttpUrl;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.osmdroid.util.GeoPoint;
 
 public class MiniUri {
 
@@ -90,8 +94,13 @@ public class MiniUri {
 
     private static Map<String, Collection<String>> parseParameters(
             final String query, final char separator) {
+        return parseParameters(Splitter.on(separator).omitEmptyStrings().split(query));
+    }
+
+    protected static Map<String, Collection<String>> parseParameters(
+            final Iterable<String> iterable) {
         final var builder = new ImmutableMultimap.Builder<String, String>();
-        for (final String pair : Splitter.on(separator).omitEmptyStrings().split(query)) {
+        for (final String pair : iterable) {
             final String[] parts = pair.split("=", 2);
             if (parts.length == 0) {
                 continue;
@@ -268,7 +277,12 @@ public class MiniUri {
                 throw new IllegalArgumentException("HTTP URI does not match pattern");
             }
             case "mumble" -> asMiniUriIfMatch(Patterns.URI_MUMBLE, uri);
-            case "geo" -> asMiniUriIfMatch(Patterns.URI_GEO, uri);
+            case "geo" -> {
+                if (Patterns.URI_GEO.matcher(uri).matches()) {
+                    yield new Geo(uri);
+                }
+                throw new IllegalArgumentException("GEO URI does not match pattern");
+            }
             case "xmpp" -> new Xmpp(uri);
             case "taler" -> asMiniUriIfMatch(Patterns.URI_TALER, uri);
             case "imto" -> new Imto(uri);
@@ -503,6 +517,103 @@ public class MiniUri {
 
         public Xmpp transform() {
             return new Xmpp(jid);
+        }
+    }
+
+    public static class Geo extends MiniUri {
+
+        private final double latitude;
+        private final double longitude;
+        private final Map<String, Collection<String>> geoParameters;
+
+        private Geo(final String uri) {
+            super(uri);
+            final var pathComponents = Splitter.on(';').splitToList(getPath());
+            final var coordinates =
+                    Splitter.on(',')
+                            .splitToList(
+                                    Iterables.getFirst(pathComponents, CharSequences.EMPTY_STRING));
+            if (coordinates.size() != 2) {
+                throw new IllegalArgumentException("invalid coordinates");
+            }
+            final var latitude = Doubles.tryParse(coordinates.get(0));
+            final var longitude = Doubles.tryParse(coordinates.get(1));
+            if (latitude == null || longitude == null) {
+                throw new IllegalArgumentException("lat/long did not contain valid doubles");
+            }
+            this.latitude = latitude;
+            this.longitude = longitude;
+            if (pathComponents.size() >= 2) {
+                this.geoParameters = parseParameters(Iterables.skip(pathComponents, 1));
+            } else {
+                this.geoParameters = Collections.emptyMap();
+            }
+        }
+
+        public Geo(final GeoPoint geoPoint) {
+            this(geoPoint.getLatitude(), geoPoint.getLongitude());
+        }
+
+        public Geo(final double latitude, final double longitude) {
+            super(String.format(Locale.US, "geo:%s,%s", latitude, longitude));
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.geoParameters = Collections.emptyMap();
+        }
+
+        public double getLatitude() {
+            return this.latitude;
+        }
+
+        public double getLongitude() {
+            return this.longitude;
+        }
+
+        public Optional<Integer> getUncertainty() {
+            final var u = this.geoParameters.get("u");
+            if (u == null || u.isEmpty()) {
+                return Optional.absent();
+            }
+            final var value = Iterables.getFirst(u, null);
+            return value == null ? null : Optional.fromNullable(Ints.tryParse(value));
+        }
+
+        public Optional<Integer> getZoom() {
+            final var z = this.getParameter("z");
+            if (z == null) {
+                return Optional.absent();
+            }
+            return Optional.fromNullable(Ints.tryParse(z));
+        }
+
+        public Uri asUniversalUri() {
+            return asUniversalUri(null);
+        }
+
+        public Uri asUniversalUri(final String label) {
+            final String uri;
+            if (Strings.isNullOrEmpty(label)) {
+                uri =
+                        String.format(
+                                Locale.US,
+                                "geo:%1$s,%2$s?q=%1$s,%2$s",
+                                this.latitude,
+                                this.longitude);
+
+            } else {
+                uri =
+                        String.format(
+                                Locale.US,
+                                "geo:%1$s,%2$s?q=%1$s,%2$s(%3$s)",
+                                this.latitude,
+                                this.longitude,
+                                MiniUri.urlEncode(label));
+            }
+            return Uri.parse(uri);
+        }
+
+        public GeoPoint asGeoPoint() {
+            return new GeoPoint(latitude, longitude);
         }
     }
 

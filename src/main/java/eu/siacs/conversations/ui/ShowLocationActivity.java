@@ -17,17 +17,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import com.google.common.base.Strings;
-import com.google.common.primitives.Doubles;
+import de.gultsch.common.MiniUri;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityShowLocationBinding;
 import eu.siacs.conversations.ui.util.LocationHelper;
-import eu.siacs.conversations.ui.util.UriHelper;
 import eu.siacs.conversations.ui.widget.Marker;
 import eu.siacs.conversations.ui.widget.MyLocation;
-import eu.siacs.conversations.utils.GeoHelper;
 import eu.siacs.conversations.utils.LocationProvider;
-import java.util.Map;
 import org.osmdroid.util.GeoPoint;
 
 public class ShowLocationActivity extends LocationActivity implements LocationListener {
@@ -69,24 +66,17 @@ public class ShowLocationActivity extends LocationActivity implements LocationLi
                 }
                 break;
             case Intent.ACTION_VIEW:
-                final Uri uri = intent.getData();
-                if (uri == null) {
-                    break;
-                }
-                final GeoPoint point;
-                try {
-                    point = GeoHelper.parseGeoPoint(uri);
-                } catch (final Exception e) {
-                    break;
-                }
-                this.loc = point;
-                final Map<String, String> query = UriHelper.parseQueryString(uri.getQuery());
-                final String z = query.get("z");
-                final Double zoom = Strings.isNullOrEmpty(z) ? null : Doubles.tryParse(z);
-                if (zoom != null) {
-                    Log.d(Config.LOGTAG, "inferring zoom level " + zoom + " from geo uri");
-                    mapController.setZoom(zoom);
-                    gotoLoc(false);
+                final var uri = MiniUri.getOrNull(intent.getData());
+                if (uri instanceof MiniUri.Geo geo) {
+                    this.loc = geo.asGeoPoint();
+                    final var zoom = geo.getZoom();
+                    if (zoom.isPresent()) {
+                        Log.d(
+                                Config.LOGTAG,
+                                "inferring zoom level " + zoom.get() + " from geo uri");
+                        mapController.setZoom((double) zoom.get());
+                        gotoLoc(false);
+                    }
                 }
                 break;
         }
