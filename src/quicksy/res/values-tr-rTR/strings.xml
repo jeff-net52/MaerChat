@@ -9,4 +9,5 @@
     <string name="unable_to_verify_server_identity">Sunucu kimliği belirlenemiyor.</string>
     <string name="unknown_security_error">Bilinmeyen güvenlik hatası.</string>
     <string name="timeout_while_connecting_to_server">Sunucuya bağlanılırken zaman aşımına uğrandı.</string>
+    <string name="use_physical_device">Lütfen hesap oluşturmak için fiziksel bir cihaz kullanınız.</string>
 </resources>
