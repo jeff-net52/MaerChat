@@ -734,7 +734,7 @@
     <string name="phone_number">número de telefone</string>
     <string name="verify_your_phone_number">Verifique o seu número de telefone</string>
     <string name="enter_country_code_and_phone_number">O Quicksy enviará uma mensagem SMS (taxas podem ser cobradas pela operadora) para verificar seu número de telefone. Digite o código do seu país e o número de telefone:</string>
-    <string name="we_will_be_verifying"><![CDATA[Nós verificaremos o número de telefone<br/><br/><b>%s</b><br/><br/>Podemos prosseguir ou deseja editar o número?]]></string>
+    <string name="we_will_be_verifying"><![CDATA[Nós verificaremos o número de telefone<br><br><b>%s</b><br><br>Podemos prosseguir ou deseja editar o número?]]></string>
     <string name="not_a_valid_phone_number">%s não é um número de telefone válido.</string>
     <string name="please_enter_your_phone_number">Digite o seu número de telefone.</string>
     <string name="search_countries">Pesquisar países</string>
@@ -1194,4 +1194,20 @@
     <string name="filter_media">Filtrar mídia</string>
     <string name="apply_filter">Aplicar</string>
     <string name="select_all">Selecionar tudo</string>
+    <string name="start_group_chat">Abrir grupo</string>
+    <string name="delete_file_dialog_shared">Esse arquivo foi compartilhado com outras conversas.</string>
+    <string name="delete_file_dialog_confirm">Tem certeza que quer apagar este arquivo?</string>
+    <string name="delete_file_dialog_copies">Fazer isso não apagará as cópias deste arquivo que estão armazenadas em outros dispositivos ou servidores.</string>
+    <string name="sheet_music">partitura musical</string>
+    <string name="search_in_chats">Buscar nas conversas</string>
+    <string name="search_for_x_in_chats">Buscar por \"%s\" nas conversas</string>
+    <string name="attachment_choice_gallery">Galeria</string>
+    <string name="attachment_choice_file">Arquivo</string>
+    <string name="attachment_choice_location">Localização</string>
+    <string name="attachment_choice_camera">Câmera</string>
+    <string name="attachment_choice_video">Vídeo</string>
+    <string name="attachment_choice_recording">Gravação</string>
+    <string name="attachment_choice_contact">Contato</string>
+    <string name="note_to_self">Anotações</string>
+    <string name="invalid_contact">Não foi possível interpretar o contato</string>
 </resources>
