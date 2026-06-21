@@ -10,18 +10,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.utils.Emoticons;
 import eu.siacs.conversations.xmpp.Jid;
-import java.io.IOException;
+import im.conversations.android.json.Services;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,12 +34,6 @@ public class Reaction implements MucOptions.IdentifiableUser {
                     "\uD83D\uDE02",
                     "\uD83D\uDE2E",
                     "\uD83D\uDE22");
-
-    private static final Gson GSON;
-
-    static {
-        GSON = new GsonBuilder().registerTypeAdapter(Jid.class, new JidTypeAdapter()).create();
-    }
 
     public final String reaction;
     public final boolean received;
@@ -71,7 +59,7 @@ public class Reaction implements MucOptions.IdentifiableUser {
     }
 
     public static String toString(final Collection<Reaction> reactions) {
-        return (reactions == null || reactions.isEmpty()) ? null : GSON.toJson(reactions);
+        return (reactions == null || reactions.isEmpty()) ? null : Services.GSON.toJson(reactions);
     }
 
     public static Collection<Reaction> fromString(final String asString) {
@@ -79,7 +67,7 @@ public class Reaction implements MucOptions.IdentifiableUser {
             return Collections.emptyList();
         }
         try {
-            return GSON.fromJson(asString, new TypeToken<List<Reaction>>() {}.getType());
+            return Services.GSON.fromJson(asString, new TypeToken<List<Reaction>>() {}.getType());
         } catch (final IllegalArgumentException | JsonSyntaxException e) {
             Log.e(Config.LOGTAG, "could not restore reactions", e);
             return Collections.emptyList();
@@ -142,29 +130,6 @@ public class Reaction implements MucOptions.IdentifiableUser {
     @Override
     public String mucUserOccupantId() {
         return this.occupantId;
-    }
-
-    private static class JidTypeAdapter extends TypeAdapter<Jid> {
-        @Override
-        public void write(final JsonWriter out, final Jid value) throws IOException {
-            if (value == null) {
-                out.nullValue();
-            } else {
-                out.value(value.toString());
-            }
-        }
-
-        @Override
-        public Jid read(final JsonReader in) throws IOException {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else if (in.peek() == JsonToken.STRING) {
-                final String value = in.nextString();
-                return Jid.of(value);
-            }
-            throw new IOException("Unexpected token");
-        }
     }
 
     public static Aggregated aggregated(final Collection<Reaction> reactions) {

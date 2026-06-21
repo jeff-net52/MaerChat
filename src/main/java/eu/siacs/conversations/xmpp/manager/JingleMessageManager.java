@@ -78,15 +78,14 @@ public class JingleMessageManager extends AbstractManager {
                     final Conversation c =
                             this.service.findOrCreateConversation(
                                     getAccount(), counterpart.asBareJid(), false, false);
-                    final eu.siacs.conversations.entities.Message preExistingMessage =
-                            c.findRtpSession(sessionId, status);
+                    final var preExistingMessage = c.findRtpSession(sessionId, status);
                     if (preExistingMessage != null) {
                         preExistingMessage.setServerMsgId(serverMsgId);
                         getDatabase().updateMessage(preExistingMessage, true);
                         this.service.updateConversationUi();
                         return;
                     }
-                    final eu.siacs.conversations.entities.Message message =
+                    final var message =
                             new eu.siacs.conversations.entities.Message(
                                     c,
                                     status,

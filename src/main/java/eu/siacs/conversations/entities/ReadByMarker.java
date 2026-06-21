@@ -1,100 +1,33 @@
 package eu.siacs.conversations.entities;
 
+import android.util.Log;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.xmpp.Jid;
+import im.conversations.android.json.Services;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-public class ReadByMarker implements MucOptions.IdentifiableUser {
-
-    private ReadByMarker() {}
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ReadByMarker marker = (ReadByMarker) o;
-
-        if (!Objects.equals(fullJid, marker.fullJid)) return false;
-        return Objects.equals(realJid, marker.realJid);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = fullJid != null ? fullJid.hashCode() : 0;
-        result = 31 * result + (realJid != null ? realJid.hashCode() : 0);
-        return result;
-    }
-
-    private Jid fullJid;
-    private Jid realJid;
-    private String occupantId;
-
-    public Jid getFullJid() {
-        return fullJid;
-    }
-
-    public Jid getRealJid() {
-        return realJid;
-    }
-
-    public JSONObject toJson() {
-        JSONObject jsonObject = new JSONObject();
-        if (fullJid != null) {
-            try {
-                jsonObject.put("fullJid", fullJid.toString());
-            } catch (JSONException e) {
-                // ignore
-            }
-        }
-        if (realJid != null) {
-            try {
-                jsonObject.put("realJid", realJid.toString());
-            } catch (JSONException e) {
-                // ignore
-            }
-        }
-        if (occupantId != null) {
-            try {
-                jsonObject.put("occupantId", occupantId);
-            } catch (JSONException e) {
-                // ignore
-            }
-        }
-        return jsonObject;
-    }
-
-    public static Set<ReadByMarker> fromJson(final JSONArray jsonArray) {
-        final Set<ReadByMarker> readByMarkers = new CopyOnWriteArraySet<>();
-        for (int i = 0; i < jsonArray.length(); ++i) {
-            try {
-                readByMarkers.add(fromJson(jsonArray.getJSONObject(i)));
-            } catch (JSONException e) {
-                // ignored
-            }
-        }
-        return readByMarkers;
-    }
+public record ReadByMarker(
+        @SerializedName("occupantId") String occupantId,
+        @SerializedName("fullJid") Jid fullJid,
+        @SerializedName("realJid") Jid realJid)
+        implements MucOptions.IdentifiableUser {
 
     public static ReadByMarker from(final Message message) {
-        final ReadByMarker marker = new ReadByMarker();
-        marker.occupantId = message.getOccupantId();
-        marker.fullJid = message.getCounterpart();
-        marker.realJid = message.getTrueCounterpart();
-        return marker;
+        return new ReadByMarker(
+                message.getOccupantId(), message.getCounterpart(), message.getTrueCounterpart());
     }
 
     public static ReadByMarker from(final MucOptions.User user) {
-        final ReadByMarker marker = new ReadByMarker();
-        marker.occupantId = user.getOccupantId();
-        marker.fullJid = user.getFullJid();
-        marker.realJid = user.getRealJid();
-        return marker;
+        return new ReadByMarker(user.getOccupantId(), user.getFullJid(), user.getRealJid());
     }
 
     public static Set<ReadByMarker> from(Collection<MucOptions.User> users) {
@@ -105,42 +38,19 @@ public class ReadByMarker implements MucOptions.IdentifiableUser {
         return markers;
     }
 
-    public static ReadByMarker fromJson(JSONObject jsonObject) {
-        ReadByMarker marker = new ReadByMarker();
+    public static Set<ReadByMarker> fromJsonString(final String json) {
+        if (Strings.isNullOrEmpty(json)) {
+            return Collections.emptySet();
+        }
+        final List<ReadByMarker> markers;
         try {
-            marker.fullJid = Jid.of(jsonObject.getString("fullJid"));
-        } catch (JSONException | IllegalArgumentException e) {
-            marker.fullJid = null;
+            markers =
+                    Services.GSON.fromJson(json, new TypeToken<List<ReadByMarker>>() {}.getType());
+        } catch (final JsonSyntaxException e) {
+            Log.e(Config.LOGTAG, "could not parse read marker from json", e);
+            return Collections.emptySet();
         }
-        try {
-            marker.realJid = Jid.of(jsonObject.getString("realJid"));
-        } catch (JSONException | IllegalArgumentException e) {
-            marker.realJid = null;
-        }
-
-        try {
-            marker.occupantId = jsonObject.getString("occupantId");
-        } catch (JSONException | IllegalArgumentException e) {
-            marker.occupantId = null;
-        }
-
-        return marker;
-    }
-
-    public static Set<ReadByMarker> fromJsonString(String json) {
-        try {
-            return fromJson(new JSONArray(json));
-        } catch (final JSONException | NullPointerException e) {
-            return new CopyOnWriteArraySet<>();
-        }
-    }
-
-    public static JSONArray toJson(final Set<ReadByMarker> readByMarkers) {
-        final JSONArray jsonArray = new JSONArray();
-        for (final ReadByMarker marker : readByMarkers) {
-            jsonArray.put(marker.toJson());
-        }
-        return jsonArray;
+        return ImmutableSet.copyOf(markers);
     }
 
     public static boolean contains(
@@ -164,8 +74,8 @@ public class ReadByMarker implements MucOptions.IdentifiableUser {
     }
 
     public static boolean allUsersRepresented(
-            Collection<MucOptions.User> users, Set<ReadByMarker> markers) {
-        for (MucOptions.User user : users) {
+            final Collection<MucOptions.User> users, final Set<ReadByMarker> markers) {
+        for (final var user : users) {
             if (!contains(from(user), markers)) {
                 return false;
             }
@@ -174,7 +84,9 @@ public class ReadByMarker implements MucOptions.IdentifiableUser {
     }
 
     public static boolean allUsersRepresented(
-            Collection<MucOptions.User> users, Set<ReadByMarker> markers, ReadByMarker marker) {
+            final Collection<MucOptions.User> users,
+            final Set<ReadByMarker> markers,
+            final ReadByMarker marker) {
         final Set<ReadByMarker> markersCopy = new CopyOnWriteArraySet<>(markers);
         markersCopy.add(marker);
         return allUsersRepresented(users, markersCopy);

@@ -59,7 +59,7 @@ public class IndividualMessage extends Message {
             String serverMsgId,
             String fingerprint,
             boolean read,
-            String edited,
+            Collection<Edit> edited,
             boolean oob,
             String errorMessage,
             Set<ReadByMarker> readByMarkers,
@@ -162,7 +162,7 @@ public class IndividualMessage extends Message {
                 cursor.getString(cursor.getColumnIndexOrThrow(SERVER_MSG_ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(FINGERPRINT)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(READ)) > 0,
-                cursor.getString(cursor.getColumnIndexOrThrow(EDITED)),
+                Edit.ofString(cursor.getString(cursor.getColumnIndexOrThrow(EDITED))),
                 cursor.getInt(cursor.getColumnIndexOrThrow(OOB)) > 0,
                 cursor.getString(cursor.getColumnIndexOrThrow(ERROR_MESSAGE)),
                 ReadByMarker.fromJsonString(

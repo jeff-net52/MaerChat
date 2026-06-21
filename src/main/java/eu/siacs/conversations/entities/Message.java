@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.util.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -25,15 +24,17 @@ import eu.siacs.conversations.utils.MessageUtils;
 import eu.siacs.conversations.utils.MimeUtils;
 import eu.siacs.conversations.utils.UIHelper;
 import eu.siacs.conversations.xmpp.Jid;
+import im.conversations.android.json.Services;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import org.json.JSONException;
+import org.jspecify.annotations.NonNull;
 
 public class Message extends AbstractEntity
         implements AvatarService.Avatar, MucOptions.IdentifiableUser {
@@ -119,7 +120,7 @@ public class Message extends AbstractEntity
     private Message mPreviousMessage = null;
     private String axolotlFingerprint = null;
     private String errorMessage = null;
-    private Set<ReadByMarker> readByMarkers = new CopyOnWriteArraySet<>();
+    private final Set<ReadByMarker> readByMarkers = new CopyOnWriteArraySet<>();
     private String occupantId;
     private Collection<Reaction> reactions = Collections.emptyList();
 
@@ -159,10 +160,10 @@ public class Message extends AbstractEntity
                 null,
                 null,
                 true,
-                null,
+                Collections.emptyList(),
                 false,
                 null,
-                null,
+                Collections.emptySet(),
                 false,
                 false,
                 null,
@@ -170,7 +171,11 @@ public class Message extends AbstractEntity
                 Collections.emptyList());
     }
 
-    public Message(Conversation conversation, int status, int type, final String remoteMsgId) {
+    public Message(
+            final Conversation conversation,
+            final int status,
+            final int type,
+            final String remoteMsgId) {
         this(
                 conversation,
                 java.util.UUID.randomUUID().toString(),
@@ -188,10 +193,10 @@ public class Message extends AbstractEntity
                 null,
                 null,
                 true,
-                null,
+                Collections.emptyList(),
                 false,
                 null,
-                null,
+                Collections.emptySet(),
                 false,
                 false,
                 null,
@@ -216,7 +221,7 @@ public class Message extends AbstractEntity
             final String serverMsgId,
             final String fingerprint,
             final boolean read,
-            final String edited,
+            @NonNull final Collection<Edit> edited,
             final boolean oob,
             final String errorMessage,
             final Set<ReadByMarker> readByMarkers,
@@ -224,7 +229,7 @@ public class Message extends AbstractEntity
             final boolean deleted,
             final String bodyLanguage,
             final String occupantId,
-            final Collection<Reaction> reactions) {
+            @NonNull final Collection<Reaction> reactions) {
         this.conversation = conversation;
         this.uuid = uuid;
         this.conversationUuid = conversationUUid;
@@ -241,10 +246,10 @@ public class Message extends AbstractEntity
         this.serverMsgId = serverMsgId;
         this.axolotlFingerprint = fingerprint;
         this.read = read;
-        this.edits = Edit.fromJson(edited);
+        this.edits = new ArrayList<>(edited);
         this.oob = oob;
         this.errorMessage = errorMessage;
-        this.readByMarkers = readByMarkers == null ? new CopyOnWriteArraySet<>() : readByMarkers;
+        this.readByMarkers.addAll(readByMarkers);
         this.markable = markable;
         this.deleted = deleted;
         this.bodyLanguage = bodyLanguage;
@@ -271,7 +276,7 @@ public class Message extends AbstractEntity
                 cursor.getString(cursor.getColumnIndexOrThrow(SERVER_MSG_ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(FINGERPRINT)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(READ)) > 0,
-                cursor.getString(cursor.getColumnIndexOrThrow(EDITED)),
+                Edit.ofString(cursor.getString(cursor.getColumnIndexOrThrow(EDITED))),
                 cursor.getInt(cursor.getColumnIndexOrThrow(OOB)) > 0,
                 cursor.getString(cursor.getColumnIndexOrThrow(ERROR_MESSAGE)),
                 ReadByMarker.fromJsonString(
@@ -358,14 +363,10 @@ public class Message extends AbstractEntity
         values.put(SERVER_MSG_ID, serverMsgId);
         values.put(FINGERPRINT, axolotlFingerprint);
         values.put(READ, read ? 1 : 0);
-        try {
-            values.put(EDITED, Edit.toJson(edits));
-        } catch (JSONException e) {
-            Log.e(Config.LOGTAG, "error persisting json for edits", e);
-        }
+        values.put(EDITED, Services.GSON.toJson(edits));
         values.put(OOB, oob ? 1 : 0);
         values.put(ERROR_MESSAGE, errorMessage);
-        values.put(READ_BY_MARKERS, ReadByMarker.toJson(readByMarkers).toString());
+        values.put(READ_BY_MARKERS, Services.GSON.toJson(readByMarkers));
         values.put(MARKABLE, markable ? 1 : 0);
         values.put(DELETED, deleted ? 1 : 0);
         values.put(BODY_LANGUAGE, bodyLanguage);
@@ -573,22 +574,22 @@ public class Message extends AbstractEntity
     }
 
     public boolean addReadByMarker(final ReadByMarker readByMarker) {
-        if (readByMarker.getRealJid() != null) {
-            if (readByMarker.getRealJid().asBareJid().equals(trueCounterpart)) {
+        if (readByMarker.realJid() != null) {
+            if (readByMarker.realJid().asBareJid().equals(trueCounterpart)) {
                 return false;
             }
-        } else if (readByMarker.getFullJid() != null) {
-            if (readByMarker.getFullJid().equals(counterpart)) {
+        } else if (readByMarker.fullJid() != null) {
+            if (readByMarker.fullJid().equals(counterpart)) {
                 return false;
             }
         }
         if (this.readByMarkers.add(readByMarker)) {
-            if (readByMarker.getRealJid() != null && readByMarker.getFullJid() != null) {
+            if (readByMarker.realJid() != null && readByMarker.fullJid() != null) {
                 Iterator<ReadByMarker> iterator = this.readByMarkers.iterator();
                 while (iterator.hasNext()) {
                     ReadByMarker marker = iterator.next();
-                    if (marker.getRealJid() == null
-                            && readByMarker.getFullJid().equals(marker.getFullJid())) {
+                    if (marker.realJid() == null
+                            && readByMarker.fullJid().equals(marker.fullJid())) {
                         iterator.remove();
                     }
                 }
@@ -606,8 +607,10 @@ public class Message extends AbstractEntity
     public Set<Jid> getReadyByTrue() {
         return ImmutableSet.copyOf(
                 Collections2.transform(
-                        Collections2.filter(this.readByMarkers, m -> m.getRealJid() != null),
-                        ReadByMarker::getRealJid));
+                        Collections2.filter(
+                                this.readByMarkers,
+                                m -> Objects.requireNonNull(m).realJid() != null),
+                        r -> Objects.requireNonNull(r).realJid()));
     }
 
     boolean similar(Message message) {
@@ -789,18 +792,18 @@ public class Message extends AbstractEntity
         if (this.edits.isEmpty()) {
             throw new IllegalStateException("Attempting to access unedited message");
         }
-        return edits.get(edits.size() - 1).getEditedId();
+        return edits.get(edits.size() - 1).editedId();
     }
 
     public Collection<String> getEditedServerMessageIds() {
-        return Collections2.transform(this.edits, Edit::getServerMsgId);
+        return Collections2.transform(this.edits, Edit::serverMsgId);
     }
 
     public String getEditedIdWireFormat() {
         if (this.edits.isEmpty()) {
             throw new IllegalStateException("Attempting to access unedited message");
         }
-        return edits.get(0).getEditedId();
+        return edits.get(0).editedId();
     }
 
     public void setOob(boolean isOob) {

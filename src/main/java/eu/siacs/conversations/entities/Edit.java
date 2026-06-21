@@ -1,32 +1,22 @@
 package eu.siacs.conversations.entities;
 
-import java.util.ArrayList;
+import android.util.Log;
+import com.google.common.base.Strings;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import eu.siacs.conversations.Config;
+import im.conversations.android.json.Services;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-public class Edit {
+public record Edit(
+        @SerializedName("edited_id") String editedId,
+        @SerializedName("server_msg_id") String serverMsgId) {
 
-    private final String editedId;
-    private final String serverMsgId;
-
-    Edit(String editedId, String serverMsgId) {
-        this.editedId = editedId;
-        this.serverMsgId = serverMsgId;
-    }
-
-    static String toJson(List<Edit> edits) throws JSONException {
-        JSONArray jsonArray = new JSONArray();
-        for (Edit edit : edits) {
-            jsonArray.put(edit.toJson());
-        }
-        return jsonArray.toString();
-    }
-
-    static boolean wasPreviouslyEditedRemoteMsgId(List<Edit> edits, String remoteMsgId) {
-        for (Edit edit : edits) {
+    static boolean wasPreviouslyEditedRemoteMsgId(
+            final List<Edit> edits, final String remoteMsgId) {
+        for (final var edit : edits) {
             if (edit.editedId != null && edit.editedId.equals(remoteMsgId)) {
                 return true;
             }
@@ -34,8 +24,9 @@ public class Edit {
         return false;
     }
 
-    static boolean wasPreviouslyEditedServerMsgId(List<Edit> edits, String serverMsgId) {
-        for (Edit edit : edits) {
+    static boolean wasPreviouslyEditedServerMsgId(
+            final List<Edit> edits, final String serverMsgId) {
+        for (final var edit : edits) {
             if (edit.serverMsgId != null && edit.serverMsgId.equals(serverMsgId)) {
                 return true;
             }
@@ -43,59 +34,15 @@ public class Edit {
         return false;
     }
 
-    private static Edit fromJson(JSONObject jsonObject) throws JSONException {
-        String edited = jsonObject.has("edited_id") ? jsonObject.getString("edited_id") : null;
-        String serverMsgId =
-                jsonObject.has("server_msg_id") ? jsonObject.getString("server_msg_id") : null;
-        return new Edit(edited, serverMsgId);
-    }
-
-    static List<Edit> fromJson(String input) {
-        final ArrayList<Edit> list = new ArrayList<>();
-        if (input == null) {
-            return list;
+    public static List<Edit> ofString(final String string) {
+        if (Strings.isNullOrEmpty(string)) {
+            return Collections.emptyList();
         }
         try {
-            final JSONArray jsonArray = new JSONArray(input);
-            for (int i = 0; i < jsonArray.length(); ++i) {
-                list.add(fromJson(jsonArray.getJSONObject(i)));
-            }
-            return list;
-        } catch (JSONException e) {
-            return list;
+            return Services.GSON.fromJson(string, new TypeToken<List<Edit>>() {}.getType());
+        } catch (final JsonSyntaxException e) {
+            Log.w(Config.LOGTAG, "could not parse edits");
+            return Collections.emptyList();
         }
-    }
-
-    private JSONObject toJson() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("edited_id", editedId);
-        jsonObject.put("server_msg_id", serverMsgId);
-        return jsonObject;
-    }
-
-    String getEditedId() {
-        return editedId;
-    }
-
-    public String getServerMsgId() {
-        return this.serverMsgId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Edit edit = (Edit) o;
-
-        if (!Objects.equals(editedId, edit.editedId)) return false;
-        return Objects.equals(serverMsgId, edit.serverMsgId);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = editedId != null ? editedId.hashCode() : 0;
-        result = 31 * result + (serverMsgId != null ? serverMsgId.hashCode() : 0);
-        return result;
     }
 }
