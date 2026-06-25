@@ -515,7 +515,7 @@ public class EditAccountActivity extends OmemoActivity
             }
             final Intent intent =
                     SignupUtils.getTokenRegistrationIntent(
-                            this, preset, mAccount.getKey(Account.KEY_PRE_AUTH_REGISTRATION_TOKEN));
+                            this, preset, mAccount.getPreAuthRegistrationToken().orNull());
             StartConversationActivity.addInviteUri(intent, this);
             startActivity(intent);
             return;
@@ -1179,7 +1179,7 @@ public class EditAccountActivity extends OmemoActivity
                             new PresenceTemplate(
                                     getAvailabilityRadioButton(binding),
                                     binding.statusMessage.getText().toString().trim());
-                    if (mAccount.getPgpId() != 0 && hasPgp()) {
+                    if (mAccount.getPgpId().isPresent() && hasPgp()) {
                         generateSignature(null, template);
                     } else {
                         xmppConnectionService.changeStatus(mAccount, template, null);
@@ -1407,12 +1407,12 @@ public class EditAccountActivity extends OmemoActivity
                 this.binding.pushRow.setVisibility(View.VISIBLE);
             }
 
-            final long pgpKeyId = this.mAccount.getPgpId();
-            if (pgpKeyId != 0) {
-                OnClickListener openPgp = view -> launchOpenKeyChain(pgpKeyId);
+            final var pgpKeyId = this.mAccount.getPgpId();
+            if (pgpKeyId.isPresent()) {
+                OnClickListener openPgp = view -> launchOpenKeyChain(pgpKeyId.get());
                 OnClickListener delete = view -> showDeletePgpDialog();
                 this.binding.pgpFingerprintBox.setVisibility(View.VISIBLE);
-                this.binding.pgpFingerprint.setText(OpenPgpUtils.convertKeyIdToHex(pgpKeyId));
+                this.binding.pgpFingerprint.setText(OpenPgpUtils.convertKeyIdToHex(pgpKeyId.get()));
                 this.binding.pgpFingerprint.setOnClickListener(openPgp);
                 if ("pgp".equals(messageFingerprint)) {
                     this.binding.pgpFingerprintDesc.setTextColor(
@@ -1602,8 +1602,7 @@ public class EditAccountActivity extends OmemoActivity
         builder.setPositiveButton(
                 R.string.confirm,
                 (dialogInterface, i) -> {
-                    mAccount.setPgpSignId(0);
-                    mAccount.unsetPgpSignature();
+                    mAccount.resetPgp();
                     xmppConnectionService.databaseBackend.updateAccount(mAccount);
                     mAccount.getXmppConnection().getManager(PresenceManager.class).available();
                     refreshUiReal();

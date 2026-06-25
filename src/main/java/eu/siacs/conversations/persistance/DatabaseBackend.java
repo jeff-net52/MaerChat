@@ -677,17 +677,15 @@ public class DatabaseBackend extends SQLiteOpenHelper {
          * depends on account de-serialization.
          */
         if (oldVersion < 17 && newVersion >= 17 && newVersion < 31) {
-            List<Account> accounts = getAccounts(db);
-            for (Account account : accounts) {
-                String ownDeviceIdString =
-                        account.getKey(SQLiteAxolotlStore.JSONKEY_REGISTRATION_ID);
-                if (ownDeviceIdString == null) {
+            final var accounts = getAccounts(db);
+            for (final var account : accounts) {
+                final var ownDeviceId = account.getAxolotlRegistrationId();
+                if (!ownDeviceId.isPresent()) {
                     continue;
                 }
-                int ownDeviceId = Integer.valueOf(ownDeviceIdString);
                 SignalProtocolAddress ownAddress =
                         new SignalProtocolAddress(
-                                account.getJid().asBareJid().toString(), ownDeviceId);
+                                account.getJid().asBareJid().toString(), ownDeviceId.get());
                 deleteSession(db, account, ownAddress);
                 IdentityKeyPair identityKeyPair = loadOwnIdentityKeyPair(db, account);
                 if (identityKeyPair != null) {
@@ -723,9 +721,9 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         }
 
         if (oldVersion < 21 && newVersion >= 21) {
-            List<Account> accounts = getAccounts(db);
-            for (Account account : accounts) {
-                account.unsetPgpSignature();
+            final var accounts = getAccounts(db);
+            for (final var account : accounts) {
+                account.resetPgp();
                 db.update(
                         Account.TABLENAME,
                         account.getContentValues(),

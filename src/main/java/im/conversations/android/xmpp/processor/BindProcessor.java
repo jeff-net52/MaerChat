@@ -41,7 +41,7 @@ public class BindProcessor extends XmppConnection.Delegate implements Runnable {
         final var sos = features.getServiceOutageStatus();
         if (sos != null) {
             Log.d(Config.LOGTAG, account.getJid().asBareJid() + " server has SOS on " + sos);
-            sosModified = account.setKey(Account.KEY_SOS_URL, sos.toString());
+            sosModified = account.setSosUrl(sos);
         } else {
             sosModified = false;
         }

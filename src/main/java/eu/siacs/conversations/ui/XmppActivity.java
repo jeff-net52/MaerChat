@@ -775,15 +775,14 @@ public abstract class XmppActivity extends ActionBarActivity {
             final Conversation conversation,
             Intent intent,
             final Runnable onSuccess) {
-        if (account.getPgpId() == 0) {
-            choosePgpSignId(account);
-        } else {
+        final var pgpId = account.getPgpId();
+        if (pgpId.isPresent()) {
             final String status = Strings.nullToEmpty(account.getPresenceStatusMessage());
             final var future =
                     xmppConnectionService.getPgpEngine().generateSignature(intent, account, status);
             Futures.addCallback(
                     future,
-                    new FutureCallback<String>() {
+                    new FutureCallback<>() {
                         @Override
                         public void onSuccess(String signature) {
                             account.setPgpSignature(signature);
@@ -817,14 +816,15 @@ public abstract class XmppActivity extends ActionBarActivity {
                                 } catch (final SendIntentException ignored) {
                                 }
                             } else {
-                                account.setPgpSignId(0);
-                                account.unsetPgpSignature();
+                                account.resetPgp();
                                 xmppConnectionService.databaseBackend.updateAccount(account);
                                 choosePgpSignId(account);
                             }
                         }
                     },
                     ContextCompat.getMainExecutor(this));
+        } else {
+            choosePgpSignId(account);
         }
     }
 

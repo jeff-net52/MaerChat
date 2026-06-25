@@ -41,17 +41,12 @@ public class SQLiteAxolotlStore implements SignalProtocolStore {
     public static final String OWN = "ownkey";
     public static final String CERTIFICATE = "certificate";
 
-    public static final String JSONKEY_REGISTRATION_ID = "axolotl_reg_id";
-    public static final String JSONKEY_CURRENT_PREKEY_ID = "axolotl_cur_prekey_id";
-
     private static final int NUM_TRUSTS_TO_CACHE = 100;
 
     private final Account account;
     private final XmppConnectionService mXmppConnectionService;
 
     private IdentityKeyPair identityKeyPair;
-    private int localRegistrationId;
-    private int currentPreKeyId = 0;
 
     private final HashSet<Integer> preKeysMarkedForRemoval = new HashSet<>();
 
@@ -84,12 +79,10 @@ public class SQLiteAxolotlStore implements SignalProtocolStore {
     public SQLiteAxolotlStore(Account account, XmppConnectionService service) {
         this.account = account;
         this.mXmppConnectionService = service;
-        this.localRegistrationId = loadRegistrationId();
-        this.currentPreKeyId = loadCurrentPreKeyId();
     }
 
     public int getCurrentPreKeyId() {
-        return currentPreKeyId;
+        return this.account.getAxolotlCurrentPreKey();
     }
 
     // --------------------------------------
@@ -120,54 +113,23 @@ public class SQLiteAxolotlStore implements SignalProtocolStore {
     }
 
     private int loadRegistrationId(boolean regenerate) {
-        String regIdString = this.account.getKey(JSONKEY_REGISTRATION_ID);
+        final var registrationId = this.account.getAxolotlRegistrationId();
         int reg_id;
-        if (!regenerate && regIdString != null) {
-            reg_id = Integer.valueOf(regIdString);
+        if (regenerate || !registrationId.isPresent()) {
+            final var id = generateRegistrationId();
+            this.account.setAxolotlRegistrationId(id);
+            return id;
         } else {
-            Log.i(
-                    Config.LOGTAG,
-                    AxolotlService.getLogprefix(account)
-                            + "Could not retrieve axolotl registration id for account "
-                            + account.getJid());
-            reg_id = generateRegistrationId();
-            boolean success =
-                    this.account.setKey(JSONKEY_REGISTRATION_ID, Integer.toString(reg_id));
-            if (success) {
-                mXmppConnectionService.databaseBackend.updateAccount(account);
-            } else {
-                Log.e(
-                        Config.LOGTAG,
-                        AxolotlService.getLogprefix(account)
-                                + "Failed to write new key to the database!");
-            }
+            return registrationId.get();
         }
-        return reg_id;
-    }
-
-    private int loadCurrentPreKeyId() {
-        String prekeyIdString = this.account.getKey(JSONKEY_CURRENT_PREKEY_ID);
-        int prekey_id;
-        if (prekeyIdString != null) {
-            prekey_id = Integer.valueOf(prekeyIdString);
-        } else {
-            Log.w(
-                    Config.LOGTAG,
-                    AxolotlService.getLogprefix(account)
-                            + "Could not retrieve current prekey id for account "
-                            + account.getJid());
-            prekey_id = 0;
-        }
-        return prekey_id;
     }
 
     public void regenerate() {
         mXmppConnectionService.databaseBackend.wipeAxolotlDb(account);
         trustCache.evictAll();
-        account.setKey(JSONKEY_CURRENT_PREKEY_ID, Integer.toString(0));
         identityKeyPair = loadIdentityKeyPair();
-        localRegistrationId = loadRegistrationId(true);
-        currentPreKeyId = 0;
+        loadRegistrationId(true);
+        this.account.setAxolotlCurrentPreKey(0);
         mXmppConnectionService.updateAccountUi();
     }
 
@@ -194,7 +156,7 @@ public class SQLiteAxolotlStore implements SignalProtocolStore {
      */
     @Override
     public int getLocalRegistrationId() {
-        return localRegistrationId;
+        return loadRegistrationId(false);
     }
 
     /**
@@ -395,19 +357,10 @@ public class SQLiteAxolotlStore implements SignalProtocolStore {
      * @param record the PreKeyRecord.
      */
     @Override
-    public void storePreKey(int preKeyId, PreKeyRecord record) {
+    public void storePreKey(final int preKeyId, final PreKeyRecord record) {
         mXmppConnectionService.databaseBackend.storePreKey(account, record);
-        currentPreKeyId = preKeyId;
-        boolean success =
-                this.account.setKey(JSONKEY_CURRENT_PREKEY_ID, Integer.toString(preKeyId));
-        if (success) {
-            mXmppConnectionService.databaseBackend.updateAccount(account);
-        } else {
-            Log.e(
-                    Config.LOGTAG,
-                    AxolotlService.getLogprefix(account)
-                            + "Failed to write new prekey id to the database!");
-        }
+        account.setAxolotlCurrentPreKey(preKeyId);
+        mXmppConnectionService.databaseBackend.updateAccount(account);
     }
 
     /**

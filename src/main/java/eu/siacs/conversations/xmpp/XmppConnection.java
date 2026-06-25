@@ -1950,12 +1950,11 @@ public class XmppConnection implements Runnable {
     }
 
     private void register() {
-        final String preAuthToken =
-                Strings.emptyToNull(account.getKey(Account.KEY_PRE_AUTH_REGISTRATION_TOKEN));
+        final var preAuthToken = account.getPreAuthRegistrationToken();
         final ListenableFuture<RegistrationManager.Registration> registrationFuture;
-        if (preAuthToken != null && streamFeatures.preAuthenticatedInBandRegistration()) {
+        if (preAuthToken.isPresent() && streamFeatures.preAuthenticatedInBandRegistration()) {
             registrationFuture =
-                    getManager(RegistrationManager.class).getRegistration(preAuthToken);
+                    getManager(RegistrationManager.class).getRegistration(preAuthToken.get());
         } else {
             registrationFuture = getManager(RegistrationManager.class).getRegistration();
         }

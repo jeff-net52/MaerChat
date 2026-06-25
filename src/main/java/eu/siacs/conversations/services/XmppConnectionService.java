@@ -897,12 +897,11 @@ public class XmppConnectionService extends Service {
     }
 
     public void fetchServiceOutageStatus(final Account account) {
-        final var sosUrl = account.getKey(Account.KEY_SOS_URL);
-        if (Strings.isNullOrEmpty(sosUrl)) {
-            return;
-        }
-        final var url = HttpUrl.parse(sosUrl);
-        if (url == null) {
+        final HttpUrl url;
+        final var sosUrl = account.getSosUrl();
+        if (sosUrl.isPresent()) {
+            url = sosUrl.get();
+        } else {
             return;
         }
         Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": fetching service outage " + url);

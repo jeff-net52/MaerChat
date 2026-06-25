@@ -3,10 +3,13 @@ package eu.siacs.conversations.entities;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
-import androidx.annotation.NonNull;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
+import com.google.gson.JsonParseException;
+import com.google.gson.annotations.SerializedName;
 import de.gultsch.common.MiniUri;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
@@ -27,10 +30,12 @@ import eu.siacs.conversations.xmpp.XmppConnection;
 import eu.siacs.conversations.xmpp.jingle.RtpCapability;
 import eu.siacs.conversations.xmpp.manager.HttpUploadManager;
 import eu.siacs.conversations.xmpp.manager.RosterManager;
+import im.conversations.android.json.Services;
 import java.util.Arrays;
 import java.util.Collection;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Locale;
+import okhttp3.HttpUrl;
+import org.jspecify.annotations.NonNull;
 
 public class Account extends AbstractEntity implements AvatarService.Avatar {
 
@@ -65,12 +70,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     public static final int OPTION_QUICKSTART_AVAILABLE = 10;
     public static final int OPTION_SOFT_DISABLED = 11;
 
-    private static final String KEY_PGP_SIGNATURE = "pgp_signature";
-    private static final String KEY_PGP_ID = "pgp_id";
-    private static final String KEY_PINNED_MECHANISM = "pinned_mechanism";
-    public static final String KEY_SOS_URL = "sos_url";
-    public static final String KEY_PRE_AUTH_REGISTRATION_TOKEN = "pre_auth_registration";
-    protected final JSONObject keys;
+    protected final Keys keys;
     protected Jid jid;
     protected String password;
     protected int options = 0;
@@ -99,7 +99,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
                 password,
                 0,
                 null,
-                "",
+                new Keys(),
                 null,
                 null,
                 null,
@@ -118,7 +118,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
             final String password,
             final int options,
             final String rosterVersion,
-            final String keys,
+            final Keys keys,
             final String avatar,
             String displayName,
             String hostname,
@@ -134,7 +134,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         this.password = password;
         this.options = options;
         this.rosterVersion = rosterVersion;
-        this.keys = parseKeys(keys);
+        this.keys = keys;
         this.avatar = avatar;
         this.displayName = displayName;
         this.hostname = hostname;
@@ -145,17 +145,6 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         this.pinnedChannelBinding = pinnedChannelBinding;
         this.fastMechanism = fastMechanism;
         this.fastToken = fastToken;
-    }
-
-    public static JSONObject parseKeys(final String keys) {
-        if (Strings.isNullOrEmpty(keys)) {
-            return new JSONObject();
-        }
-        try {
-            return new JSONObject(keys);
-        } catch (final JSONException e) {
-            return new JSONObject();
-        }
     }
 
     public static Account fromCursor(final Cursor cursor) {
@@ -181,7 +170,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
                 cursor.getString(cursor.getColumnIndexOrThrow(PASSWORD)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(OPTIONS)),
                 cursor.getString(cursor.getColumnIndexOrThrow(ROSTERVERSION)),
-                cursor.getString(cursor.getColumnIndexOrThrow(KEYS)),
+                Keys.parse(cursor.getString(cursor.getColumnIndexOrThrow(KEYS))),
                 cursor.getString(cursor.getColumnIndexOrThrow(AVATAR)),
                 cursor.getString(cursor.getColumnIndexOrThrow(DISPLAY_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(HOSTNAME)),
@@ -225,15 +214,14 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         return getPgpDecryptionService().isConnected();
     }
 
-    public boolean setShowErrorNotification(boolean newValue) {
-        boolean oldValue = showErrorNotification();
-        setKey("show_error", Boolean.toString(newValue));
+    public boolean setShowErrorNotification(final boolean newValue) {
+        final boolean oldValue = this.showErrorNotification();
+        this.keys.showError = newValue;
         return newValue != oldValue;
     }
 
     public boolean showErrorNotification() {
-        String key = getKey("show_error");
-        return key == null || Boolean.parseBoolean(key);
+        return this.keys.showError == null || this.keys.showError;
     }
 
     public boolean isEnabled() {
@@ -375,17 +363,12 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     public void resetPinnedMechanism() {
         this.pinnedMechanism = null;
         this.pinnedChannelBinding = null;
-        setKey(Account.KEY_PINNED_MECHANISM, String.valueOf(-1));
     }
 
     public int getPinnedMechanismPriority() {
-        final int fallback = getKeyAsInt(KEY_PINNED_MECHANISM, -1);
-        if (Strings.isNullOrEmpty(this.pinnedMechanism)) {
-            return fallback;
-        }
         final SaslMechanism saslMechanism = getPinnedMechanism();
         if (saslMechanism == null) {
-            return fallback;
+            return Integer.MIN_VALUE;
         } else {
             return saslMechanism.getPriority();
         }
@@ -466,42 +449,12 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         return jid;
     }
 
-    public JSONObject getKeys() {
-        return keys;
-    }
-
-    public String getKey(final String name) {
-        synchronized (this.keys) {
-            return this.keys.optString(name, null);
-        }
-    }
-
-    public int getKeyAsInt(final String name, int defaultValue) {
-        String key = getKey(name);
-        try {
-            return key == null ? defaultValue : Integer.parseInt(key);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    public boolean setKey(final String keyName, final String keyValue) {
-        synchronized (this.keys) {
-            try {
-                this.keys.put(keyName, keyValue);
-                return true;
-            } catch (final JSONException e) {
-                return false;
-            }
-        }
-    }
-
     public void setPrivateKeyAlias(final String alias) {
-        setKey("private_key_alias", alias);
+        this.keys.privateKeyAlias = alias;
     }
 
     public String getPrivateKeyAlias() {
-        return getKey("private_key_alias");
+        return this.keys.privateKeyAlias;
     }
 
     @Override
@@ -512,9 +465,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         values.put(SERVER, jid.getDomain().toString());
         values.put(PASSWORD, password);
         values.put(OPTIONS, options);
-        synchronized (this.keys) {
-            values.put(KEYS, this.keys.toString());
-        }
+        values.put(KEYS, Services.GSON.toJson(this.keys));
         values.put(ROSTERVERSION, rosterVersion);
         values.put(AVATAR, avatar);
         values.put(DISPLAY_NAME, displayName);
@@ -569,46 +520,58 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     }
 
     public String getPgpSignature() {
-        return getKey(KEY_PGP_SIGNATURE);
+        return this.keys.pgpSignature;
     }
 
-    public boolean setPgpSignature(String signature) {
-        return setKey(KEY_PGP_SIGNATURE, signature);
+    public void setPgpSignature(final String signature) {
+        this.keys.pgpSignature = signature;
     }
 
-    public boolean unsetPgpSignature() {
-        synchronized (this.keys) {
-            return keys.remove(KEY_PGP_SIGNATURE) != null;
-        }
+    public void resetPgp() {
+        this.keys.pgpKeyId = null;
+        this.keys.pgpSignature = null;
     }
 
-    public long getPgpId() {
-        synchronized (this.keys) {
-            if (keys.has(KEY_PGP_ID)) {
-                try {
-                    return keys.getLong(KEY_PGP_ID);
-                } catch (JSONException e) {
-                    return 0;
-                }
-            } else {
-                return 0;
-            }
-        }
+    public Optional<Long> getPgpId() {
+        return Optional.fromNullable(this.keys.pgpKeyId);
     }
 
-    public boolean setPgpSignId(long pgpID) {
-        synchronized (this.keys) {
-            try {
-                if (pgpID == 0) {
-                    keys.remove(KEY_PGP_ID);
-                } else {
-                    keys.put(KEY_PGP_ID, pgpID);
-                }
-            } catch (JSONException e) {
-                return false;
-            }
-            return true;
-        }
+    public void setPgpSignId(final long pgpID) {
+        this.keys.pgpKeyId = pgpID;
+    }
+
+    public Optional<Integer> getAxolotlRegistrationId() {
+        return this.keys.getAxolotlRegistrationId();
+    }
+
+    public void setAxolotlRegistrationId(final int registrationId) {
+        this.keys.axolotlRegistrationId = registrationId;
+    }
+
+    public int getAxolotlCurrentPreKey() {
+        return this.keys.axolotlCurrentPreKey;
+    }
+
+    public void setAxolotlCurrentPreKey(final int id) {
+        this.keys.axolotlCurrentPreKey = id;
+    }
+
+    public Optional<String> getPreAuthRegistrationToken() {
+        return Optional.fromNullable(Strings.emptyToNull(this.keys.preAuthRegistrationToken));
+    }
+
+    public void setPreAuthRegistrationToken(final String preAuthRegistrationToken) {
+        this.keys.preAuthRegistrationToken = preAuthRegistrationToken;
+    }
+
+    public Optional<HttpUrl> getSosUrl() {
+        return Optional.fromNullable(this.keys.sosUrl);
+    }
+
+    public boolean setSosUrl(final HttpUrl url) {
+        final var old = this.keys.sosUrl;
+        this.keys.sosUrl = url;
+        return !Objects.equal(old, url);
     }
 
     public Roster getRoster() {
@@ -636,12 +599,15 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         final ImmutableMultimap.Builder<String, String> builder = new ImmutableMultimap.Builder<>();
         final var axolotlService = getAxolotlService();
         builder.put(
-                String.format("omemo-sid-%d", axolotlService.getOwnDeviceId()),
+                String.format(Locale.US, "omemo-sid-%d", axolotlService.getOwnDeviceId()),
                 axolotlService.getOwnFingerprint().substring(2));
         for (final var session : axolotlService.findOwnSessions()) {
             if (session.getTrust().isVerified() && session.getTrust().isActive()) {
                 builder.put(
-                        String.format("omemo-sid-%d", session.getRemoteAddress().getDeviceId()),
+                        String.format(
+                                Locale.US,
+                                "omemo-sid-%d",
+                                session.getRemoteAddress().getDeviceId()),
                         session.getFingerprint().substring(2));
             }
         }
@@ -677,6 +643,55 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
 
     public void setXmppConnection(final XmppConnection connection) {
         this.xmppConnection = connection;
+    }
+
+    public static class Keys {
+
+        @SerializedName("pgp_signature")
+        private String pgpSignature;
+
+        @SerializedName("pgp_id")
+        private Long pgpKeyId;
+
+        @SerializedName("sos_url")
+        private HttpUrl sosUrl;
+
+        @SerializedName("pre_auth_registration")
+        private String preAuthRegistrationToken;
+
+        @SerializedName("show_error")
+        private Boolean showError;
+
+        @SerializedName("private_key_alias")
+        private String privateKeyAlias;
+
+        @SerializedName("axolotl_reg_id")
+        private Integer axolotlRegistrationId;
+
+        @SerializedName("axolotl_cur_prekey_id")
+        private int axolotlCurrentPreKey;
+
+        public Optional<Integer> getAxolotlRegistrationId() {
+            return Optional.fromNullable(this.axolotlRegistrationId);
+        }
+
+        public static Keys parse(final String json) {
+            if (Strings.isNullOrEmpty(json)) {
+                return new Keys();
+            }
+            try {
+                return Services.GSON.fromJson(json, Keys.class);
+            } catch (final JsonParseException e) {
+                Log.d(Config.LOGTAG, "could not parse account keys", e);
+                return new Keys();
+            }
+        }
+
+        public Keys() {}
+
+        public Keys(final int deviceId) {
+            this.axolotlRegistrationId = deviceId;
+        }
     }
 
     public enum State {
@@ -783,7 +798,6 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
                 case SEE_OTHER_HOST -> R.string.reconnect_on_other_host;
                 case MISSING_INTERNET_PERMISSION -> R.string.missing_internet_permission;
                 case TEMPORARY_AUTH_FAILURE -> R.string.account_status_temporary_auth_failure;
-                default -> R.string.account_status_unknown;
             };
         }
     }

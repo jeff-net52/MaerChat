@@ -39,6 +39,7 @@ import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.BackupFileHeader;
 import eu.siacs.conversations.xmpp.Jid;
+import im.conversations.android.json.Services;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -62,8 +63,6 @@ import org.bouncycastle.crypto.modes.AEADBlockCipher;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ImportBackupWorker extends Worker {
 
@@ -288,17 +287,15 @@ public class ImportBackupWorker extends Worker {
             } else {
                 throw new IOException("jid or password in table did not match backup");
             }
-            final var keys = Account.parseKeys(contentValues.getAsString(Account.KEYS));
-            final var deviceId = keys.optString(SQLiteAxolotlStore.JSONKEY_REGISTRATION_ID);
-            final var importReadyKeys = new JSONObject();
-            if (!Strings.isNullOrEmpty(deviceId) && this.includeOmemo) {
-                try {
-                    importReadyKeys.put(SQLiteAxolotlStore.JSONKEY_REGISTRATION_ID, deviceId);
-                } catch (final JSONException e) {
-                    Log.e(Config.LOGTAG, "error writing omemo registration id", e);
-                }
+            final var keys = Account.Keys.parse(contentValues.getAsString(Account.KEYS));
+            final var deviceId = keys.getAxolotlRegistrationId();
+            final Account.Keys importReadyKeys;
+            if (deviceId.isPresent() && this.includeOmemo) {
+                importReadyKeys = new Account.Keys(deviceId.get());
+            } else {
+                importReadyKeys = new Account.Keys();
             }
-            contentValues.put(Account.KEYS, importReadyKeys.toString());
+            contentValues.put(Account.KEYS, Services.GSON.toJson(importReadyKeys));
         }
         if (this.includeOmemo) {
             db.insert(table, null, contentValues);

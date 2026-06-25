@@ -79,9 +79,11 @@ public class PgpEngine {
         params.setAction(OpenPgpApi.ACTION_ENCRYPT);
         final Conversation conversation = (Conversation) message.getConversation();
         if (conversation.getMode() == Conversation.MODE_SINGLE) {
-            long[] keys = {
-                conversation.getContact().getPgpKeyId(), conversation.getAccount().getPgpId()
-            };
+            final var pgpId = conversation.getAccount().getPgpId();
+            if (!pgpId.isPresent()) {
+                settableFuture.setException(new IllegalStateException("PGP not set up"));
+            }
+            final long[] keys = {conversation.getContact().getPgpKeyId(), pgpId.get()};
             params.putExtra(OpenPgpApi.EXTRA_KEY_IDS, keys);
         } else {
             params.putExtra(OpenPgpApi.EXTRA_KEY_IDS, conversation.getMucOptions().getPgpKeyIds());
@@ -265,16 +267,17 @@ public class PgpEngine {
     }
 
     public ListenableFuture<String> generateSignature(
-            Intent intent, final Account account, final String status) {
-        if (account.getPgpId() == 0) {
+            final Intent intent, final Account account, final String status) {
+        final var pgpId = account.getPgpId();
+        if (!pgpId.isPresent()) {
             return Futures.immediateFailedFuture(
                     new IllegalStateException("Account has no PGP ID"));
         }
         final SettableFuture<String> future = SettableFuture.create();
-        Intent params = intent == null ? new Intent() : intent;
+        final Intent params = intent == null ? new Intent() : intent;
         params.setAction(OpenPgpApi.ACTION_CLEARTEXT_SIGN);
         params.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-        params.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, account.getPgpId());
+        params.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, pgpId.get());
         InputStream is = new ByteArrayInputStream(status.getBytes());
         final OutputStream os = new ByteArrayOutputStream();
         Log.d(
