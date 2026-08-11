@@ -395,29 +395,6 @@ public class FileBackend {
         }
     }
 
-    public static Uri getMediaUri(Context context, File file) {
-        final String filePath = file.getAbsolutePath();
-        try (final Cursor cursor =
-                context.getContentResolver()
-                        .query(
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                new String[] {MediaStore.Images.Media._ID},
-                                MediaStore.Images.Media.DATA + "=? ",
-                                new String[] {filePath},
-                                null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                final int id =
-                        cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID));
-                return Uri.withAppendedPath(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
-            } else {
-                return null;
-            }
-        } catch (final Exception e) {
-            return null;
-        }
-    }
-
     public static void updateFileParams(Message message, String url, long size) {
         message.setBody(url + '|' + size);
     }

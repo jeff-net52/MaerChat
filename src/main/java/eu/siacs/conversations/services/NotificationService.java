@@ -1508,7 +1508,7 @@ public class NotificationService {
                         message.getStatus() == Message.STATUS_RECEIVED ? getPerson(message) : null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && isImageMessage(message)) {
                     final Uri dataUri =
-                            FileBackend.getMediaUri(
+                            FileBackend.getUriForFile(
                                     mXmppConnectionService,
                                     mXmppConnectionService.getFileBackend().getFile(message));
                     NotificationCompat.MessagingStyle.Message imageMessage =
@@ -1517,9 +1517,7 @@ public class NotificationService {
                                             .first,
                                     message.getTimeSent(),
                                     sender);
-                    if (dataUri != null) {
-                        imageMessage.setData(message.getMimeType(), dataUri);
-                    }
+                    imageMessage.setData(message.getMimeType(), dataUri);
                     messagingStyle.addMessage(imageMessage);
                 } else {
                     messagingStyle.addMessage(
