@@ -69,12 +69,8 @@ public class ConversationAdapter
         if (conversation == ConversationFragment.getConversation(activity)) {
             viewHolder.binding.frame.setBackgroundResource(
                     R.drawable.background_selected_item_conversation);
-            // viewHolder.binding.frame.setBackgroundColor(MaterialColors.getColor(viewHolder.binding.frame, com.google.android.material.R.attr.colorSurfaceDim));
         } else {
-            viewHolder.binding.frame.setBackgroundColor(
-                    MaterialColors.getColor(
-                            viewHolder.binding.frame,
-                            com.google.android.material.R.attr.colorSurface));
+            viewHolder.binding.frame.setBackgroundResource(R.drawable.background_conversation_card);
         }
 
         final Message message = conversation.getLatestMessage();
@@ -83,6 +79,34 @@ public class ConversationAdapter
         final boolean isRead = conversation.isRead();
         final @DrawableRes Integer messageStatusDrawable =
                 MessageAdapter.getMessageStatusAsDrawable(message, status);
+        final int encryption = message.getEncryption();
+        final boolean isOmemo = encryption == Message.ENCRYPTION_AXOLOTL;
+        final boolean omemoFailed =
+                encryption == Message.ENCRYPTION_AXOLOTL_FAILED
+                        || encryption == Message.ENCRYPTION_AXOLOTL_NOT_FOR_THIS_DEVICE;
+        viewHolder.binding.encryptionStatus.setVisibility(
+                isOmemo || omemoFailed ? View.VISIBLE : View.GONE);
+        if (omemoFailed) {
+            viewHolder.binding.encryptionStatus.setImageResource(R.drawable.ic_warning_24dp);
+            viewHolder.binding.encryptionStatus.setContentDescription(
+                    activity.getString(R.string.omemo_decryption_failed));
+            ImageViewCompat.setImageTintList(
+                    viewHolder.binding.encryptionStatus,
+                    ColorStateList.valueOf(
+                            MaterialColors.getColor(
+                                    viewHolder.binding.encryptionStatus,
+                                    androidx.appcompat.R.attr.colorError)));
+        } else if (isOmemo) {
+            viewHolder.binding.encryptionStatus.setImageResource(R.drawable.ic_lock_24dp);
+            viewHolder.binding.encryptionStatus.setContentDescription(
+                    activity.getString(R.string.encrypted_with_omemo));
+            ImageViewCompat.setImageTintList(
+                    viewHolder.binding.encryptionStatus,
+                    ColorStateList.valueOf(
+                            MaterialColors.getColor(
+                                    viewHolder.binding.encryptionStatus,
+                                    com.google.android.material.R.attr.colorTertiary)));
+        }
         if (message.getType() == Message.TYPE_RTP_SESSION) {
             viewHolder.binding.messageStatus.setVisibility(View.GONE);
         } else if (messageStatusDrawable == null) {
@@ -214,6 +238,8 @@ public class ConversationAdapter
             viewHolder.binding.notificationStatus.setVisibility(View.VISIBLE);
             viewHolder.binding.notificationStatus.setImageResource(
                     R.drawable.ic_phone_in_talk_24dp);
+            viewHolder.binding.notificationStatus.setContentDescription(
+                    activity.getString(R.string.ongoing_call));
         } else {
             final long muted_till =
                     conversation.getLongAttribute(Conversation.ATTRIBUTE_MUTED_TILL, 0);
@@ -221,16 +247,23 @@ public class ConversationAdapter
                 viewHolder.binding.notificationStatus.setVisibility(View.VISIBLE);
                 viewHolder.binding.notificationStatus.setImageResource(
                         R.drawable.ic_notifications_off_24dp);
+                viewHolder.binding.notificationStatus.setContentDescription(
+                        activity.getString(R.string.conversation_muted));
             } else if (muted_till >= System.currentTimeMillis()) {
                 viewHolder.binding.notificationStatus.setVisibility(View.VISIBLE);
                 viewHolder.binding.notificationStatus.setImageResource(
                         R.drawable.ic_notifications_paused_24dp);
+                viewHolder.binding.notificationStatus.setContentDescription(
+                        activity.getString(R.string.conversation_muted_temporarily));
             } else if (conversation.alwaysNotify()) {
                 viewHolder.binding.notificationStatus.setVisibility(View.GONE);
+                viewHolder.binding.notificationStatus.setContentDescription(null);
             } else {
                 viewHolder.binding.notificationStatus.setVisibility(View.VISIBLE);
                 viewHolder.binding.notificationStatus.setImageResource(
                         R.drawable.ic_notifications_none_24dp);
+                viewHolder.binding.notificationStatus.setContentDescription(
+                        activity.getString(R.string.conversation_mentions_only));
             }
         }
 
@@ -240,10 +273,11 @@ public class ConversationAdapter
         } else {
             timestamp = conversation.getLatestMessage().getTimeSent();
         }
-        viewHolder.binding.pinnedOnTop.setVisibility(
-                conversation.getBooleanAttribute(Conversation.ATTRIBUTE_PINNED_ON_TOP, false)
-                        ? View.VISIBLE
-                        : View.GONE);
+        final boolean pinned =
+                conversation.getBooleanAttribute(Conversation.ATTRIBUTE_PINNED_ON_TOP, false);
+        viewHolder.binding.pinnedOnTop.setVisibility(pinned ? View.VISIBLE : View.GONE);
+        viewHolder.binding.pinnedOnTop.setContentDescription(
+                pinned ? activity.getString(R.string.conversation_pinned) : null);
         viewHolder.binding.conversationLastupdate.setText(
                 UIHelper.readableTimeDifference(activity, timestamp));
         AvatarWorkerTask.loadAvatar(

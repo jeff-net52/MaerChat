@@ -24,12 +24,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -50,6 +52,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import de.gultsch.common.Linkify;
 import de.gultsch.common.MiniUri;
 import eu.siacs.conversations.AppSettings;
+import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.crypto.PgpEngine;
@@ -127,7 +130,21 @@ public class EditAccountActivity extends OmemoActivity
     private Boolean mForceRegister = null;
     private boolean mUsernameMode = false;
     private boolean mShowOptions = false;
+    private boolean mPasswordEdited = false;
     private Account mAccount;
+    private final OnBackPressedCallback onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    deleteAccountAndReturnIfNecessary();
+                    setEnabled(false);
+                    try {
+                        EditAccountActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                    } finally {
+                        setEnabled(true);
+                    }
+                }
+            };
     private final OnClickListener mCancelButtonClickListener =
             v -> {
                 deleteAccountAndReturnIfNecessary();
@@ -175,7 +192,11 @@ public class EditAccountActivity extends OmemoActivity
 
                 @Override
                 public void onClick(final View v) {
-                    final String password = binding.accountPassword.getText().toString();
+                    final String enteredPassword = binding.accountPassword.getText().toString();
+                    final String password =
+                            mAccount != null && enteredPassword.isEmpty()
+                                    ? mAccount.getPassword()
+                                    : enteredPassword;
                     final boolean wasDisabled =
                             mAccount != null && mAccount.getStatus() == Account.State.DISABLED;
                     final boolean accountInfoEdited = accountInfoEdited();
@@ -198,14 +219,11 @@ public class EditAccountActivity extends OmemoActivity
                         }
                         return;
                     }
-                    final boolean registerNewAccount;
-                    if (mForceRegister != null) {
-                        registerNewAccount = mForceRegister;
-                    } else {
-                        registerNewAccount =
-                                binding.accountRegisterNew.isChecked()
-                                        && !Config.DISALLOW_REGISTRATION_IN_UI;
-                    }
+                    final boolean registerNewAccount =
+                            !Config.DISALLOW_REGISTRATION_IN_UI
+                                    && (mForceRegister != null
+                                            ? mForceRegister
+                                            : binding.accountRegisterNew.isChecked());
                     if (mUsernameMode && binding.accountJid.getText().toString().contains("@")) {
                         binding.accountJidLayout.setError(getString(R.string.invalid_username));
                         removeErrorsOnAllBut(binding.accountJidLayout);
@@ -401,6 +419,22 @@ public class EditAccountActivity extends OmemoActivity
                 @Override
                 public void afterTextChanged(final Editable s) {}
             };
+    private final TextWatcher mPasswordTextWatcher =
+            new TextWatcher() {
+                @Override
+                public void beforeTextChanged(
+                        final CharSequence s, final int start, final int count, final int after) {}
+
+                @Override
+                public void onTextChanged(
+                        final CharSequence s, final int start, final int before, final int count) {
+                    mPasswordEdited = true;
+                    updateSaveButton();
+                }
+
+                @Override
+                public void afterTextChanged(final Editable s) {}
+            };
     private final View.OnFocusChangeListener mEditTextFocusListener =
             new View.OnFocusChangeListener() {
                 @Override
@@ -484,41 +518,11 @@ public class EditAccountActivity extends OmemoActivity
         return super.onNavigateUp();
     }
 
-    @Override
-    public void onBackPressed() {
-        deleteAccountAndReturnIfNecessary();
-        super.onBackPressed();
-    }
-
     private void deleteAccountAndReturnIfNecessary() {
         if (mInitMode
                 && mAccount != null
                 && !mAccount.isOptionSet(Account.OPTION_LOGGED_IN_SUCCESSFULLY)) {
             xmppConnectionService.deleteAccount(mAccount);
-        }
-
-        final boolean magicCreate =
-                mAccount != null
-                        && mAccount.isOptionSet(Account.OPTION_MAGIC_CREATE)
-                        && !mAccount.isOptionSet(Account.OPTION_LOGGED_IN_SUCCESSFULLY);
-        final Jid jid = mAccount == null ? null : mAccount.getJid();
-
-        if (SignupUtils.isSupportTokenRegistry()
-                && jid != null
-                && magicCreate
-                && !jid.getDomain().equals(Jid.ofDomain(Config.MAGIC_CREATE_DOMAIN))) {
-            final Jid preset;
-            if (mAccount.isOptionSet(Account.OPTION_FIXED_USERNAME)) {
-                preset = jid.asBareJid();
-            } else {
-                preset = jid.getDomain();
-            }
-            final Intent intent =
-                    SignupUtils.getTokenRegistrationIntent(
-                            this, preset, mAccount.getPreAuthRegistrationToken().orNull());
-            StartConversationActivity.addInviteUri(intent, this);
-            startActivity(intent);
-            return;
         }
 
         final List<Account> accounts =
@@ -700,9 +704,11 @@ public class EditAccountActivity extends OmemoActivity
             return false;
         }
         return jidEdited()
-                || !this.mAccount
-                        .getPassword()
-                        .equals(this.binding.accountPassword.getText().toString())
+                || (mPasswordEdited
+                        && !this.binding.accountPassword.getText().toString().isEmpty()
+                        && !this.mAccount
+                                .getPassword()
+                                .equals(this.binding.accountPassword.getText().toString()))
                 || !this.mAccount.getHostname().equals(this.binding.hostname.getText().toString())
                 || !String.valueOf(this.mAccount.getPort())
                         .equals(this.binding.port.getText().toString());
@@ -721,6 +727,7 @@ public class EditAccountActivity extends OmemoActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, this.onBackPressedCallback);
         if (savedInstanceState != null) {
             this.mSavedInstanceAccount = savedInstanceState.getString("account");
             this.mSavedInstanceInit = savedInstanceState.getBoolean("initMode", false);
@@ -730,7 +737,7 @@ public class EditAccountActivity extends OmemoActivity
         setSupportActionBar(binding.toolbar);
         binding.accountJid.addTextChangedListener(this.mTextWatcher);
         binding.accountJid.setOnFocusChangeListener(this.mEditTextFocusListener);
-        this.binding.accountPassword.addTextChangedListener(this.mTextWatcher);
+        this.binding.accountPassword.addTextChangedListener(this.mPasswordTextWatcher);
 
         this.binding.avater.setOnClickListener(this.mAvatarClickListener);
         this.binding.hostname.addTextChangedListener(mTextWatcher);
@@ -856,9 +863,11 @@ public class EditAccountActivity extends OmemoActivity
                     intent.getBooleanExtra(EXTRA_OPENED_FROM_NOTIFICATION, false);
             Log.d(Config.LOGTAG, "extras " + intent.getExtras());
             this.mForceRegister =
-                    intent.hasExtra(EXTRA_FORCE_REGISTER)
-                            ? intent.getBooleanExtra(EXTRA_FORCE_REGISTER, false)
-                            : null;
+                    Config.DISALLOW_REGISTRATION_IN_UI
+                            ? Boolean.FALSE
+                            : intent.hasExtra(EXTRA_FORCE_REGISTER)
+                                    ? intent.getBooleanExtra(EXTRA_FORCE_REGISTER, false)
+                                    : null;
             Log.d(Config.LOGTAG, "force register=" + mForceRegister);
             this.mInitMode = init || this.jidToEdit == null;
             this.messageFingerprint = intent.getStringExtra("fingerprint");
@@ -896,6 +905,12 @@ public class EditAccountActivity extends OmemoActivity
         if (mForceRegister != null) {
             this.binding.accountRegisterNew.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     private void displayVerificationWarningDialog(final MiniUri.Xmpp xmppUri) {
@@ -1241,7 +1256,8 @@ public class EditAccountActivity extends OmemoActivity
                         .append(this.mAccount.getJid().asBareJid().toString());
             }
             this.binding.accountPassword.getEditableText().clear();
-            this.binding.accountPassword.getEditableText().append(this.mAccount.getPassword());
+            this.binding.accountPasswordLayout.setHint(R.string.password_unchanged_hint);
+            this.mPasswordEdited = false;
             this.binding.hostname.setText("");
             this.binding.hostname.getEditableText().append(this.mAccount.getHostname());
             this.binding.port.setText("");
@@ -1308,6 +1324,66 @@ public class EditAccountActivity extends OmemoActivity
             this.binding.sessionEst.setText(
                     UIHelper.readableTimeDifferenceFull(
                             this, this.mAccount.getXmppConnection().getLastSessionEstablished()));
+            final var diagnostics = connection.getConnectionDiagnostics();
+            this.binding.diagnosticsJid.setText(mAccount.getJid().asBareJid().toString());
+            final String resolvedServer = diagnostics.resolvedServer();
+            final String remoteAddress = diagnostics.remoteAddress();
+            if (!TextUtils.isEmpty(remoteAddress)
+                    && !TextUtils.equals(resolvedServer, remoteAddress)) {
+                this.binding.diagnosticsServer.setText(
+                        getString(
+                                R.string.server_info_endpoint_with_address,
+                                resolvedServer,
+                                remoteAddress));
+            } else {
+                this.binding.diagnosticsServer.setText(resolvedServer);
+            }
+            this.binding.diagnosticsPort.setText(
+                    diagnostics.port() > 0
+                            ? String.valueOf(diagnostics.port())
+                            : getString(R.string.server_info_not_available));
+            final var tls = diagnostics.tls();
+            if (tls.established()) {
+                this.binding.diagnosticsTls.setText(
+                        getString(
+                                R.string.server_info_tls_active,
+                                TextUtils.isEmpty(tls.protocol()) ? "TLS" : tls.protocol(),
+                                TextUtils.isEmpty(tls.cipherSuite())
+                                        ? getString(R.string.server_info_not_available)
+                                        : tls.cipherSuite()));
+            } else {
+                this.binding.diagnosticsTls.setText(R.string.server_info_not_available);
+            }
+            final var certificate = tls.certificate();
+            if (!TextUtils.isEmpty(certificate.subject())
+                    && !TextUtils.isEmpty(certificate.sha256Fingerprint())
+                    && certificate.validFrom() > 0
+                    && certificate.validUntil() > 0) {
+                final int dateFlags =
+                        DateUtils.FORMAT_NUMERIC_DATE
+                                | DateUtils.FORMAT_SHOW_DATE
+                                | DateUtils.FORMAT_SHOW_YEAR;
+                this.binding.diagnosticsCertificate.setText(
+                        getString(
+                                R.string.server_info_certificate_summary,
+                                certificate.subject(),
+                                certificate.issuer(),
+                                DateUtils.formatDateTime(this, certificate.validFrom(), dateFlags),
+                                DateUtils.formatDateTime(this, certificate.validUntil(), dateFlags),
+                                certificate.sha256Fingerprint()));
+            } else {
+                this.binding.diagnosticsCertificate.setText(R.string.server_info_not_available);
+            }
+            this.binding.diagnosticsResource.setText(
+                    TextUtils.isEmpty(mAccount.getResource())
+                            ? getString(R.string.server_info_not_available)
+                            : mAccount.getResource());
+            this.binding.diagnosticsAppVersion.setText(
+                    getString(
+                            R.string.server_info_app_version_value,
+                            BuildConfig.APP_NAME,
+                            BuildConfig.VERSION_NAME,
+                            BuildConfig.VERSION_CODE));
             final var rosterManager = connection.getManager(RosterManager.class);
             if (rosterManager.versioning()) {
                 this.binding.serverInfoRosterVersion.setText(R.string.server_info_available);
@@ -1369,17 +1445,29 @@ public class EditAccountActivity extends OmemoActivity
                 stanzaRxTxValues = ImmutableList.of(stanzas.rx(), stanzas.tx(), pushCount);
             }
             this.binding.stanzaRxTx.setText(Joiner.on('/').join(stanzaRxTxValues));
-            if (connection.getManager(PepManager.class).isAvailable()) {
-                AxolotlService axolotlService = this.mAccount.getAxolotlService();
+            final var pepManager = connection.getManager(PepManager.class);
+            final AxolotlService axolotlService = this.mAccount.getAxolotlService();
+            if (pepManager.isAvailable()) {
                 if (axolotlService != null && axolotlService.isPepBroken()) {
                     this.binding.serverInfoPep.setText(R.string.server_info_broken);
-                } else if (connection.getManager(PepManager.class).hasPublishOptions()) {
+                } else if (pepManager.hasPublishOptions()) {
                     this.binding.serverInfoPep.setText(R.string.server_info_available);
                 } else {
                     this.binding.serverInfoPep.setText(R.string.server_info_partial);
                 }
             } else {
                 this.binding.serverInfoPep.setText(R.string.server_info_unavailable);
+            }
+            if (axolotlService == null
+                    || axolotlService.getOwnFingerprint() == null
+                    || !pepManager.isAvailable()) {
+                this.binding.serverInfoOmemo.setText(R.string.server_info_unavailable);
+            } else if (axolotlService.isPepBroken()) {
+                this.binding.serverInfoOmemo.setText(R.string.server_info_broken);
+            } else if (pepManager.hasPublishOptions()) {
+                this.binding.serverInfoOmemo.setText(R.string.server_info_available);
+            } else {
+                this.binding.serverInfoOmemo.setText(R.string.server_info_partial);
             }
             final var httpUploadManager = connection.getManager(HttpUploadManager.class);
             final var uploadService = httpUploadManager.getService();
@@ -1426,7 +1514,7 @@ public class EditAccountActivity extends OmemoActivity
                 this.binding.pgpFingerprintBox.setVisibility(View.GONE);
             }
             final String ownAxolotlFingerprint =
-                    this.mAccount.getAxolotlService().getOwnFingerprint();
+                    axolotlService == null ? null : axolotlService.getOwnFingerprint();
             if (ownAxolotlFingerprint != null) {
                 this.binding.axolotlFingerprintBox.setVisibility(View.VISIBLE);
                 this.binding.axolotlFingerprintBox.setOnCreateContextMenuListener(

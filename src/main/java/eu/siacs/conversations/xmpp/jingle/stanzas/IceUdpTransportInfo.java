@@ -3,7 +3,6 @@ package eu.siacs.conversations.xmpp.jingle.stanzas;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.google.common.base.Joiner;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -187,10 +186,7 @@ public class IceUdpTransportInfo extends GenericTransportInfo {
         @Override
         @NonNull
         public String toString() {
-            return MoreObjects.toStringHelper(this)
-                    .add("ufrag", ufrag)
-                    .add("password", password)
-                    .toString();
+            return "Credentials{redacted}";
         }
     }
 
@@ -480,7 +476,7 @@ public class IceUdpTransportInfo extends GenericTransportInfo {
                 if (WELL_KNOWN.contains(iceOption)) {
                     optionBuilder.add(iceOption);
                 } else {
-                    Log.w(Config.LOGTAG, "unrecognized ice option: " + iceOption);
+                    Log.w(Config.LOGTAG, "unrecognized ICE option ignored");
                 }
             }
             return optionBuilder.build();

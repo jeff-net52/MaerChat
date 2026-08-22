@@ -1,13 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="432dp"
-    android:height="432dp"
-    android:viewportWidth="732"
-    android:viewportHeight="732">
-    <group
-        android:translateX="150"
-        android:translateY="150">
-        <path
-            android:fillColor="#ffffff"
-            android:pathData="M216 74.92c-79.3 0.37-144 63.8-144 141.73 0 77.93 64.69 140.8 144 140.43 24.66-0.11 43.7-5.26 65.4-13.25l68.95 27.47c6.87 2.76 14.01-3.47 12.22-10.67l-18.68-75.4c12-21.14 16.11-45.17 16.11-69.92 0-77.93-64.7-140.76-144-140.4Zm-68.25 127.8c8.62-0.04 15.6 6.92 15.6 15.53 0 8.62-6.98 15.64-15.6 15.68-8.62 0.04-15.6-6.91-15.6-15.53s6.98-15.64 15.6-15.68Zm68.47-0.31c8.62-0.04 15.6 6.9 15.6 15.53 0 8.61-6.98 15.63-15.6 15.67-8.61 0.04-15.6-6.91-15.6-15.53s6.99-15.64 15.6-15.68Zm68.66-0.32c8.61-0.05 15.6 6.9 15.6 15.53 0 8.61-6.99 15.63-15.6 15.67-8.62 0.04-15.6-6.91-15.6-15.53s6.98-15.63 15.6-15.67Z" />
-    </group>
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Conversation bubble with a hand-drawn M monogram. -->
+    <path
+        android:fillColor="#FFFFF9"
+        android:pathData="M28,29C22.5,29 18,33.5 18,39L18,64C18,69.5 22.5,74 28,74L59,74L72,84C73.7,85.3 76.1,83.8 75.5,81.7L73.5,74L80,74C85.5,74 90,69.5 90,64L90,39C90,33.5 85.5,29 80,29Z" />
+    <path
+        android:fillColor="#6A2E4D"
+        android:pathData="M33,62L33,43L40,43L49,54L58,43L65,43L65,62L59,62L59,51L49,62L39,51L39,62Z" />
+    <path
+        android:fillColor="#E9B071"
+        android:pathData="M74,45a4,4 0,1 0,0 8a4,4 0,1 0,0 -8" />
 </vector>

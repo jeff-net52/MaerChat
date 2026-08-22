@@ -128,6 +128,7 @@ public class MemorizingTrustManager {
     private File keyStoreFile;
     private KeyStore appKeyStore;
     private final X509TrustManager defaultTrustManager;
+    private final X509TrustManager strictTrustManager;
     private X509TrustManager appTrustManager;
     private String poshCacheDir;
 
@@ -150,6 +151,7 @@ public class MemorizingTrustManager {
         init(context);
         this.appTrustManager = getTrustManager(appKeyStore);
         this.defaultTrustManager = defaultTrustManager;
+        this.strictTrustManager = createStrictTrustManager(context);
     }
 
     /**
@@ -168,6 +170,18 @@ public class MemorizingTrustManager {
         this.appTrustManager = getTrustManager(appKeyStore);
         try {
             this.defaultTrustManager = TrustManagers.createForAndroidVersion(context);
+            this.strictTrustManager = TrustManagers.createSystemTrustManager();
+        } catch (final NoSuchAlgorithmException
+                | KeyStoreException
+                | CertificateException
+                | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static X509TrustManager createStrictTrustManager(final Context context) {
+        try {
+            return TrustManagers.createSystemTrustManager();
         } catch (final NoSuchAlgorithmException
                 | KeyStoreException
                 | CertificateException
@@ -516,7 +530,7 @@ public class MemorizingTrustManager {
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(Config.LOGTAG, "failed to update POSH cache");
         }
     }
 
@@ -677,6 +691,14 @@ public class MemorizingTrustManager {
 
     public X509TrustManager getNonInteractive(String domain) {
         return new NonInteractiveMemorizingTrustManager(domain);
+    }
+
+    /**
+     * Uses only Android's configured trust anchors. It never consults certificates accepted through
+     * the legacy interactive flow and never invokes POSH or user interaction.
+     */
+    public X509TrustManager getStrict() {
+        return strictTrustManager;
     }
 
     public X509TrustManager getInteractive(String domain) {

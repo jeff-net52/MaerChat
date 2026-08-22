@@ -17,6 +17,8 @@
     <string name="action_block_participant">Block participant</string>
     <string name="action_unblock_participant">Unblock participant</string>
     <string name="title_activity_manage_accounts">Manage Accounts</string>
+    <string name="pref_account_and_profile">Account and profile</string>
+    <string name="pref_account_and_profile_summary">Avatar, display name, connection diagnostics and encryption devices</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_share_with">Share with…</string>
     <string name="title_activity_choose_contact">Choose Contact</string>
@@ -31,6 +33,10 @@
         <item quantity="one">%d unread chat</item>
         <item quantity="other">%d unread chats</item>
 
+    </plurals>
+    <plurals name="x_unread_messages">
+        <item quantity="one">%d unread message</item>
+        <item quantity="other">%d unread messages</item>
     </plurals>
     <string name="sending">sending…</string>
     <string name="message_decrypting">Decrypting message. Please wait…</string>
@@ -58,6 +64,9 @@
     <string name="start_group_chat">Start group chat</string>
     <string name="invite">Invite</string>
     <string name="contacts">Contacts</string>
+    <string name="chats">Chats</string>
+    <string name="groups">Groups</string>
+    <string name="conversation_categories">Conversation categories</string>
     <string name="contact">Contact</string>
     <string name="cancel">Cancel</string>
     <string name="set">Set</string>
@@ -201,10 +210,24 @@
     <string name="block_jabber_id">Block XMPP address</string>
     <string name="account_settings_example_jabber_id">username@example.com</string>
     <string name="password">Password</string>
+    <string name="password_unchanged_hint">Password (leave blank to keep it)</string>
     <string name="invalid_jid">This is not a valid XMPP address</string>
     <string name="error_out_of_memory">Out of memory. Image too big</string>
     <string name="add_phone_book_text">Do you want to add %s to your address book?</string>
     <string name="server_info_show_more">Server info</string>
+    <string name="server_info_jid">JID</string>
+    <string name="server_info_resolved_server">Connected server</string>
+    <string name="server_info_endpoint_with_address">%1$s (%2$s)</string>
+    <string name="server_info_port">Port</string>
+    <string name="server_info_tls">TLS transport</string>
+    <string name="server_info_tls_active">Active · %1$s · %2$s</string>
+    <string name="server_info_certificate">TLS certificate</string>
+    <string name="server_info_certificate_summary">Subject: %1$s\nIssuer: %2$s\nValid: %3$s – %4$s\nSHA-256: %5$s</string>
+    <string name="server_info_resource">XMPP resource</string>
+    <string name="server_info_app_version">App version</string>
+    <string name="server_info_app_version_value">%1$s %2$s (%3$d)</string>
+    <string name="server_info_omemo">OMEMO end-to-end encryption</string>
+    <string name="server_info_not_available">Not available</string>
     <string name="server_info_mam">XEP-0313: MAM</string>
     <string name="server_info_occupant_id">XEP-0421: Occupant identifiers</string>
     <string name="server_info_moderated_message_retraction">XEP-0425: Moderated Message Retraction</string>
@@ -406,6 +429,10 @@
     <string name="snooze">Snooze</string>
     <string name="reply">Reply</string>
     <string name="mark_as_read">Mark as read</string>
+    <string name="conversation_muted">Notifications muted</string>
+    <string name="conversation_muted_temporarily">Notifications muted temporarily</string>
+    <string name="conversation_mentions_only">Notifications for mentions only</string>
+    <string name="conversation_pinned">Pinned conversation</string>
     <string name="pref_input_options">Input</string>
     <string name="pref_enter_is_send">Enter is send</string>
     <string name="pref_enter_is_send_summary">Use Enter key to send message. You can always use Ctrl+Enter to send message, even if this option is disabled.</string>
@@ -943,8 +970,8 @@
     <string name="reconnecting_video_call">Reconnecting video call</string>
     <string name="disable_tor_to_make_call">Disable Tor to make calls</string>
     <string name="incoming_call">Incoming call</string>
-    <string name="incoming_call_duration_timestamp">Incoming call (%s) · %s</string>
-    <string name="outgoing_call_duration_timestamp">Outgoing call (%s) · %s</string>
+    <string name="incoming_call_duration_timestamp">Incoming call (%1$s) · %2$s</string>
+    <string name="outgoing_call_duration_timestamp">Outgoing call (%1$s) · %2$s</string>
     <string name="missed_call_timestamp">Missed call · %s</string>
     <string name="outgoing_call">Outgoing call</string>
     <string name="outgoing_call_timestamp">Outgoing call · %s</string>
@@ -1133,6 +1160,7 @@
     <string name="last_seen">last seen %s</string>
     <string name="strong_transport_security">Strong transport security</string>
     <string name="require_tls_v1_3">Require Transport Layer Security (TLS) Protocol Version 1.3 for all connections</string>
+    <string name="empty_conversations_title">Your conversations start here</string>
     <string name="empty_conversations_list_hint">Once you start a new conversation, you’ll see it listed here</string>
     <string name="number_reactions_are_restricted">Reaction limit reached.</string>
     <string name="this_reaction_isnt_allowed">This reaction isn’t allowed.</string>

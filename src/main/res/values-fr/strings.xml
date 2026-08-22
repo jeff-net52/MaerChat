@@ -16,6 +16,8 @@
     <string name="action_block_participant">Bloquer le·a participant·e</string>
     <string name="action_unblock_participant">Débloquer le·a participant·e</string>
     <string name="title_activity_manage_accounts">Gestion des comptes</string>
+    <string name="pref_account_and_profile">Compte et profil</string>
+    <string name="pref_account_and_profile_summary">Avatar, nom affiché, diagnostic de connexion et appareils de chiffrement</string>
     <string name="title_activity_settings">Paramètres</string>
     <string name="title_activity_choose_contact">Choisir un contact</string>
     <string name="title_activity_choose_contacts">Choisir les contacts</string>
@@ -28,6 +30,10 @@
         <item quantity="one">%d conversation non lue</item>
         <item quantity="many">%d conversations non lues</item>
         <item quantity="other">%d conversations non lues</item>
+    </plurals>
+    <plurals name="x_unread_messages">
+        <item quantity="one">%d message non lu</item>
+        <item quantity="other">%d messages non lus</item>
     </plurals>
     <string name="sending">Envoi…</string>
     <string name="message_decrypting">Déchiffrement du message. Veuillez patienter…</string>
@@ -52,6 +58,9 @@
     <string name="invite_contact">Inviter un contact</string>
     <string name="invite">Inviter</string>
     <string name="contacts">Contacts</string>
+    <string name="chats">Discussions</string>
+    <string name="groups">Groupes</string>
+    <string name="conversation_categories">Catégories de conversations</string>
     <string name="contact">Contact</string>
     <string name="cancel">Annuler</string>
     <string name="set">Établir</string>
@@ -176,10 +185,23 @@
     <string name="block_jabber_id">Bloquer l\'adresse XMPP</string>
     <string name="account_settings_example_jabber_id">nom@example.com</string>
     <string name="password">Mot de passe</string>
+    <string name="password_unchanged_hint">Mot de passe (laisser vide pour le conserver)</string>
     <string name="invalid_jid">Ce n\'est pas une adresse XMPP valide</string>
     <string name="error_out_of_memory">Plus de mémoire disponible. L\'image est trop volumineuse</string>
     <string name="add_phone_book_text">Voulez-vous ajouter %s à votre carnet d\'adresses ?</string>
     <string name="server_info_show_more">Infos sur le serveur</string>
+    <string name="server_info_jid">JID</string>
+    <string name="server_info_resolved_server">Serveur connecté</string>
+    <string name="server_info_endpoint_with_address">%1$s (%2$s)</string>
+    <string name="server_info_port">Port</string>
+    <string name="server_info_tls">Transport TLS</string>
+    <string name="server_info_tls_active">Actif · %1$s · %2$s</string>
+    <string name="server_info_certificate">Certificat TLS</string>
+    <string name="server_info_certificate_summary">Sujet : %1$s\nÉmetteur : %2$s\nValidité : %3$s – %4$s\nSHA-256 : %5$s</string>
+    <string name="server_info_resource">Ressource XMPP</string>
+    <string name="server_info_app_version">Version de l’application</string>
+    <string name="server_info_omemo">Chiffrement de bout en bout OMEMO</string>
+    <string name="server_info_not_available">Indisponible</string>
     <string name="server_info_mam">XEP-0313 : MAM</string>
     <string name="server_info_carbon_messages">XEP-0280 : Copies carbone</string>
     <string name="server_info_csi">XEP-0352 : Indication statut client</string>
@@ -373,6 +395,10 @@
     <string name="snooze">Répéter les notifications</string>
     <string name="reply">Répondre</string>
     <string name="mark_as_read">Marquer comme lu</string>
+    <string name="conversation_muted">Notifications coupées</string>
+    <string name="conversation_muted_temporarily">Notifications coupées temporairement</string>
+    <string name="conversation_mentions_only">Notifications pour les mentions uniquement</string>
+    <string name="conversation_pinned">Discussion épinglée</string>
     <string name="pref_input_options">Saisie</string>
     <string name="pref_enter_is_send">Touche Entrée pour envoyer</string>
     <string name="pref_enter_is_send_summary">Utilisez la touche Entrée pour envoyer un message. Vous pourrez toujours utiliser la combinaison Ctrl+Entrée pour envoyer un message, même si cette option est désactivée.</string>
@@ -931,7 +957,7 @@
 \nVotre liste de contacts ne quitte jamais votre appareil !</string>
     <string name="multimedia_file">ficher multimédia</string>
     <string name="search_group_chats">Rechercher des groupes</string>
-    <string name="outgoing_call_duration_timestamp">Appel sortant (%s) · %s</string>
+    <string name="outgoing_call_duration_timestamp">Appel sortant (%1$s) · %2$s</string>
     <string name="data_saver_enabled_explained">Votre système d\'exploitation empêche %1$s d\'accéder à l\'internet lorsqu\'il est en arrière-plan. Pour être notifié de nouveaux messages, vous devez permettre à %1$s d\'accéder à Internet lorsque l\'économiseur de données est activé.
 \n%1$s s\'efforcera toujours d\'économiser des données lorsque cela est possible.</string>
     <string name="verifying_omemo_keys_trusted_source_account">Vous êtes sur le point de vérifier les clés OMEMO de votre propre compte. Cette opération n\'est garantie que si vous avez suivi ce lien à partir d\'une source fiable où vous seul pouvez avoir publié ce lien.</string>
@@ -951,7 +977,7 @@
     <string name="pref_autojoin">Synchroniser les favoris</string>
     <string name="pref_autojoin_summary">Activer \"Rejoindre automatiquement\" en entrant ou sortant d\'un groupe et réagir aux modifications apportées par d\'autres clients.</string>
     <string name="vector_graphic">graphique vectoriel</string>
-    <string name="incoming_call_duration_timestamp">Appel entrant (%s) · %s</string>
+    <string name="incoming_call_duration_timestamp">Appel entrant (%1$s) · %2$s</string>
     <string name="outgoing_call_timestamp">Appel sortant · %s</string>
     <plurals name="n_missed_calls_from_x">
         <item quantity="one">%1$d appel manqué de %2$s</item>
@@ -1119,7 +1145,8 @@
     <string name="last_seen">vu pour la dernière fois %s</string>
     <string name="strong_transport_security">Sécurité de transport forte</string>
     <string name="require_tls_v1_3">Nécessite le protocole Transport Layer Security (TLS) Version 1.3 pour toutes les connections</string>
-    <string name="empty_conversations_list_hint">Quand une nouvelle conversation sera lancé, elle sera listé ici</string>
+    <string name="empty_conversations_title">Vos discussions commencent ici</string>
+    <string name="empty_conversations_list_hint">Quand une nouvelle conversation sera lancée, elle sera listée ici</string>
     <plurals name="x_participants">
         <item quantity="one">%1$d Participant·e</item>
         <item quantity="many">%1$d Participant·es</item>

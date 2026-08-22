@@ -39,6 +39,7 @@ import android.view.TextureView;
 import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.WindowManager;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -78,6 +79,15 @@ public final class ScanQrCodeActivity extends AppCompatActivity
                     || Build.MODEL.equals("GT-I9300") // Galaxy S3
                     || Build.MODEL.equals("GT-N7000"); // Galaxy Note
     private final CameraManager cameraManager = new CameraManager();
+    private final OnBackPressedCallback onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    scannerView.setVisibility(View.GONE);
+                    setResult(RESULT_CANCELED);
+                    postFinish();
+                }
+            };
     private ScannerView scannerView;
     private TextureView previewView;
     private volatile boolean surfaceCreated = false;
@@ -190,6 +200,7 @@ public final class ScanQrCodeActivity extends AppCompatActivity
         cameraThread = new HandlerThread("cameraThread", Process.THREAD_PRIORITY_BACKGROUND);
         cameraThread.start();
         cameraHandler = new Handler(cameraThread.getLooper());
+        getOnBackPressedDispatcher().addCallback(this, this.onBackPressedCallback);
     }
 
     @Override
@@ -245,13 +256,6 @@ public final class ScanQrCodeActivity extends AppCompatActivity
     @Override
     public void onAttachedToWindow() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-    }
-
-    @Override
-    public void onBackPressed() {
-        scannerView.setVisibility(View.GONE);
-        setResult(RESULT_CANCELED);
-        postFinish();
     }
 
     @Override

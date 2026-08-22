@@ -33,7 +33,9 @@ configurations {
 }
 
 spotless {
-    ratchetFrom '2.17.4'
+    // Format every file changed by this fork while leaving the imported Conversations history
+    // untouched. This commit is the documented Maer Chat upstream baseline.
+    ratchetFrom '9fdc9ed5b2e2e4981cf58fce871c2ed47623c2bc'
     java {
         target '**/*.java'
         googleJavaFormat().aosp().reflowLongStrings()
@@ -103,17 +105,20 @@ ext {
 
 android {
     namespace 'eu.siacs.conversations'
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdkVersion 23
-        versionCode 42178
-        versionName "2.20.1"
-        applicationId "eu.siacs.conversations"
+        targetSdkVersion 37
+        versionCode 1
+        versionName "0.1.0"
+        applicationId "fr.maer.chat"
         resValue "string", "applicationId", applicationId
-        def appName = "Conversations"
+        def appName = "Maer Chat"
         resValue "string", "app_name", appName
+        resValue "string", "default_xmpp_domain", "contacts.chaumont.me"
         buildConfigField "String", "APP_NAME", "\"$appName\""
+        buildConfigField "String", "DEFAULT_XMPP_DOMAIN", "\"contacts.chaumont.me\""
         base {
             archivesName = "${android.defaultConfig.applicationId}-${android.defaultConfig.versionName}"
         }
@@ -135,6 +140,10 @@ android {
 
     dataBinding {
         enabled true
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
     }
 
     compileOptions {
@@ -174,7 +183,7 @@ android {
 
         conversations {
             dimension "mode"
-            buildConfigField "String", "PRIVACY_POLICY", "\"https://conversations.im/privacy.html\""
+            buildConfigField "String", "PRIVACY_POLICY", "null"
         }
 
         playstore {
@@ -187,31 +196,19 @@ android {
         }
     }
 
+    // Maer Chat is shipped only as the Conversations/free flavor. The upstream Quicksy and
+    // Play Store variants require unrelated identities and private push-service resources.
+    variantFilter { variant ->
+        def flavorNames = variant.flavors*.name
+        if (!(flavorNames.contains('conversations') && flavorNames.contains('free'))) {
+            variant.ignore = true
+        }
+    }
+
     sourceSets {
-        quicksyFree {
-            java {
-                srcDir 'src/quicksyFree/java'
-            }
-        }
-        quicksyPlaystore {
-            java {
-                srcDir 'src/quicksyPlaystore/java'
-            }
-            res {
-                srcDir 'src/quicksyPlaystore/res'
-            }
-        }
         conversationsFree {
             java {
                 srcDir 'src/conversationsFree/java'
-            }
-        }
-        conversationsPlaystore {
-            java {
-                srcDir 'src/conversationsPlaystore/java'
-            }
-            res {
-                srcDir 'src/conversationsPlaystore/res'
             }
         }
     }
@@ -260,6 +257,10 @@ android {
         }
     }
     lint {
+        // Conversations carries longstanding lint findings across its large compatibility
+        // surface. Keep that debt explicit so CI fails only on findings introduced by Maer Chat.
+        baseline = file("lint-baseline.xml")
+        warningsAsErrors true
         disable 'MissingTranslation', 'InvalidPackage', 'AppCompatResource'
     }
     buildFeatures {

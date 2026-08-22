@@ -12,14 +12,18 @@ public final class Config {
 
     public static final boolean QUICK_LOG = false;
 
-    public static final Jid BUG_REPORTS = Jid.of("bugs@conversations.im");
-    public static final Uri HELP = Uri.parse("https://help.conversations.im");
-    public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
+    // Do not transmit fork crash reports or calls to infrastructure operated for Conversations.
+    // A Maer-owned support endpoint can be configured here in a future release.
+    public static final Jid BUG_REPORTS = null;
+    public static final Uri HELP = null;
+    public static final String MAGIC_CREATE_DOMAIN = null;
     public static final Jid QUICKSY_DOMAIN = Jid.of("quicksy.im");
 
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
 
-    public static final boolean DISALLOW_REGISTRATION_IN_UI = false; // hide the register checkbox
+    // Maer Chat connects existing accounts on the managed server. Account creation remains a
+    // server-side administrative operation and is deliberately not offered in the app.
+    public static final boolean DISALLOW_REGISTRATION_IN_UI = true;
 
     public static final boolean USE_RANDOM_RESOURCE_ON_EVERY_BIND = false;
 

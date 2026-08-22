@@ -643,7 +643,7 @@ public class AxolotlService implements OnAdvancedStreamFeaturesLoaded {
                                 });
                     });
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(Config.LOGTAG, "OMEMO bundle publication failed");
         }
     }
 

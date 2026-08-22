@@ -1,11 +1,9 @@
 package im.conversations.android.xmpp.model.data;
 
-import android.util.Log;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import eu.siacs.conversations.Config;
 import eu.siacs.conversations.xmpp.Jid;
 import im.conversations.android.annotation.XmlElement;
 import im.conversations.android.xmpp.model.Extension;
@@ -64,11 +62,12 @@ public class Data extends Extension {
             field.setType(type);
         }
         if (value instanceof Collection<?> collection) {
-            Log.d(Config.LOGTAG, "submitting collection: " + collection);
             for (final Object subValue : collection) {
                 if (subValue == null) {
-                    Log.d(Config.LOGTAG, "null value in the values for " + name);
-                } else if (subValue instanceof String s) {
+                    // Keep the historical behavior of ignoring null collection entries.
+                    continue;
+                }
+                if (subValue instanceof String s) {
                     final var valueExtension = field.addExtension(new Value());
                     valueExtension.setContent(s);
                 } else {
@@ -94,7 +93,6 @@ public class Data extends Extension {
             } else if (value instanceof Instant i) {
                 valueExtension.setContent(i.toString());
             } else {
-                System.out.println(value);
                 throw new IllegalArgumentException(
                         String.format(
                                 "%s is not a supported field value",

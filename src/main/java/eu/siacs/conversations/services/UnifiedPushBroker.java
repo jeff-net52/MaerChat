@@ -128,22 +128,10 @@ public class UnifiedPushBroker {
         final UnifiedPushDatabase unifiedPushDatabase = UnifiedPushDatabase.getInstance(service);
         final List<UnifiedPushDatabase.PushTarget> renewals =
                 unifiedPushDatabase.getRenewals(account.getUuid(), transport.transport.toString());
-        Log.d(
-                Config.LOGTAG,
-                account.getJid().asBareJid()
-                        + ": "
-                        + renewals.size()
-                        + " UnifiedPush endpoints scheduled for renewal on "
-                        + transport.transport);
+        Log.d(Config.LOGTAG, renewals.size() + " UnifiedPush endpoints scheduled for renewal");
         for (final UnifiedPushDatabase.PushTarget renewal : renewals) {
-            Log.d(
-                    Config.LOGTAG,
-                    account.getJid().asBareJid() + ": try to renew UnifiedPush " + renewal);
-            UnifiedPushDistributor.quickLog(
-                    service,
-                    String.format(
-                            "%s: try to renew UnifiedPush %s",
-                            account.getJid(), renewal.toString()));
+            Log.d(Config.LOGTAG, "renewing UnifiedPush endpoint");
+            UnifiedPushDistributor.quickLog(service, "renewing a UnifiedPush endpoint");
             final Messenger messenger;
             if (pushTargetMessenger != null && renewal.equals(pushTargetMessenger.pushTarget)) {
                 messenger = pushTargetMessenger.messenger;
@@ -177,7 +165,7 @@ public class UnifiedPushBroker {
         final var expiration = registration.expiration().toEpochMilli();
         Log.d(
                 Config.LOGTAG,
-                "registered endpoint " + endpoint + " expiration=" + registration.expiration());
+                "registered UnifiedPush endpoint; expiration=" + registration.expiration());
         final UnifiedPushDatabase unifiedPushDatabase = UnifiedPushDatabase.getInstance(service);
         final boolean modified =
                 unifiedPushDatabase.updateEndpoint(
@@ -187,14 +175,7 @@ public class UnifiedPushBroker {
                         endpoint,
                         expiration);
         if (modified) {
-            UnifiedPushDistributor.quickLog(
-                    service,
-                    "endpoint for "
-                            + renewal.application()
-                            + "/"
-                            + renewal.instance()
-                            + " was updated to "
-                            + endpoint);
+            UnifiedPushDistributor.quickLog(service, "updated a UnifiedPush endpoint");
             final UnifiedPushDatabase.ApplicationEndpoint applicationEndpoint =
                     new UnifiedPushDatabase.ApplicationEndpoint(renewal.application(), endpoint);
             sendEndpoint(messenger, renewal.instance(), applicationEndpoint);
@@ -288,7 +269,7 @@ public class UnifiedPushBroker {
 
     private void broadcastUnregistered(final List<UnifiedPushDatabase.PushTarget> pushTargets) {
         for (final UnifiedPushDatabase.PushTarget pushTarget : pushTargets) {
-            Log.d(Config.LOGTAG, "sending unregistered to " + pushTarget);
+            Log.d(Config.LOGTAG, "broadcasting UnifiedPush unregistration");
             broadcastUnregistered(pushTarget);
         }
     }
@@ -321,13 +302,7 @@ public class UnifiedPushBroker {
         if (pushTarget.isPresent()) {
             final UnifiedPushDatabase.PushTarget target = pushTarget.get();
             // TODO check if app is still installed?
-            Log.d(
-                    Config.LOGTAG,
-                    account.getJid().asBareJid()
-                            + ": broadcasting a "
-                            + payload.length
-                            + " bytes push message to "
-                            + target.application());
+            Log.d(Config.LOGTAG, "broadcasting " + payload.length + " byte UnifiedPush message");
             broadcastPushMessage(target, payload);
             return true;
         } else {
@@ -402,9 +377,7 @@ public class UnifiedPushBroker {
 
     private void broadcastEndpoint(
             final String instance, final UnifiedPushDatabase.ApplicationEndpoint endpoint) {
-        Log.d(
-                Config.LOGTAG,
-                "broadcasting endpoint to " + endpoint.application() + " " + endpoint.endpoint());
+        Log.d(Config.LOGTAG, "broadcasting refreshed UnifiedPush endpoint");
         final Intent updateIntent = endpointIntent(instance, endpoint);
         service.sendBroadcast(updateIntent);
     }

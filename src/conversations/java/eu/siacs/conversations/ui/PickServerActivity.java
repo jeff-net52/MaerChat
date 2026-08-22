@@ -4,14 +4,28 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityPickServerBinding;
-import eu.siacs.conversations.entities.Account;
-import java.util.List;
 
 public class PickServerActivity extends XmppActivity {
+
+    private final OnBackPressedCallback onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    startActivity(new Intent(PickServerActivity.this, WelcomeActivity.class));
+                    setEnabled(false);
+                    try {
+                        PickServerActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                    } finally {
+                        setEnabled(true);
+                    }
+                }
+            };
 
     @Override
     protected void refreshUiReal() {}
@@ -30,12 +44,6 @@ public class PickServerActivity extends XmppActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, WelcomeActivity.class));
-        super.onBackPressed();
-    }
-
-    @Override
     public void onNewIntent(final Intent intent) {
         super.onNewIntent(intent);
         if (intent != null) {
@@ -49,32 +57,19 @@ public class PickServerActivity extends XmppActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, this.onBackPressedCallback);
+        if (Config.DISALLOW_REGISTRATION_IN_UI) {
+            WelcomeActivity.launch(this);
+            finish();
+            return;
+        }
         ActivityPickServerBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_pick_server);
         Activities.setStatusAndNavigationBarColors(this, binding.getRoot());
         setSupportActionBar(binding.toolbar);
         configureActionBar(getSupportActionBar());
-        binding.useCim.setOnClickListener(
-                v -> {
-                    final Intent intent = new Intent(this, MagicCreateActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    addInviteUri(intent);
-                    startActivity(intent);
-                });
-        binding.useOwnProvider.setOnClickListener(
-                v -> {
-                    List<Account> accounts = xmppConnectionService.getAccounts();
-                    Intent intent = new Intent(this, EditAccountActivity.class);
-                    intent.putExtra(EditAccountActivity.EXTRA_FORCE_REGISTER, true);
-                    if (accounts.size() == 1) {
-                        intent.putExtra("jid", accounts.get(0).getJid().asBareJid().toString());
-                        intent.putExtra("init", true);
-                    } else if (!accounts.isEmpty()) {
-                        intent = new Intent(this, ManageAccountActivity.class);
-                    }
-                    addInviteUri(intent);
-                    startActivity(intent);
-                });
+        binding.useCim.setOnClickListener(v -> WelcomeActivity.launch(this));
+        binding.useOwnProvider.setOnClickListener(v -> WelcomeActivity.launch(this));
     }
 
     public void addInviteUri(final Intent intent) {
@@ -82,9 +77,6 @@ public class PickServerActivity extends XmppActivity {
     }
 
     public static void launch(final AppCompatActivity activity) {
-        Intent intent = new Intent(activity, PickServerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        activity.startActivity(intent);
-        activity.overridePendingTransition(0, 0);
+        WelcomeActivity.launch(activity);
     }
 }

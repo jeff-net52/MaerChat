@@ -75,7 +75,7 @@ public class SessionDescription {
         for (final String line : input.split(LINE_DIVIDER)) {
             final String[] pair = line.trim().split("=", 2);
             if (pair.length < 2 || pair[0].length() != 1) {
-                Log.d(Config.LOGTAG, "skipping sdp parsing on line " + line);
+                Log.d(Config.LOGTAG, "skipping malformed SDP line");
                 continue;
             }
             final char key = pair[0].charAt(0);

@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -130,6 +131,25 @@ public class RtpSessionActivity extends XmppActivity
 
     private ActivityRtpSessionBinding binding;
     private PowerManager.WakeLock mProximityWakeLock;
+    private final OnBackPressedCallback onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (isConnected()) {
+                        if (switchToPictureInPicture()) {
+                            return;
+                        }
+                    } else {
+                        endCall();
+                    }
+                    setEnabled(false);
+                    try {
+                        RtpSessionActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                    } finally {
+                        setEnabled(true);
+                    }
+                }
+            };
 
     private final Handler mHandler = new Handler();
     private final Runnable mTickExecutor =
@@ -171,6 +191,7 @@ public class RtpSessionActivity extends XmppActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, this.onBackPressedCallback);
         getWindow()
                 .addFlags(
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -642,18 +663,6 @@ public class RtpSessionActivity extends XmppActivity
         if (localVideo.isPresent()) {
             localVideo.get().removeSink(binding.localVideo);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isConnected()) {
-            if (switchToPictureInPicture()) {
-                return;
-            }
-        } else {
-            endCall();
-        }
-        super.onBackPressed();
     }
 
     @Override

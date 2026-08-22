@@ -25,6 +25,7 @@
     <dimen name="avatar">48dp</dimen>
     <dimen name="avatar_on_details_screen_size">56dp</dimen>
     <dimen name="avatar_on_conversation_overview">56dp</dimen>
+    <dimen name="home_profile_avatar">40dp</dimen>
 
     <dimen name="input_label_vertical_spacing">4dp</dimen>
     <dimen name="input_label_horizontal_spacing">4dp</dimen>

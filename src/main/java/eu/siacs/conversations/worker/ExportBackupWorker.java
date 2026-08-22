@@ -5,6 +5,7 @@ import static eu.siacs.conversations.utils.Compatibility.s;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
@@ -62,6 +63,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.bouncycastle.crypto.digests.SHA256Digest;
+import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
+import org.bouncycastle.crypto.params.KeyParameter;
 
 public class ExportBackupWorker extends Worker {
 
@@ -71,6 +75,7 @@ public class ExportBackupWorker extends Worker {
     private static final String KEY_TYPE = "AES";
     private static final String CIPHER_MODE = "AES/GCM/NoPadding";
     private static final String PROVIDER = "BC";
+    private static final int MODERN_KDF_ITERATIONS = 310_000;
 
     public static final String MIME_TYPE = "application/vnd.conversations.backup";
 
@@ -104,7 +109,7 @@ public class ExportBackupWorker extends Worker {
                 | NoSuchPaddingException
                 | NoSuchAlgorithmException
                 | NoSuchProviderException e) {
-            Log.d(Config.LOGTAG, "could not create backup", e);
+            Log.d(Config.LOGTAG, "could not create backup");
             return Result.failure();
         } finally {
             getApplicationContext()
@@ -153,18 +158,18 @@ public class ExportBackupWorker extends Worker {
         final ImmutableList.Builder<Uri> locations = new ImmutableList.Builder<>();
         Log.d(Config.LOGTAG, "starting backup for " + max + " accounts");
         for (final Account account : accounts) {
+            if (!account.isPasswordStorageAvailable()) {
+                throw new IOException("Account backup password is unavailable");
+            }
+        }
+        for (final Account account : accounts) {
             if (isStopped()) {
                 Log.d(Config.LOGTAG, "ExportBackupWorker has stopped. Returning what we have");
                 return locations.build();
             }
             final String password = account.getPassword();
             if (Strings.nullToEmpty(password).trim().isEmpty()) {
-                Log.d(
-                        Config.LOGTAG,
-                        String.format(
-                                "skipping backup for %s because password is empty. unable to"
-                                        + " encrypt",
-                                account.getJid().asBareJid()));
+                Log.d(Config.LOGTAG, "skipping account backup because password is empty");
                 count++;
                 continue;
             }
@@ -178,7 +183,11 @@ public class ExportBackupWorker extends Worker {
             locations.add(uri);
             count++;
         }
-        return locations.build();
+        final List<Uri> exported = locations.build();
+        if (!accounts.isEmpty() && exported.isEmpty()) {
+            throw new IOException("No account backup file could be created");
+        }
+        return exported;
     }
 
     private Uri export(
@@ -197,11 +206,7 @@ public class ExportBackupWorker extends Worker {
                     NoSuchProviderException,
                     WorkStoppedException {
         final var context = getApplicationContext();
-        Log.d(
-                Config.LOGTAG,
-                String.format(
-                        "exporting data for account %s (%s)",
-                        account.getJid().asBareJid(), account.getUuid()));
+        Log.d(Config.LOGTAG, "exporting account backup");
         final byte[] IV = new byte[12];
         final byte[] salt = new byte[16];
         Random.SECURE_RANDOM.nextBytes(IV);
@@ -272,7 +277,7 @@ public class ExportBackupWorker extends Worker {
         jsonWriter.beginArray();
         final SQLiteDatabase db = database.getReadableDatabase();
         final String uuid = account.getUuid();
-        accountExport(db, uuid, jsonWriter);
+        accountExport(db, account, jsonWriter);
         simpleExport(db, Conversation.TABLENAME, Conversation.ACCOUNT, uuid, jsonWriter);
         messageExport(db, uuid, location, jsonWriter, progress);
         for (final String table :
@@ -291,7 +296,7 @@ public class ExportBackupWorker extends Worker {
         if ("file".equalsIgnoreCase(location.getScheme()) && path != null) {
             mediaScannerScanFile(new File(path));
         }
-        Log.d(Config.LOGTAG, "written backup to " + location);
+        Log.d(Config.LOGTAG, "account backup written");
         return location;
     }
 
@@ -333,8 +338,10 @@ public class ExportBackupWorker extends Worker {
     }
 
     private static void accountExport(
-            final SQLiteDatabase db, final String uuid, final JsonWriter writer)
+            final SQLiteDatabase db, final Account account, final JsonWriter writer)
             throws IOException {
+        final String uuid = account.getUuid();
+        final ContentValues cleartextAccountValues = account.getContentValues();
         try (final Cursor accountCursor =
                 db.query(
                         Account.TABLENAME,
@@ -353,7 +360,15 @@ public class ExportBackupWorker extends Worker {
                 for (int i = 0; i < accountCursor.getColumnCount(); ++i) {
                     final String name = accountCursor.getColumnName(i);
                     writer.name(name);
-                    final String value = accountCursor.getString(i);
+                    final String value;
+                    if (Account.PASSWORD.equals(name) || Account.FAST_TOKEN.equals(name)) {
+                        // The whole backup stream is already authenticated and encrypted with the
+                        // user's password. Keystore ciphertext is device-bound and must not leak
+                        // into a portable backup.
+                        value = cleartextAccountValues.getAsString(name);
+                    } else {
+                        value = accountCursor.getString(i);
+                    }
                     if (value == null
                             || Account.ROSTERVERSION.equals(accountCursor.getColumnName(i))) {
                         writer.nullValue();
@@ -453,6 +468,24 @@ public class ExportBackupWorker extends Worker {
 
     public static byte[] getKey(final String password, final byte[] salt)
             throws InvalidKeySpecException {
+        return getKey(password, salt, BackupFileHeader.CURRENT_VERSION);
+    }
+
+    public static byte[] getKey(final String password, final byte[] salt, final int version)
+            throws InvalidKeySpecException {
+        if (version == BackupFileHeader.CURRENT_VERSION) {
+            final byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_8);
+            try {
+                final var generator = new PKCS5S2ParametersGenerator(new SHA256Digest());
+                generator.init(passwordBytes, salt, MODERN_KDF_ITERATIONS);
+                return ((KeyParameter) generator.generateDerivedParameters(256)).getKey();
+            } finally {
+                Arrays.fill(passwordBytes, (byte) 0);
+            }
+        }
+        if (version != BackupFileHeader.LEGACY_VERSION) {
+            throw new InvalidKeySpecException("Unsupported backup key derivation version");
+        }
         final SecretKeyFactory factory;
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");

@@ -658,15 +658,7 @@ public class XmppConnection implements Runnable {
         } else {
             keyManager = null;
         }
-        final String domain = account.getServer();
-        sc.init(
-                keyManager,
-                new X509TrustManager[] {
-                    mInteractive
-                            ? trustManager.getInteractive(domain)
-                            : trustManager.getNonInteractive(domain)
-                },
-                SECURE_RANDOM);
+        sc.init(keyManager, new X509TrustManager[] {trustManager.getStrict()}, SECURE_RANDOM);
         return sc.getSocketFactory();
     }
 
@@ -2807,6 +2799,72 @@ public class XmppConnection implements Runnable {
 
     public Features getFeatures() {
         return this.features;
+    }
+
+    /** Returns an immutable snapshot containing no credentials, tokens, or key material. */
+    public ConnectionDiagnostics getConnectionDiagnostics() {
+        final Socket activeSocket = this.socket;
+        final Resolver.Result resolverResult = this.currentResolverResult;
+
+        final String resolvedServer;
+        final int port;
+        if (resolverResult != null) {
+            if (resolverResult.getHostname() != null) {
+                resolvedServer = resolverResult.getHostname().toString();
+            } else if (resolverResult.getIp() != null) {
+                resolvedServer = resolverResult.getIp().getHostAddress();
+            } else {
+                resolvedServer = account.getServer();
+            }
+            port = resolverResult.getPort();
+        } else {
+            resolvedServer =
+                    Strings.isNullOrEmpty(this.verifiedHostname)
+                            ? account.getServer()
+                            : this.verifiedHostname;
+            port = activeSocket == null ? account.getPort() : activeSocket.getPort();
+        }
+
+        final String remoteAddress;
+        if (activeSocket == null
+                || activeSocket.getInetAddress() == null
+                || appSettings.isUseTor()
+                || account.isOnion()) {
+            remoteAddress = "";
+        } else {
+            remoteAddress = activeSocket.getInetAddress().getHostAddress();
+        }
+
+        final ConnectionDiagnostics.TlsSummary tls;
+        if (activeSocket instanceof SSLSocket sslSocket) {
+            final var session = sslSocket.getSession();
+            X509Certificate peerCertificate = null;
+            try {
+                final var peerCertificates = session.getPeerCertificates();
+                if (peerCertificates.length > 0
+                        && peerCertificates[0] instanceof X509Certificate x509Certificate) {
+                    peerCertificate = x509Certificate;
+                }
+            } catch (final SSLPeerUnverifiedException ignored) {
+                // A missing peer certificate is represented by an empty summary.
+            }
+            final String protocol = session.getProtocol();
+            final String cipherSuite = session.getCipherSuite();
+            final boolean established =
+                    !sslSocket.isClosed()
+                            && !Strings.isNullOrEmpty(protocol)
+                            && !"NONE".equals(protocol)
+                            && !"SSL_NULL_WITH_NULL_NULL".equals(cipherSuite);
+            tls =
+                    new ConnectionDiagnostics.TlsSummary(
+                            established,
+                            protocol,
+                            cipherSuite,
+                            ConnectionDiagnostics.summarize(peerCertificate));
+        } else {
+            tls = ConnectionDiagnostics.TlsSummary.unavailable();
+        }
+        return new ConnectionDiagnostics(resolvedServer, remoteAddress, port, tls);
     }
 
     public im.conversations.android.xmpp.model.streams.Features getStreamFeatures() {

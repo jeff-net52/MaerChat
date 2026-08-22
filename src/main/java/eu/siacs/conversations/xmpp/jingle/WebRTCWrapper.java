@@ -123,8 +123,7 @@ public class WebRTCWrapper {
 
                 @Override
                 public void onSelectedCandidatePairChanged(CandidatePairChangeEvent event) {
-                    Log.d(Config.LOGTAG, "remote candidate selected: " + event.remote);
-                    Log.d(Config.LOGTAG, "local candidate selected: " + event.local);
+                    Log.d(Config.LOGTAG, "ICE candidate pair selected");
                 }
 
                 @Override
@@ -649,7 +648,7 @@ public class WebRTCWrapper {
                 () -> {
                     final SessionDescription description =
                             requirePeerConnection().getLocalDescription();
-                    Log.d(EXTENDED_LOGGING_TAG, "local description:");
+                    Log.d(EXTENDED_LOGGING_TAG, "local SDP description created");
                     logDescription(description);
                     return description;
                 },
@@ -657,11 +656,9 @@ public class WebRTCWrapper {
     }
 
     public static void logDescription(final SessionDescription sessionDescription) {
-        for (final String line :
-                sessionDescription.description.split(
-                        eu.siacs.conversations.xmpp.jingle.SessionDescription.LINE_DIVIDER)) {
-            Log.d(EXTENDED_LOGGING_TAG, line);
-        }
+        Log.d(
+                EXTENDED_LOGGING_TAG,
+                "SDP description available (type=" + sessionDescription.type + ")");
     }
 
     public static boolean isTurnRelay(final PeerConnection.IceServer iceServer) {
@@ -672,7 +669,7 @@ public class WebRTCWrapper {
 
     synchronized ListenableFuture<Void> setRemoteDescription(
             final SessionDescription sessionDescription) {
-        Log.d(EXTENDED_LOGGING_TAG, "setting remote description:");
+        Log.d(EXTENDED_LOGGING_TAG, "setting remote SDP description");
         logDescription(sessionDescription);
         return Futures.transformAsync(
                 getPeerConnectionFuture(),

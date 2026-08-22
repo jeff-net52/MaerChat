@@ -12,4 +12,19 @@
     <string name="tap_share_button_send_invite">Tap the share button to send your contact an invitation to %1$s.</string>
     <string name="if_contact_is_nearby_use_qr">If your contact is nearby, they can also scan the code below to accept your invitation.</string>
     <string name="share_invite_with">Share invite with…</string>
+    <string name="maer_login_subtitle">Sign in with your existing messaging account.</string>
+    <string name="maer_login_complete_jid">Complete XMPP address</string>
+    <string name="maer_login_server_summary">Secure connection to %1$s</string>
+    <string name="maer_login_advanced_summary">The server is selected from the complete XMPP address.</string>
+    <string name="maer_login_use_complete_jid">Advanced: use a complete JID</string>
+    <string name="maer_login_use_default_server">Use the default server</string>
+    <string name="maer_login_security_notice">Your password is hidden and is never included in application logs.</string>
+    <string name="maer_login_error_initializing">The application is getting ready. Please try again in a moment.</string>
+    <string name="maer_login_error_authentication">The username or password is incorrect.</string>
+    <string name="maer_login_error_tls">The secure connection was stopped because the server certificate or TLS protection could not be verified.</string>
+    <string name="maer_login_error_server">The messaging server is unavailable or cannot be found. Please try again later.</string>
+    <string name="maer_login_error_network">No internet connection is available. Maer Chat will reconnect automatically.</string>
+    <string name="maer_login_error_incompatible">This server cannot establish a compatible secure XMPP session.</string>
+    <string name="maer_login_error_generic">Sign-in failed. Check your details and try again.</string>
+    <string name="maer_login_error_save">The account could not be saved. Please try again.</string>
 </resources>

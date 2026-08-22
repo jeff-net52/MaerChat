@@ -90,6 +90,8 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     private String pinnedChannelBinding;
     private String fastMechanism;
     private String fastToken;
+    private boolean passwordStorageUnavailable;
+    private boolean fastTokenStorageUnavailable;
     private ServiceOutageStatus serviceOutageStatus;
 
     public Account(final Jid jid, final String password) {
@@ -132,7 +134,8 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         this.uuid = uuid;
         this.jid = jid;
         this.password = password;
-        this.options = options;
+        this.options =
+                Config.DISALLOW_REGISTRATION_IN_UI ? options & ~(1 << OPTION_REGISTER) : options;
         this.rosterVersion = rosterVersion;
         this.keys = keys;
         this.avatar = avatar;
@@ -148,6 +151,14 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     }
 
     public static Account fromCursor(final Cursor cursor) {
+        return fromCursor(
+                cursor,
+                cursor.getString(cursor.getColumnIndexOrThrow(PASSWORD)),
+                cursor.getString(cursor.getColumnIndexOrThrow(FAST_TOKEN)));
+    }
+
+    public static Account fromCursor(
+            final Cursor cursor, final String password, final String fastToken) {
         final Jid jid;
         try {
             final String resource = cursor.getString(cursor.getColumnIndexOrThrow(RESOURCE));
@@ -167,7 +178,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         return new Account(
                 cursor.getString(cursor.getColumnIndexOrThrow(UUID)),
                 jid,
-                cursor.getString(cursor.getColumnIndexOrThrow(PASSWORD)),
+                password,
                 cursor.getInt(cursor.getColumnIndexOrThrow(OPTIONS)),
                 cursor.getString(cursor.getColumnIndexOrThrow(ROSTERVERSION)),
                 Keys.parse(cursor.getString(cursor.getColumnIndexOrThrow(KEYS))),
@@ -181,7 +192,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
                 cursor.getString(cursor.getColumnIndexOrThrow(PINNED_MECHANISM)),
                 cursor.getString(cursor.getColumnIndexOrThrow(PINNED_CHANNEL_BINDING)),
                 cursor.getString(cursor.getColumnIndexOrThrow(FAST_MECHANISM)),
-                cursor.getString(cursor.getColumnIndexOrThrow(FAST_TOKEN)));
+                fastToken);
     }
 
     // TODO remove this method and call HttpUploadManager directly i
@@ -237,6 +248,11 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     }
 
     public boolean setOption(final int option, final boolean value) {
+        if (Config.DISALLOW_REGISTRATION_IN_UI && option == OPTION_REGISTER && value) {
+            final int before = this.options;
+            this.options &= ~(1 << OPTION_REGISTER);
+            return before != this.options;
+        }
         if (value && (option == OPTION_DISABLED || option == OPTION_SOFT_DISABLED)) {
             this.setStatus(State.OFFLINE);
         }
@@ -284,6 +300,15 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
 
     public void setPassword(final String password) {
         this.password = password;
+        this.passwordStorageUnavailable = false;
+    }
+
+    public void markPasswordStorageUnavailable() {
+        this.passwordStorageUnavailable = true;
+    }
+
+    public boolean isPasswordStorageAvailable() {
+        return !this.passwordStorageUnavailable;
     }
 
     @NonNull
@@ -353,11 +378,13 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     public void setFastToken(final HashedToken.Mechanism mechanism, final String token) {
         this.fastMechanism = mechanism.name();
         this.fastToken = token;
+        this.fastTokenStorageUnavailable = false;
     }
 
     public void resetFastToken() {
         this.fastMechanism = null;
         this.fastToken = null;
+        this.fastTokenStorageUnavailable = false;
     }
 
     public void resetPinnedMechanism() {
@@ -406,6 +433,14 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
 
     public String getFastToken() {
         return this.fastToken;
+    }
+
+    public void markFastTokenStorageUnavailable() {
+        this.fastTokenStorageUnavailable = true;
+    }
+
+    public boolean isFastTokenStorageAvailable() {
+        return !this.fastTokenStorageUnavailable;
     }
 
     public State getTrueStatus() {
@@ -557,11 +592,12 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     }
 
     public Optional<String> getPreAuthRegistrationToken() {
-        return Optional.fromNullable(Strings.emptyToNull(this.keys.preAuthRegistrationToken));
+        return Optional.absent();
     }
 
-    public void setPreAuthRegistrationToken(final String preAuthRegistrationToken) {
-        this.keys.preAuthRegistrationToken = preAuthRegistrationToken;
+    public void setPreAuthRegistrationToken(final String ignoredPreAuthRegistrationToken) {
+        // Maer Chat never performs in-band registration. Intentionally discard legacy
+        // pre-authentication tokens so they cannot enter a newly serialized account record.
     }
 
     public Optional<HttpUrl> getSosUrl() {
@@ -655,9 +691,6 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
 
         @SerializedName("sos_url")
         private HttpUrl sosUrl;
-
-        @SerializedName("pre_auth_registration")
-        private String preAuthRegistrationToken;
 
         @SerializedName("show_error")
         private Boolean showError;

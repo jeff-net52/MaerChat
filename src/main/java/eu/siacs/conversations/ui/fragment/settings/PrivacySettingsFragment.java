@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import eu.siacs.conversations.AppSettings;
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 
 public class PrivacySettingsFragment extends XmppPreferenceFragment {
@@ -11,6 +12,10 @@ public class PrivacySettingsFragment extends XmppPreferenceFragment {
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences_privacy, rootKey);
+        final var applicationReporting = findPreference("application_reporting");
+        if (applicationReporting != null) {
+            applicationReporting.setVisible(Config.BUG_REPORTS != null);
+        }
     }
 
     @Override

@@ -35,12 +35,14 @@ import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityImportBackupBinding;
 import eu.siacs.conversations.databinding.DialogEnterPasswordBinding;
+import eu.siacs.conversations.persistance.ImportBackupSecretStorage;
 import eu.siacs.conversations.services.QuickConversationsService;
 import eu.siacs.conversations.ui.adapter.BackupFileAdapter;
 import eu.siacs.conversations.utils.BackupFile;
 import eu.siacs.conversations.utils.BackupFileHeader;
 import eu.siacs.conversations.worker.ImportBackupWorker;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -235,7 +237,7 @@ public class ImportBackupActivity extends ActionBarActivity
 
                     @Override
                     public void onFailure(@NonNull final Throwable throwable) {
-                        Log.d(Config.LOGTAG, "could not open backup file " + uri, throwable);
+                        Log.d(Config.LOGTAG, "could not open backup file");
                         showBackupThrowable(throwable);
                     }
                 },
@@ -253,8 +255,8 @@ public class ImportBackupActivity extends ActionBarActivity
                 || throwable instanceof IllegalArgumentException) {
             Snackbar.make(binding.coordinator, R.string.not_a_backup_file, Snackbar.LENGTH_LONG)
                     .show();
-        } else if (throwable instanceof SecurityException e) {
-            Log.d(Config.LOGTAG, "not able to parse backup file", e);
+        } else if (throwable instanceof SecurityException) {
+            Log.d(Config.LOGTAG, "not able to parse backup file");
             Snackbar.make(
                             binding.coordinator,
                             R.string.sharing_application_not_grant_permission,
@@ -269,7 +271,6 @@ public class ImportBackupActivity extends ActionBarActivity
         final DialogEnterPasswordBinding enterPasswordBinding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(this), R.layout.dialog_enter_password, null, false);
-        Log.d(Config.LOGTAG, "attempting to import " + backupFile.getUri());
         enterPasswordBinding.explain.setText(
                 getString(
                         R.string.enter_password_to_restore,
@@ -314,27 +315,46 @@ public class ImportBackupActivity extends ActionBarActivity
             return;
         }
 
-        importBackup(backupFile, password, enterPasswordBinding.includeKeys.isChecked());
-        d.dismiss();
+        final boolean scheduled =
+                importBackup(backupFile, password, enterPasswordBinding.includeKeys.isChecked());
+        enterPasswordBinding.accountPassword.getEditableText().clear();
+        if (scheduled) {
+            d.dismiss();
+        }
     }
 
-    private void importBackup(
+    private boolean importBackup(
             final BackupFile backupFile, final String password, final boolean includeOmemo) {
         final OneTimeWorkRequest importBackupWorkRequest =
                 new OneTimeWorkRequest.Builder(ImportBackupWorker.class)
                         .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                        .setInputData(
-                                ImportBackupWorker.data(
-                                        password, backupFile.getUri(), includeOmemo))
+                        .setInputData(ImportBackupWorker.data(backupFile.getUri(), includeOmemo))
                         .addTag(ImportBackupWorker.TAG_IMPORT_BACKUP)
                         .build();
 
         final var id = importBackupWorkRequest.getId();
+        final var secretStorage = new ImportBackupSecretStorage(this);
+        try {
+            secretStorage.store(id, password);
+        } catch (final GeneralSecurityException | IOException | RuntimeException e) {
+            Log.e(Config.LOGTAG, "unable to protect backup import secret", e);
+            onBackupRestoreFailed();
+            return false;
+        }
         this.currentWorkRequest = id;
         monitorWorkRequest(id);
 
         final var workManager = WorkManager.getInstance(this);
-        workManager.enqueue(importBackupWorkRequest);
+        try {
+            workManager.enqueue(importBackupWorkRequest);
+        } catch (final RuntimeException e) {
+            secretStorage.delete(id);
+            this.currentWorkRequest = null;
+            Log.e(Config.LOGTAG, "unable to schedule backup import", e);
+            onBackupRestoreFailed();
+            return false;
+        }
+        return true;
     }
 
     private void monitorWorkRequest(final UUID uuid) {
@@ -346,8 +366,13 @@ public class ImportBackupActivity extends ActionBarActivity
         workInfoLiveData.observe(
                 this,
                 workInfo -> {
+                    if (workInfo == null) {
+                        return;
+                    }
                     final var state = workInfo.getState();
                     if (state.isFinished()) {
+                        // Also covers requests cancelled before the worker got a chance to start.
+                        new ImportBackupSecretStorage(this).delete(uuid);
                         this.currentWorkRequest = null;
                     }
                     if (state == WorkInfo.State.FAILED) {

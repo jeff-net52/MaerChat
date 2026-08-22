@@ -120,7 +120,7 @@ public class CallIntegration extends Connection {
 
     @Override
     public void onReject(final String replyMessage) {
-        Log.d(Config.LOGTAG, "onReject(" + replyMessage + ")");
+        Log.d(Config.LOGTAG, "onReject(with reply message)");
         this.callback.onCallIntegrationReject();
     }
 

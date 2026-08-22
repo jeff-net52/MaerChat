@@ -937,18 +937,13 @@ public class JingleRtpConnection extends AbstractJingleConnection
         final RtpContentMap restartContentMap;
         try {
             if (isOffer) {
-                Log.d(Config.LOGTAG, "received offer to restart ICE " + newCredentials);
+                Log.d(Config.LOGTAG, "received offer to restart ICE");
                 restartContentMap =
                         existing.modifiedCredentials(
                                 newCredentials, IceUdpTransportInfo.Setup.ACTPASS);
             } else {
                 final IceUdpTransportInfo.Setup setup = getPeerDtlsSetup();
-                Log.d(
-                        Config.LOGTAG,
-                        "received confirmation of ICE restart"
-                                + newCredentials
-                                + " peer_setup="
-                                + setup);
+                Log.d(Config.LOGTAG, "received confirmation of ICE restart; peer_setup=" + setup);
                 // DTLS setup attribute needs to be rewritten to reflect current peer state
                 // https://groups.google.com/g/discuss-webrtc/c/DfpIMwvUfeM
                 restartContentMap = existing.modifiedCredentials(newCredentials, setup);
@@ -968,7 +963,9 @@ public class JingleRtpConnection extends AbstractJingleConnection
                 Log.d(Config.LOGTAG, "ignoring PeerConnectionNotInitialized on ICE restart");
                 return true;
             }
-            Log.d(Config.LOGTAG, "failure to apply ICE restart", rootCause);
+            Log.d(
+                    Config.LOGTAG,
+                    "failure to apply ICE restart (" + rootCause.getClass().getSimpleName() + ")");
             webRTCWrapper.close();
             sendSessionTerminate(Reason.ofThrowable(rootCause), rootCause.getMessage());
             return true;
@@ -1047,21 +1044,15 @@ public class JingleRtpConnection extends AbstractJingleConnection
             try {
                 sdp = candidate.toSdpAttribute(credentials.ufrag);
             } catch (final IllegalArgumentException e) {
-                Log.d(
-                        Config.LOGTAG,
-                        id.account.getJid().asBareJid()
-                                + ": ignoring invalid ICE candidate "
-                                + e.getMessage());
+                Log.d(Config.LOGTAG, "ignoring invalid inbound ICE candidate");
                 continue;
             }
             final int mLineIndex = indices.indexOf(sdpMid);
             if (mLineIndex < 0) {
-                Log.w(
-                        Config.LOGTAG,
-                        "mLineIndex not found for " + sdpMid + ". available indices " + indices);
+                Log.w(Config.LOGTAG, "mLineIndex not found for received ICE candidate");
             }
             final IceCandidate iceCandidate = new IceCandidate(sdpMid, mLineIndex, sdp);
-            Log.d(Config.LOGTAG, "received candidate: " + iceCandidate);
+            Log.d(Config.LOGTAG, "received ICE candidate");
             this.webRTCWrapper.addIceCandidate(iceCandidate);
         }
     }
@@ -2440,17 +2431,17 @@ public class JingleRtpConnection extends AbstractJingleConnection
         try {
             credentials = rtpContentMap.getCredentials(iceCandidate.sdpMid);
         } catch (final IllegalArgumentException e) {
-            Log.d(Config.LOGTAG, "ignoring (not sending) candidate: " + iceCandidate, e);
+            Log.d(Config.LOGTAG, "ignoring invalid outbound ICE candidate");
             return;
         }
         final String uFrag = credentials.ufrag;
         final IceUdpTransportInfo.Candidate candidate =
                 IceUdpTransportInfo.Candidate.fromSdpAttribute(iceCandidate.sdp, uFrag);
         if (candidate == null) {
-            Log.d(Config.LOGTAG, "ignoring (not sending) candidate: " + iceCandidate);
+            Log.d(Config.LOGTAG, "ignoring malformed outbound ICE candidate");
             return;
         }
-        Log.d(Config.LOGTAG, "sending candidate: " + iceCandidate);
+        Log.d(Config.LOGTAG, "sending ICE candidate");
         sendTransportInfo(iceCandidate.sdpMid, candidate);
     }
 
@@ -2560,7 +2551,7 @@ public class JingleRtpConnection extends AbstractJingleConnection
     private void initiateIceRestart(final RtpContentMap rtpContentMap) {
         final RtpContentMap transportInfo = rtpContentMap.transportInfo();
         final Iq iq = transportInfo.toJinglePacket(Jingle.Action.TRANSPORT_INFO, id.sessionId);
-        Log.d(Config.LOGTAG, "initiating ice restart: " + iq);
+        Log.d(Config.LOGTAG, "initiating ICE restart");
         iq.setTo(id.with);
         final var future = this.id.account.getXmppConnection().sendIqPacket(iq);
         Futures.addCallback(
@@ -2860,7 +2851,7 @@ public class JingleRtpConnection extends AbstractJingleConnection
 
                     @Override
                     public void onFailure(@NonNull Throwable t) {
-                        Log.d(Config.LOGTAG, "could not discover ice servers", t);
+                        Log.d(Config.LOGTAG, "could not discover ICE servers");
                         onIceServersDiscovered.onIceServersDiscovered(Collections.emptySet());
                     }
                 },

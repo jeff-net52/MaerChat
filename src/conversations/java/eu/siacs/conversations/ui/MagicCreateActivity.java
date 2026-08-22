@@ -44,6 +44,11 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onCreate(savedInstanceState);
+        if (Config.DISALLOW_REGISTRATION_IN_UI) {
+            WelcomeActivity.launch(this);
+            finish();
+            return;
+        }
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_magic_create);
         Activities.setStatusAndNavigationBarColors(this, binding.getRoot());
         setSupportActionBar(this.binding.toolbar);
@@ -71,7 +76,7 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
                             jid = Jid.ofLocalAndDomain(username, this.domain);
                         } else {
                             fixedUsername = false;
-                            jid = Jid.ofLocalAndDomain(username, Config.MAGIC_CREATE_DOMAIN);
+                            jid = Jid.ofLocalAndDomain(username, getRegistrationDomain());
                         }
                         if (!jid.getLocal().equals(jid.getLocal())
                                 || (this.username == null && username.length() < 3)) {
@@ -142,7 +147,7 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
                 binding.fullJid.setVisibility(View.VISIBLE);
                 final Jid jid;
                 if (this.domain == null) {
-                    jid = Jid.ofLocalAndDomain(username, Config.MAGIC_CREATE_DOMAIN);
+                    jid = Jid.ofLocalAndDomain(username, getRegistrationDomain());
                 } else {
                     jid = Jid.ofLocalAndDomain(username, this.domain);
                 }
@@ -152,5 +157,15 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
                 binding.fullJid.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    private String getRegistrationDomain() {
+        if (this.domain != null) {
+            return this.domain;
+        }
+        if (Config.MAGIC_CREATE_DOMAIN == null) {
+            throw new IllegalStateException("Account registration is disabled");
+        }
+        return Config.MAGIC_CREATE_DOMAIN;
     }
 }

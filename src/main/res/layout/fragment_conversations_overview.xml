@@ -1,70 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?colorSurface">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/home_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?colorSurface"
             app:elevation="0dp"
-            app:liftOnScroll="false">
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/list">
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/brand_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                app:title="@string/app_name"
+                app:titleTextAppearance="?textAppearanceTitleLarge"
+                tools:title="Maer Chat">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_avatar"
+                    android:layout_width="@dimen/home_profile_avatar"
+                    android:layout_height="@dimen/home_profile_avatar"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/background_profile_avatar"
+                    android:clickable="true"
+                    android:contentDescription="@string/your_avatar"
+                    android:focusable="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_person_24dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular"
+                    app:strokeColor="?colorOutlineVariant"
+                    app:strokeWidth="1dp" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <com.google.android.material.search.SearchBar
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:hint="@string/search_in_chats"
-                app:layout_scrollFlags="snap" />
+                app:backgroundTint="?colorSurfaceContainerHigh"
+                app:defaultMarginsEnabled="false"
+                app:navigationIcon="@drawable/ic_search_24dp"
+                app:shapeAppearance="@style/ShapeAppearance.MaerChat.Search"
+                app:strokeWidth="0dp" />
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/home_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:contentDescription="@string/conversation_categories"
+                app:tabGravity="fill"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorColor="?colorPrimary"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="fixed"
+                app:tabRippleColor="?colorPrimaryContainer"
+                app:tabSelectedTextColor="?colorPrimary"
+                app:tabTextColor="?colorOnSurfaceVariant">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chats" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contacts" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/groups" />
+            </com.google.android.material.tabs.TabLayout>
         </com.google.android.material.appbar.AppBarLayout>
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="4dp"
+            android:paddingBottom="96dp"
             android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:itemCount="6"
+            tools:listitem="@layout/item_conversation" />
 
-        <RelativeLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/empty_chat_hint"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="48dp"
-            android:visibility="gone">
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="?colorSurfaceContainerLow"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:strokeColor="?colorOutlineVariant"
+            app:strokeWidth="1dp">
 
-            <ImageView
-                android:id="@+id/empty_chat_hint_image"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:importantForAccessibility="no"
-                android:src="@drawable/ic_forum_thin_48dp"
-                app:tint="?colorPrimaryFixedDim" />
-
-            <TextView
-                android:id="@+id/empty_chat_hint_text"
-                style="?textAppearanceBodyMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/empty_chat_hint_image"
                 android:gravity="center"
-                android:text="@string/empty_conversations_list_hint" />
-        </RelativeLayout>
+                android:orientation="vertical"
+                android:padding="28dp">
+
+                <ImageView
+                    android:id="@+id/empty_chat_hint_image"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:background="@drawable/background_profile_avatar"
+                    android:importantForAccessibility="no"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_forum_thin_48dp"
+                    app:tint="?colorOnPrimaryContainer" />
+
+                <TextView
+                    style="?textAppearanceTitleMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/empty_conversations_title"
+                    android:textColor="?colorOnSurface" />
+
+                <TextView
+                    android:id="@+id/empty_chat_hint_text"
+                    style="?textAppearanceBodyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/empty_conversations_list_hint"
+                    android:textColor="?colorOnSurfaceVariant" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
+            android:layout_margin="20dp"
+            android:contentDescription="@string/start_chat"
             android:text="@string/start_chat"
-            app:icon="@drawable/ic_chat_24dp" />
+            app:backgroundTint="?colorPrimaryContainer"
+            app:icon="@drawable/ic_chat_24dp"
+            app:iconTint="?colorOnPrimaryContainer"
+            app:rippleColor="?colorPrimaryFixedDim"
+            app:textColor="?colorOnPrimaryContainer" />
 
         <com.google.android.material.search.SearchView
             android:id="@+id/search_view"
@@ -77,10 +179,12 @@
                 android:id="@+id/search_suggestion_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="24dp"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_search_suggestion" />
-
         </com.google.android.material.search.SearchView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

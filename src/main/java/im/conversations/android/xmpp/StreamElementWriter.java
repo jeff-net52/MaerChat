@@ -109,7 +109,7 @@ public class StreamElementWriter extends BufferedWriter {
             if (ALLOWED_CONTROL_CHARS.contains(c)) {
                 this.write(c);
             } else if (Character.isISOControl(c)) {
-                Log.e(Config.LOGTAG, "invalid control chars in: " + text);
+                Log.e(Config.LOGTAG, "invalid control character omitted from XMPP element");
             } else {
                 final var entity = ENTITIES.get(c);
                 if (entity != null) {

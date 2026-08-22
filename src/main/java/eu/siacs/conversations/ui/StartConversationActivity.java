@@ -107,6 +107,8 @@ public class StartConversationActivity extends XmppActivity
             "contact_list_integration_consent";
 
     public static final String EXTRA_INVITE_URI = "eu.siacs.conversations.invite_uri";
+    private static final String EXTRA_INITIAL_TAB =
+            "eu.siacs.conversations.extra.INITIAL_START_CONVERSATION_TAB";
 
     private final int REQUEST_SYNC_CONTACTS = 0x28cf;
     private final int REQUEST_CREATE_CONFERENCE = 0x39da;
@@ -242,6 +244,12 @@ public class StartConversationActivity extends XmppActivity
         context.startActivity(intent);
     }
 
+    public static void launch(Context context, int initialTab) {
+        final Intent intent = new Intent(context, StartConversationActivity.class);
+        intent.putExtra(EXTRA_INITIAL_TAB, initialTab);
+        context.startActivity(intent);
+    }
+
     private static Intent createLauncherIntent(Context context) {
         final Intent intent = new Intent(context, StartConversationActivity.class);
         intent.setAction(Intent.ACTION_MAIN);
@@ -295,6 +303,9 @@ public class StartConversationActivity extends XmppActivity
 
         mConferenceAdapter = new ListItemAdapter(this, conferences, this.mOnTagClickedListener);
         mContactsAdapter = new ListItemAdapter(this, contacts, this.mOnTagClickedListener);
+        final int initialTab =
+                Math.max(0, Math.min(1, getIntent().getIntExtra(EXTRA_INITIAL_TAB, 0)));
+        binding.startConversationViewPager.setCurrentItem(initialTab, false);
 
         final SharedPreferences preferences = getPreferences();
 

@@ -51,7 +51,7 @@ public class PushManagementService {
                         fcmToken -> {
                             final var pushManager =
                                     connection.getManager(PushNotificationManager.class);
-                            Log.d(Config.LOGTAG, "FCM Token: " + fcmToken);
+                            Log.d(Config.LOGTAG, "FCM token retrieved");
                             final var androidId = PhoneHelper.getAndroidId(context);
                             final var appServer = getAppServer();
                             return pushManager.registerAndEnable(appServer, fcmToken, androidId);

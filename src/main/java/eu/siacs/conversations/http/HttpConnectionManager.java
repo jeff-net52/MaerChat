@@ -213,13 +213,10 @@ public class HttpConnectionManager extends AbstractConnectionManager {
         return future;
     }
 
-    private void setupTrustManager(final OkHttpClient.Builder builder, final boolean interactive) {
-        final X509TrustManager trustManager;
-        if (interactive) {
-            trustManager = mXmppConnectionService.getMemorizingTrustManager().getInteractive();
-        } else {
-            trustManager = mXmppConnectionService.getMemorizingTrustManager().getNonInteractive();
-        }
+    private void setupTrustManager(
+            final OkHttpClient.Builder builder, final boolean ignoredInteractive) {
+        final X509TrustManager trustManager =
+                mXmppConnectionService.getMemorizingTrustManager().getStrict();
         try {
             final SSLSocketFactory sf =
                     new TLSSocketFactory(

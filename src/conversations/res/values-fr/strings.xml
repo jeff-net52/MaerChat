@@ -14,4 +14,19 @@
     <string name="tap_share_button_send_invite">Appuyez sur le bouton partager pour envoyer à votre contact une invitation pour %1$s.</string>
     <string name="if_contact_is_nearby_use_qr">Si votre contact se trouve près de vous, il peut aussi scanner le code ci-dessous pour accepter votre invitation.</string>
     <string name="share_invite_with">Partager une invitation avec …</string>
+    <string name="maer_login_subtitle">Connectez-vous avec votre compte de messagerie existant.</string>
+    <string name="maer_login_complete_jid">Adresse XMPP complète</string>
+    <string name="maer_login_server_summary">Connexion sécurisée à %1$s</string>
+    <string name="maer_login_advanced_summary">Le serveur est déterminé depuis l’adresse XMPP complète.</string>
+    <string name="maer_login_use_complete_jid">Avancé : utiliser un JID complet</string>
+    <string name="maer_login_use_default_server">Utiliser le serveur par défaut</string>
+    <string name="maer_login_security_notice">Votre mot de passe reste masqué et n’est jamais inclus dans les journaux de l’application.</string>
+    <string name="maer_login_error_initializing">L’application se prépare. Réessayez dans un instant.</string>
+    <string name="maer_login_error_authentication">Le nom d’utilisateur ou le mot de passe est incorrect.</string>
+    <string name="maer_login_error_tls">La connexion sécurisée a été interrompue, car le certificat du serveur ou la protection TLS n’a pas pu être vérifié.</string>
+    <string name="maer_login_error_server">Le serveur de messagerie est indisponible ou introuvable. Réessayez plus tard.</string>
+    <string name="maer_login_error_network">Aucune connexion Internet n’est disponible. Maer Chat se reconnectera automatiquement.</string>
+    <string name="maer_login_error_incompatible">Ce serveur ne permet pas d’établir une session XMPP sécurisée compatible.</string>
+    <string name="maer_login_error_generic">La connexion a échoué. Vérifiez vos informations puis réessayez.</string>
+    <string name="maer_login_error_save">Le compte n’a pas pu être enregistré. Réessayez.</string>
 </resources>

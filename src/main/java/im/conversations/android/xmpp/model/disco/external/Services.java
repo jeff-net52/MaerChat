@@ -1,7 +1,6 @@
 package im.conversations.android.xmpp.model.disco.external;
 
 import android.util.Log;
-import androidx.annotation.NonNull;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
@@ -74,17 +73,10 @@ public class Services extends Extension {
                     // The WebRTC spec requires throwing an
                     // InvalidAccessError on empty username or password
                     // https://chromium.googlesource.com/external/webrtc/+/master/pc/ice_server_parsing.cc
-                    Log.w(
-                            Config.LOGTAG,
-                            "skipping "
-                                    + type
-                                    + "/"
-                                    + transport
-                                    + " without username and password");
+                    Log.w(Config.LOGTAG, "skipping TURN service without username and password");
                     continue;
                 }
                 final var iceServer = new IceServerWrapper(iceServerBuilder.createIceServer());
-                Log.w(Config.LOGTAG, "discovered ICE Server: " + iceServer);
                 builder.add(iceServer);
             }
         }
@@ -113,12 +105,6 @@ public class Services extends Extension {
         @Override
         public int hashCode() {
             return Objects.hashCode(iceServer.urls, iceServer.urls, iceServer.password);
-        }
-
-        @Override
-        @NonNull
-        public String toString() {
-            return this.iceServer.toString();
         }
     }
 }

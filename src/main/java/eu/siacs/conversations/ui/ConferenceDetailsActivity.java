@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -68,6 +69,22 @@ public class ConferenceDetailsActivity extends XmppActivity
     private MediaAdapter mMediaAdapter;
     private UserPreviewAdapter mUserPreviewAdapter;
     private String uuid = null;
+    private final OnBackPressedCallback onBackPressedCallback =
+            new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (binding.mucEditor.getVisibility() == View.VISIBLE) {
+                        hideEditor();
+                        return;
+                    }
+                    setEnabled(false);
+                    try {
+                        ConferenceDetailsActivity.this.getOnBackPressedDispatcher().onBackPressed();
+                    } finally {
+                        setEnabled(true);
+                    }
+                }
+            };
 
     private final FutureCallback<Void> renameCallback =
             new FutureCallback<Void>() {
@@ -216,6 +233,7 @@ public class ConferenceDetailsActivity extends XmppActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, this.onBackPressedCallback);
         final var showMore =
                 savedInstanceState != null && savedInstanceState.getBoolean("show_more");
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_muc_details);
@@ -568,15 +586,6 @@ public class ConferenceDetailsActivity extends XmppActivity
                 }
                 updateView();
             }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (this.binding.mucEditor.getVisibility() == View.VISIBLE) {
-            hideEditor();
-        } else {
-            super.onBackPressed();
         }
     }
 

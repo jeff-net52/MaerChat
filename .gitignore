@@ -22,6 +22,7 @@ libs/*.aar
 # Built application files
 *.apk
 *.ap_
+*.idsig
 
 # Files for the Dalvik VM
 *.dex

@@ -904,7 +904,7 @@ public class XmppConnectionService extends Service {
         } else {
             return;
         }
-        Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": fetching service outage " + url);
+        Log.d(Config.LOGTAG, "fetching service outage metadata");
         Futures.addCallback(
                 ServiceOutageStatus.fetch(getApplicationContext(), url),
                 new FutureCallback<>() {
@@ -1084,6 +1084,11 @@ public class XmppConnectionService extends Service {
         Log.d(Config.LOGTAG, "restoring accounts...");
         this.accounts = databaseBackend.getAccounts();
         for (final var account : this.accounts) {
+            if (!account.isPasswordStorageAvailable()) {
+                // A restored or invalidated Keystore key cannot unlock the stored credential.
+                // Surface the normal re-authentication flow instead of attempting an empty login.
+                account.setStatus(Account.State.UNAUTHORIZED);
+            }
             account.setXmppConnection(new XmppConnection(account, this));
         }
         final boolean hasEnabledAccounts = hasEnabledAccounts();
@@ -1554,7 +1559,7 @@ public class XmppConnectionService extends Service {
 
     private void sendFileMessageExistingEndpoint(
             final Message message, final boolean delay, final String url) {
-        Log.d(Config.LOGTAG, "reusing existing endpoint " + url);
+        Log.d(Config.LOGTAG, "reusing existing HTTP upload endpoint");
         if (!message.isPrivateMessage()) {
             message.setCounterpart(message.getConversation().getAddress().asBareJid());
         }
@@ -2468,7 +2473,7 @@ public class XmppConnectionService extends Service {
                 showErrorToastInUi(R.string.jid_does_not_match_certificate);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(Config.LOGTAG, "certificate account update failed");
         }
     }
 

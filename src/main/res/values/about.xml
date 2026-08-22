@@ -30,8 +30,10 @@
 
 <resources>
     <string name="pref_about_message" translatable="false">
-			Conversations • the very last word in instant messaging.
-			\n\nCopyright © 2014-2026 Daniel Gultsch
+			Maer Chat • messagerie XMPP sécurisée.
+			\n\nMaer Chat 0.1.0 est un logiciel libre dérivé de Conversations 2.20.1.
+			\n\nCopyright du fork © 2026 contributeurs de Maer Chat
+			\nCopyright amont © 2014-2026 Daniel Gultsch et contributeurs de Conversations
 			\n\nThis program is free software: you can redistribute it and/or modify
 			it under the terms of the GNU General Public License as published by
 			the Free Software Foundation, either version 3 of the License, or
@@ -42,7 +44,9 @@
 			GNU General Public License for more details.
 			\n\nYou should have received a copy of the GNU General Public License
 			along with this program. If not, see https://www.gnu.org/licenses
-			\n\nDownload the full source code at https://codeberg.org/iNPUTmice/Conversations
+			\n\nLe code source correspondant, les instructions de compilation et les mentions
+			se trouvent dans la distribution Maer Chat. Projet amont :
+			https://codeberg.org/iNPUTmice/Conversations
 			\n\n\nThird-party libraries:
 
 			\n\nAndroid Jetpack\nhttps://android.googlesource.com/platform/frameworks/support\n(Apache License, Version 2.0)

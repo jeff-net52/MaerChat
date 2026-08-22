@@ -154,10 +154,7 @@ public class HttpUploadConnection
 
                     @Override
                     public void onFailure(@NonNull final Throwable throwable) {
-                        Log.d(
-                                Config.LOGTAG,
-                                account.getJid().asBareJid() + ": unable to request slot",
-                                throwable);
+                        Log.d(Config.LOGTAG, "unable to request HTTP upload slot");
                         // TODO consider fall back to jingle in 1-on-1 chats with exactly one online
                         // presence
                         fail(throwable.getMessage());
@@ -176,13 +173,15 @@ public class HttpUploadConnection
         final RequestBody requestBody = AbstractConnectionManager.requestBody(this.upload, this);
         final Request request =
                 new Request.Builder().url(slot.put).put(requestBody).headers(slot.headers).build();
-        Log.d(Config.LOGTAG, "uploading file to " + slot.put);
+        Log.d(Config.LOGTAG, "starting HTTP file upload");
         this.mostRecentCall = client.newCall(request);
         this.mostRecentCall.enqueue(
                 new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, IOException e) {
-                        Log.d(Config.LOGTAG, "http upload failed", e);
+                        Log.d(
+                                Config.LOGTAG,
+                                "HTTP upload failed (" + e.getClass().getSimpleName() + ")");
                         fail(e.getMessage());
                     }
 

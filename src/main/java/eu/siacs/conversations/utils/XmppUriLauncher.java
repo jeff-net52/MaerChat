@@ -2,13 +2,11 @@ package eu.siacs.conversations.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.collect.Iterables;
 import de.gultsch.common.MiniUri;
-import eu.siacs.conversations.Config;
 import eu.siacs.conversations.Conversations;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.persistance.DatabaseBackend;
@@ -40,29 +38,11 @@ public class XmppUriLauncher {
     private void launch(
             final Collection<DatabaseBackend.AccountWithOptions> accounts, final MiniUri.Xmpp uri) {
         final var addresses = DatabaseBackend.AccountWithOptions.getAddresses(accounts);
-        Log.d(Config.LOGTAG, "trying to launch: " + uri);
         final Intent intent;
         final var jid = uri.asJid();
-        if (SignupUtils.isSupportTokenRegistry() && uri.isAddress() && jid != null) {
-            final String preAuth = uri.getParameter(MiniUri.Xmpp.PARAMETER_PRE_AUTH);
-            if (uri.isAction(MiniUri.Xmpp.ACTION_REGISTER)) {
-                if (jid.getLocal() != null && addresses.contains(jid.asBareJid())) {
-                    showError(R.string.account_already_exists);
-                    return;
-                }
-                intent = SignupUtils.getTokenRegistrationIntent(context, jid, preAuth);
-                this.context.startActivity(intent);
-                return;
-            }
-            if (!DatabaseBackend.AccountWithOptions.hasEnabledAccount(accounts)
-                    && uri.isAction(MiniUri.Xmpp.ACTION_ROSTER)
-                    && uri.isYesIbr()) {
-                intent = SignupUtils.getTokenRegistrationIntent(context, jid.getDomain(), preAuth);
-                intent.putExtra(StartConversationActivity.EXTRA_INVITE_URI, uri.asUri().toString());
-                this.context.startActivity(intent);
-                return;
-            }
-        } else if (uri.isAction(MiniUri.Xmpp.ACTION_REGISTER)) {
+        // Account provisioning is administrative in Maer Chat. Reject registration URIs before
+        // considering account state, token-registry support, or any legacy creation activity.
+        if (uri.isAction(MiniUri.Xmpp.ACTION_REGISTER)) {
             showError(R.string.account_registrations_are_not_supported);
             return;
         }

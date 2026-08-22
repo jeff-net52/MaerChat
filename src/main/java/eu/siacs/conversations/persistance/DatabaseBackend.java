@@ -47,6 +47,7 @@ import im.conversations.android.xmpp.model.disco.info.InfoQuery;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -77,7 +78,9 @@ import org.whispersystems.libsignal.state.SignedPreKeyRecord;
 public class DatabaseBackend extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "history";
-    private static final int DATABASE_VERSION = 55;
+    private static final int ACCOUNT_SECRET_STORAGE_VERSION = 56;
+    private static final int DATABASE_VERSION = ACCOUNT_SECRET_STORAGE_VERSION;
+    private static final String PRE_AUTH_REGISTRATION_TOKEN = "pre_auth_registration";
 
     private static boolean requiresMessageIndexRebuild = false;
     private static DatabaseBackend instance = null;
@@ -335,10 +338,16 @@ public class DatabaseBackend extends SQLiteOpenHelper {
             "INSERT INTO messages_index(messages_index) VALUES('rebuild');";
 
     private final Context context;
+    private final AccountSecretStorage accountSecretStorage;
 
     private DatabaseBackend(Context context) {
+        this(context, new AccountSecretStorage());
+    }
+
+    DatabaseBackend(final Context context, final AccountSecretStorage accountSecretStorage) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context.getApplicationContext();
+        this.accountSecretStorage = accountSecretStorage;
     }
 
     private static ContentValues createFingerprintStatusContentValues(
@@ -1105,6 +1114,112 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                             + Message.SHARED_STORAGE
                             + " BOOLEAN NOT NULL DEFAULT 1");
         }
+        if (oldVersion < ACCOUNT_SECRET_STORAGE_VERSION
+                && newVersion >= ACCOUNT_SECRET_STORAGE_VERSION) {
+            migrateAccountSecrets(db);
+            purgePreAuthRegistrationTokens(db);
+        }
+    }
+
+    private void purgePreAuthRegistrationTokens(final SQLiteDatabase db) {
+        try (final Cursor cursor =
+                db.query(
+                        Account.TABLENAME,
+                        new String[] {Account.UUID, Account.KEYS, Account.OPTIONS},
+                        null,
+                        null,
+                        null,
+                        null,
+                        null)) {
+            while (cursor.moveToNext()) {
+                final String uuid = cursor.getString(0);
+                final String storedKeys = cursor.getString(1);
+                final String sanitizedKeys = removePreAuthRegistrationToken(storedKeys);
+                final int storedOptions = cursor.getInt(2);
+                final int sanitizedOptions = storedOptions & ~(1 << Account.OPTION_REGISTER);
+                if (Objects.equals(storedKeys, sanitizedKeys)
+                        && storedOptions == sanitizedOptions) {
+                    continue;
+                }
+                final ContentValues values = new ContentValues();
+                if (!Objects.equals(storedKeys, sanitizedKeys)) {
+                    values.put(Account.KEYS, sanitizedKeys);
+                }
+                if (storedOptions != sanitizedOptions) {
+                    values.put(Account.OPTIONS, sanitizedOptions);
+                }
+                final int rows =
+                        db.update(
+                                Account.TABLENAME,
+                                values,
+                                Account.UUID + "=?",
+                                new String[] {uuid});
+                if (rows != 1) {
+                    throw new IllegalStateException(
+                            "Unable to purge pre-authentication registration token");
+                }
+            }
+        }
+    }
+
+    static String removePreAuthRegistrationToken(final String serializedKeys) {
+        if (Strings.isNullOrEmpty(serializedKeys)) {
+            return serializedKeys;
+        }
+        try {
+            final JSONObject keys = new JSONObject(serializedKeys);
+            if (!keys.has(PRE_AUTH_REGISTRATION_TOKEN)) {
+                return serializedKeys;
+            }
+            keys.remove(PRE_AUTH_REGISTRATION_TOKEN);
+            return keys.toString();
+        } catch (final Exception e) {
+            // Do not replace malformed legacy JSON and risk discarding unrelated account keys.
+            Log.w(Config.LOGTAG, "Unable to sanitize legacy account keys", e);
+            return serializedKeys;
+        }
+    }
+
+    private void migrateAccountSecrets(final SQLiteDatabase db) {
+        try (final Cursor cursor =
+                db.query(
+                        Account.TABLENAME,
+                        new String[] {Account.UUID, Account.PASSWORD, Account.FAST_TOKEN},
+                        null,
+                        null,
+                        null,
+                        null,
+                        null)) {
+            while (cursor.moveToNext()) {
+                final String uuid = cursor.getString(0);
+                final ContentValues encryptedValues = new ContentValues();
+                migrateAccountSecret(encryptedValues, uuid, Account.PASSWORD, cursor.getString(1));
+                migrateAccountSecret(
+                        encryptedValues, uuid, Account.FAST_TOKEN, cursor.getString(2));
+                if (encryptedValues.size() > 0) {
+                    final int rows =
+                            db.update(
+                                    Account.TABLENAME,
+                                    encryptedValues,
+                                    Account.UUID + "=?",
+                                    new String[] {uuid});
+                    if (rows != 1) {
+                        throw new IllegalStateException("Unable to migrate account secrets");
+                    }
+                }
+            }
+        }
+    }
+
+    private void migrateAccountSecret(
+            final ContentValues values,
+            final String uuid,
+            final String column,
+            final String storedValue) {
+        if (storedValue == null || accountSecretStorage.isEncrypted(storedValue)) {
+            return;
+        }
+        values.put(column, encryptAccountSecret(uuid, column, storedValue));
     }
 
     private void canonicalizeJids(SQLiteDatabase db) {
@@ -1240,7 +1355,13 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 
     public void createAccount(Account account) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(Account.TABLENAME, null, account.getContentValues());
+        db.insert(Account.TABLENAME, null, getAccountContentValuesForStorage(account));
+    }
+
+    /** Inserts an account row restored from an encrypted Conversations backup. */
+    public long restoreAccount(final SQLiteDatabase db, final ContentValues cleartextValues) {
+        return db.insert(
+                Account.TABLENAME, null, protectAccountSecrets(new ContentValues(cleartextValues)));
     }
 
     public void saveResolverResult(String domain, Resolver.Result result) {
@@ -1817,7 +1938,33 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         try (final Cursor cursor =
                 db.query(Account.TABLENAME, null, null, null, null, null, null)) {
             while (cursor.moveToNext()) {
-                list.add(Account.fromCursor(cursor));
+                // While an older schema is being upgraded, callers in earlier migration steps
+                // still need the legacy plaintext values. Version 56 is the strict boundary.
+                if (db.getVersion() < ACCOUNT_SECRET_STORAGE_VERSION) {
+                    list.add(Account.fromCursor(cursor));
+                    continue;
+                }
+                final String uuid = cursor.getString(cursor.getColumnIndexOrThrow(Account.UUID));
+                final SecretReadResult password =
+                        decryptAccountSecret(
+                                uuid,
+                                Account.PASSWORD,
+                                cursor.getString(cursor.getColumnIndexOrThrow(Account.PASSWORD)),
+                                "");
+                final SecretReadResult fastToken =
+                        decryptAccountSecret(
+                                uuid,
+                                Account.FAST_TOKEN,
+                                cursor.getString(cursor.getColumnIndexOrThrow(Account.FAST_TOKEN)),
+                                null);
+                final Account account = Account.fromCursor(cursor, password.value, fastToken.value);
+                if (!password.available) {
+                    account.markPasswordStorageUnavailable();
+                }
+                if (!fastToken.available) {
+                    account.markFastTokenStorageUnavailable();
+                }
+                list.add(account);
             }
         }
         return list;
@@ -1827,8 +1974,90 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         final var db = this.getWritableDatabase();
         final String[] args = {account.getUuid()};
         final int rows =
-                db.update(Account.TABLENAME, account.getContentValues(), Account.UUID + "=?", args);
+                db.update(
+                        Account.TABLENAME,
+                        getAccountContentValuesForStorage(account),
+                        Account.UUID + "=?",
+                        args);
         return rows == 1;
+    }
+
+    private ContentValues getAccountContentValuesForStorage(final Account account) {
+        final ContentValues values = account.getContentValues();
+        // A transient or permanent Keystore failure must not replace recoverable ciphertext with
+        // an empty fallback while unrelated account properties are saved.
+        if (!account.isPasswordStorageAvailable()) {
+            values.remove(Account.PASSWORD);
+        }
+        if (!account.isFastTokenStorageAvailable()) {
+            values.remove(Account.FAST_TOKEN);
+        }
+        return protectAccountSecrets(values);
+    }
+
+    private ContentValues protectAccountSecrets(final ContentValues values) {
+        final String uuid = values.getAsString(Account.UUID);
+        if (uuid == null) {
+            throw new IllegalArgumentException("Account UUID is required to protect secrets");
+        }
+        if (values.containsKey(Account.KEYS)) {
+            values.put(
+                    Account.KEYS, removePreAuthRegistrationToken(values.getAsString(Account.KEYS)));
+        }
+        if (values.containsKey(Account.OPTIONS) && Config.DISALLOW_REGISTRATION_IN_UI) {
+            final Integer options = values.getAsInteger(Account.OPTIONS);
+            if (options != null) {
+                values.put(Account.OPTIONS, options & ~(1 << Account.OPTION_REGISTER));
+            }
+        }
+        protectAccountSecret(values, uuid, Account.PASSWORD);
+        protectAccountSecret(values, uuid, Account.FAST_TOKEN);
+        return values;
+    }
+
+    private void protectAccountSecret(
+            final ContentValues values, final String uuid, final String column) {
+        if (!values.containsKey(column) || values.get(column) == null) {
+            return;
+        }
+        values.put(column, encryptAccountSecret(uuid, column, values.getAsString(column)));
+    }
+
+    private String encryptAccountSecret(
+            final String uuid, final String column, final String cleartext) {
+        try {
+            return accountSecretStorage.encrypt(uuid, column, cleartext);
+        } catch (final GeneralSecurityException | IOException e) {
+            // Never fall back to writing cleartext when Android Keystore is unavailable.
+            throw new IllegalStateException("Unable to protect account secret", e);
+        }
+    }
+
+    private SecretReadResult decryptAccountSecret(
+            final String uuid,
+            final String column,
+            final String encryptedValue,
+            final String unavailableValue) {
+        try {
+            return new SecretReadResult(
+                    accountSecretStorage.decrypt(uuid, column, encryptedValue), true);
+        } catch (final GeneralSecurityException | IOException e) {
+            Log.e(
+                    Config.LOGTAG,
+                    "Unable to decrypt stored account credential; preserving ciphertext",
+                    e);
+            return new SecretReadResult(unavailableValue, false);
+        }
+    }
+
+    private static final class SecretReadResult {
+        private final String value;
+        private final boolean available;
+
+        private SecretReadResult(final String value, final boolean available) {
+            this.value = value;
+            this.available = available;
+        }
     }
 
     public boolean deleteAccount(final Account account) {
@@ -2065,7 +2294,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         new SessionRecord(
                                 Base64.decode(
                                         cursor.getString(
-                                                cursor.getColumnIndex(SQLiteAxolotlStore.KEY)),
+                                                cursor.getColumnIndexOrThrow(
+                                                        SQLiteAxolotlStore.KEY)),
                                         Base64.DEFAULT));
             } catch (IOException e) {
                 cursor.close();
@@ -2097,7 +2327,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         null);
 
         while (cursor.moveToNext()) {
-            devices.add(cursor.getInt(cursor.getColumnIndex(SQLiteAxolotlStore.DEVICE_ID)));
+            devices.add(cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.DEVICE_ID)));
         }
 
         cursor.close();
@@ -2200,7 +2430,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         new PreKeyRecord(
                                 Base64.decode(
                                         cursor.getString(
-                                                cursor.getColumnIndex(SQLiteAxolotlStore.KEY)),
+                                                cursor.getColumnIndexOrThrow(
+                                                        SQLiteAxolotlStore.KEY)),
                                         Base64.DEFAULT));
             } catch (IOException e) {
                 throw new AssertionError(e);
@@ -2263,7 +2494,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         new SignedPreKeyRecord(
                                 Base64.decode(
                                         cursor.getString(
-                                                cursor.getColumnIndex(SQLiteAxolotlStore.KEY)),
+                                                cursor.getColumnIndexOrThrow(
+                                                        SQLiteAxolotlStore.KEY)),
                                         Base64.DEFAULT));
             } catch (IOException e) {
                 throw new AssertionError(e);
@@ -2294,7 +2526,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         new SignedPreKeyRecord(
                                 Base64.decode(
                                         cursor.getString(
-                                                cursor.getColumnIndex(SQLiteAxolotlStore.KEY)),
+                                                cursor.getColumnIndexOrThrow(
+                                                        SQLiteAxolotlStore.KEY)),
                                         Base64.DEFAULT)));
             } catch (IOException ignored) {
             }
@@ -2423,7 +2656,8 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                         new IdentityKeyPair(
                                 Base64.decode(
                                         cursor.getString(
-                                                cursor.getColumnIndex(SQLiteAxolotlStore.KEY)),
+                                                cursor.getColumnIndexOrThrow(
+                                                        SQLiteAxolotlStore.KEY)),
                                         Base64.DEFAULT));
             } catch (InvalidKeyException e) {
                 Log.d(
@@ -2454,7 +2688,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
                 continue;
             }
             try {
-                String key = cursor.getString(cursor.getColumnIndex(SQLiteAxolotlStore.KEY));
+                String key = cursor.getString(cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.KEY));
                 if (key != null) {
                     identityKeys.add(new IdentityKey(Base64.decode(key, Base64.DEFAULT), 0));
                 } else {
@@ -2628,7 +2862,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         } else {
             cursor.moveToFirst();
             byte[] certificate =
-                    cursor.getBlob(cursor.getColumnIndex(SQLiteAxolotlStore.CERTIFICATE));
+                    cursor.getBlob(cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.CERTIFICATE));
             cursor.close();
             if (certificate == null || certificate.length == 0) {
                 return null;

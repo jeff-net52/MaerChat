@@ -169,8 +169,7 @@ public class WebRTCDataChannelTransport implements Transport {
 
                 @Override
                 public void onSelectedCandidatePairChanged(CandidatePairChangeEvent event) {
-                    Log.d(Config.LOGTAG, "remote candidate selected: " + event.remote);
-                    Log.d(Config.LOGTAG, "local candidate selected: " + event.local);
+                    Log.d(Config.LOGTAG, "ICE candidate pair selected for data channel");
                 }
             };
 
@@ -235,7 +234,7 @@ public class WebRTCDataChannelTransport implements Transport {
                 xmppConnection.getManager(ExternalServiceDiscoveryManager.class).getIceServers(),
                 Exception.class,
                 ex -> {
-                    Log.d(Config.LOGTAG, "could not discover ice servers", ex);
+                    Log.d(Config.LOGTAG, "could not discover ICE servers");
                     return Collections.emptySet();
                 },
                 MoreExecutors.directExecutor());

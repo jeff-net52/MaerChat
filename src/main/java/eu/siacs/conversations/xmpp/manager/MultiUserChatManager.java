@@ -314,11 +314,7 @@ public class MultiUserChatManager extends AbstractManager {
                     final var account = getAccount();
                     for (final var presence : account.getSelfContact().getPresences()) {
                         Jid other = presence.getFrom();
-                        Log.d(
-                                Config.LOGTAG,
-                                account.getJid().asBareJid()
-                                        + ": sending direct invite to "
-                                        + other);
+                        Log.d(Config.LOGTAG, "sending direct group chat invitation");
                         this.service.directInvite(conversation, other);
                     }
                     getManager(BookmarkManager.class).save(conversation, name);
@@ -655,7 +651,7 @@ public class MultiUserChatManager extends AbstractManager {
             return false;
         }
         if (isMuc(message)) {
-            Log.d(Config.LOGTAG, "ignore direct invite from MUC " + from);
+            Log.d(Config.LOGTAG, "ignoring direct group chat invitation from a MUC");
             return false;
         }
         final var jid = Jid.Invalid.getNullForInvalid(directInvite.getJid());
@@ -727,16 +723,11 @@ public class MultiUserChatManager extends AbstractManager {
     }
 
     private void handleInvite(final Invite invite) {
-        Log.d(Config.LOGTAG, "received " + invite);
+        Log.d(Config.LOGTAG, "received group chat invitation");
 
         final var account = getAccount();
         if (getManager(BlockingManager.class).isBlocked(invite.by)) {
-            Log.d(
-                    Config.LOGTAG,
-                    account.getJid().asBareJid()
-                            + ": ignore invite from "
-                            + invite.by
-                            + " because contact is blocked");
+            Log.d(Config.LOGTAG, "ignored group chat invitation from blocked contact");
             return;
         }
 
@@ -749,12 +740,7 @@ public class MultiUserChatManager extends AbstractManager {
             final Conversation conversation =
                     this.service.findOrCreateConversation(account, invite.to, true, false);
             if (conversation.getMucOptions().online()) {
-                Log.d(
-                        Config.LOGTAG,
-                        account.getJid().asBareJid()
-                                + ": received invite to "
-                                + invite.to
-                                + " but muc is considered to be online");
+                Log.d(Config.LOGTAG, "received invitation for an already-online group chat");
                 getManager(MultiUserChatManager.class).pingAndRejoin(conversation);
             } else {
                 conversation.getMucOptions().setPassword(invite.password);
@@ -767,12 +753,7 @@ public class MultiUserChatManager extends AbstractManager {
                 this.service.updateConversationUi();
             }
         } else {
-            Log.d(
-                    Config.LOGTAG,
-                    account.getJid().asBareJid()
-                            + ": ignoring invite from "
-                            + invite.by
-                            + " because we are not accepting invites from strangers");
+            Log.d(Config.LOGTAG, "ignoring group chat invitation from an unknown contact");
         }
     }
 
@@ -1323,13 +1304,7 @@ public class MultiUserChatManager extends AbstractManager {
     }
 
     public void invite(final Conversation conversation, final Jid address) {
-        Log.d(
-                Config.LOGTAG,
-                conversation.getAccount().getJid().asBareJid()
-                        + ": inviting "
-                        + address
-                        + " to "
-                        + conversation.getAddress().asBareJid());
+        Log.d(Config.LOGTAG, "inviting contact to group chat");
         final var state = getOrCreateState(conversation);
         final var user =
                 state.getUser(MucOptions.IdentifiableUser.realAddress(address.asBareJid()));
@@ -1574,5 +1549,11 @@ public class MultiUserChatManager extends AbstractManager {
                 .buildOrThrow();
     }
 
-    public record Invite(Jid to, Jid by, String password) {}
+    public record Invite(Jid to, Jid by, String password) {
+
+        @Override
+        public String toString() {
+            return "Invite{details redacted}";
+        }
+    }
 }

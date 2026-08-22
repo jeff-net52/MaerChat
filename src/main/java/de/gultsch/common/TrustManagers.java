@@ -10,8 +10,10 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
@@ -46,6 +48,44 @@ public final class TrustManagers {
     public static X509TrustManager createDefaultTrustManager()
             throws NoSuchAlgorithmException, KeyStoreException {
         return createTrustManager(null);
+    }
+
+    /**
+     * Builds a trust manager from Android's system CA partition only.
+     *
+     * <p>The platform default trust manager can include user-installed certificate authorities on
+     * Android 6. Maer Chat uses this method for unattended XMPP and HTTP connections so a local
+     * user CA cannot silently intercept them.
+     */
+    public static X509TrustManager createSystemTrustManager()
+            throws NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
+        final KeyStore androidCaStore = KeyStore.getInstance("AndroidCAStore");
+        androidCaStore.load(null);
+
+        final KeyStore systemCaStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        systemCaStore.load(null, null);
+        final int certificateCount = copySystemCertificates(androidCaStore, systemCaStore);
+        if (certificateCount == 0) {
+            throw new KeyStoreException("Android system CA store is empty");
+        }
+        return createTrustManager(systemCaStore);
+    }
+
+    static int copySystemCertificates(final KeyStore source, final KeyStore destination)
+            throws KeyStoreException {
+        int certificateCount = 0;
+        final Enumeration<String> aliases = source.aliases();
+        while (aliases.hasMoreElements()) {
+            final String alias = aliases.nextElement();
+            if (!alias.startsWith("system:")) {
+                continue;
+            }
+            final Certificate certificate = source.getCertificate(alias);
+            if (certificate != null) {
+                destination.setCertificateEntry("system-" + certificateCount++, certificate);
+            }
+        }
+        return certificateCount;
     }
 
     private static X509TrustManager createDefaultWithBundledLetsEncrypt(final Context context)

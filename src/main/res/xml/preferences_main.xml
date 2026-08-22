@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
+        android:icon="@drawable/ic_person_24dp"
+        android:key="account_and_profile"
+        app:summary="@string/pref_account_and_profile_summary"
+        app:title="@string/pref_account_and_profile" />
+    <Preference
         android:icon="@drawable/ic_touch_app_24dp"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.InterfaceSettingsFragment"
         app:summary="@string/pref_summary_appearance"

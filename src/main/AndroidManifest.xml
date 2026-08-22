@@ -89,7 +89,7 @@
 
     <application
         android:name=".Conversations"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:appCategory="social"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -100,6 +100,7 @@
         android:largeHeap="true"
         android:localeConfig="@xml/locales_config"
         android:networkSecurityConfig="@xml/network_security_configuration"
+        android:usesCleartextTraffic="false"
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.Conversations3"

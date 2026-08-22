@@ -58,6 +58,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
@@ -69,6 +70,7 @@ import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.FragmentConversationsOverviewBinding;
+import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Conversational;
 import eu.siacs.conversations.services.QuickConversationsService;
@@ -77,6 +79,7 @@ import eu.siacs.conversations.ui.adapter.ConversationAdapter;
 import eu.siacs.conversations.ui.adapter.SearchSuggestionAdapter;
 import eu.siacs.conversations.ui.interfaces.OnConversationArchived;
 import eu.siacs.conversations.ui.interfaces.OnConversationSelected;
+import eu.siacs.conversations.ui.util.AvatarWorkerTask;
 import eu.siacs.conversations.ui.util.PendingActionHelper;
 import eu.siacs.conversations.ui.util.PendingItem;
 import eu.siacs.conversations.ui.util.ScrollState;
@@ -384,6 +387,9 @@ public class ConversationsOverviewFragment extends XmppFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (this.binding != null) {
+            this.binding.homeTabs.clearOnTabSelectedListeners();
+        }
         this.binding = null;
         this.conversationsAdapter = null;
         this.searchSuggestionAdapter = null;
@@ -440,6 +446,38 @@ public class ConversationsOverviewFragment extends XmppFragment {
                 });
         this.binding.fab.setOnClickListener(
                 (view) -> StartConversationActivity.launch(getActivity()));
+        this.binding.profileAvatar.setOnClickListener(
+                view -> {
+                    final var service = requireXmppActivity().xmppConnectionService;
+                    if (service == null) {
+                        return;
+                    }
+                    final Account account = AccountUtils.getFirstEnabled(service);
+                    if (account != null) {
+                        requireXmppActivity().switchToAccount(account);
+                    }
+                });
+        this.binding.homeTabs.addOnTabSelectedListener(
+                new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(@NonNull final TabLayout.Tab tab) {
+                        final int position = tab.getPosition();
+                        if (position == 0) {
+                            return;
+                        }
+                        final var chatsTab = binding.homeTabs.getTabAt(0);
+                        if (chatsTab != null) {
+                            chatsTab.select();
+                        }
+                        StartConversationActivity.launch(requireContext(), position - 1);
+                    }
+
+                    @Override
+                    public void onTabUnselected(@NonNull final TabLayout.Tab tab) {}
+
+                    @Override
+                    public void onTabReselected(@NonNull final TabLayout.Tab tab) {}
+                });
 
         this.conversationsAdapter =
                 new ConversationAdapter(requireXmppActivity(), this.conversations);
@@ -650,6 +688,7 @@ public class ConversationsOverviewFragment extends XmppFragment {
             return;
         }
         this.binding.searchBar.invalidateMenu();
+        refreshProfileAvatar();
         this.requireXmppActivity()
                 .xmppConnectionService
                 .populateWithOrderedConversations(this.conversations);
@@ -673,6 +712,22 @@ public class ConversationsOverviewFragment extends XmppFragment {
                 setScrollPosition(scrollState);
             }
         }
+    }
+
+    private void refreshProfileAvatar() {
+        final var service = requireXmppActivity().xmppConnectionService;
+        if (service == null) {
+            return;
+        }
+        final Account account = AccountUtils.getFirstEnabled(service);
+        if (account == null) {
+            this.binding.profileAvatar.setImageResource(R.drawable.ic_person_24dp);
+            this.binding.profileAvatar.setBackgroundResource(R.drawable.background_profile_avatar);
+            this.binding.profileAvatar.setContentDescription(getString(R.string.your_avatar));
+            return;
+        }
+        AvatarWorkerTask.loadAvatar(
+                account, this.binding.profileAvatar, R.dimen.home_profile_avatar);
     }
 
     private void toggleHintVisibility() {

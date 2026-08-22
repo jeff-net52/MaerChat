@@ -28,17 +28,14 @@ public class FingerprintStatus implements Comparable<FingerprintStatus> {
         return result;
     }
 
-    private FingerprintStatus() {
-
-
-    }
+    private FingerprintStatus() {}
 
     public ContentValues toContentValues() {
         final ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLiteAxolotlStore.TRUST,trust.toString());
-        contentValues.put(SQLiteAxolotlStore.ACTIVE,active ? 1 : 0);
+        contentValues.put(SQLiteAxolotlStore.TRUST, trust.toString());
+        contentValues.put(SQLiteAxolotlStore.ACTIVE, active ? 1 : 0);
         if (lastActivation != DO_NOT_OVERWRITE) {
-            contentValues.put(SQLiteAxolotlStore.LAST_ACTIVATION,lastActivation);
+            contentValues.put(SQLiteAxolotlStore.LAST_ACTIVATION, lastActivation);
         }
         return contentValues;
     }
@@ -46,12 +43,16 @@ public class FingerprintStatus implements Comparable<FingerprintStatus> {
     public static FingerprintStatus fromCursor(Cursor cursor) {
         final FingerprintStatus status = new FingerprintStatus();
         try {
-            status.trust = Trust.valueOf(cursor.getString(cursor.getColumnIndex(SQLiteAxolotlStore.TRUST)));
-        } catch(IllegalArgumentException e) {
+            status.trust =
+                    Trust.valueOf(
+                            cursor.getString(
+                                    cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.TRUST)));
+        } catch (IllegalArgumentException e) {
             status.trust = Trust.UNTRUSTED;
         }
-        status.active = cursor.getInt(cursor.getColumnIndex(SQLiteAxolotlStore.ACTIVE)) > 0;
-        status.lastActivation = cursor.getLong(cursor.getColumnIndex(SQLiteAxolotlStore.LAST_ACTIVATION));
+        status.active = cursor.getInt(cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.ACTIVE)) > 0;
+        status.lastActivation =
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLiteAxolotlStore.LAST_ACTIVATION));
         return status;
     }
 
@@ -165,7 +166,7 @@ public class FingerprintStatus implements Comparable<FingerprintStatus> {
             } else {
                 return 0;
             }
-        } else if (active){
+        } else if (active) {
             return -1;
         } else {
             return 1;
@@ -184,5 +185,4 @@ public class FingerprintStatus implements Comparable<FingerprintStatus> {
         VERIFIED,
         VERIFIED_X509
     }
-
 }

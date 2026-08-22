@@ -50,7 +50,9 @@
             android:title="@string/pref_use_relays" />
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_category_application">
+    <PreferenceCategory
+        android:key="application_reporting"
+        android:title="@string/pref_category_application">
         <SwitchPreferenceCompat
             android:defaultValue="@bool/send_crash_reports"
             android:icon="@drawable/ic_report_24dp"

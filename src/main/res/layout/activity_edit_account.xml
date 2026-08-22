@@ -92,6 +92,7 @@
                                     android:id="@+id/account_password"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:saveEnabled="false"
                                     android:inputType="textPassword" />
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -359,6 +360,183 @@
                             android:shrinkColumns="0"
                             android:stretchColumns="1"
                             android:visibility="gone">
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_jid"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_jid"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_resolved_server"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_server"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_port"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_port"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_tls"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_tls"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="top"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_certificate"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_certificate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:breakStrategy="simple"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_resource"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_resource"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_app_version"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/diagnostics_app_version"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    android:textIsSelectable="true" />
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/server_info_omemo"
+                                    android:textAppearance="?textAppearanceBodyMedium" />
+
+                                <TextView
+                                    android:id="@+id/server_info_omemo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:textAppearance="?textAppearanceBodyMedium"
+                                    tools:ignore="RtlHardcoded" />
+                            </TableRow>
 
                             <TableRow
                                 android:layout_width="fill_parent"

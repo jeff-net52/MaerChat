@@ -1171,7 +1171,7 @@ public abstract class XmppActivity extends ActionBarActivity {
                 try {
                     task.execute(message);
                 } catch (final RejectedExecutionException ignored) {
-                    ignored.printStackTrace();
+                    // The activity is shutting down; no message metadata belongs in stderr.
                 }
             }
         }

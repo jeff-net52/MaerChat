@@ -26,7 +26,7 @@ public class PushMessageReceiver extends BroadcastReceiver {
             return;
         }
         switch (Strings.nullToEmpty(intent.getAction())) {
-            case PushManagementService.ACTION_REGISTRATION -> onNewToken(context, extras);
+            case PushManagementService.ACTION_REGISTRATION -> onNewToken(context);
             case PushManagementService.ACTION_RECEIVE -> onMessageReceived(context, extras);
         }
     }
@@ -50,9 +50,8 @@ public class PushMessageReceiver extends BroadcastReceiver {
         Compatibility.startService(context, intent);
     }
 
-    private void onNewToken(final Context context, final Bundle extras) {
-        String registrationId = extras == null ? null : extras.getString("registration_id");
-        Log.d(Config.LOGTAG, "onNewToken(" + registrationId + ")");
+    private void onNewToken(final Context context) {
+        Log.d(Config.LOGTAG, "received refreshed FCM token");
 
         if (!Conversations.getInstance(context.getApplicationContext()).hasEnabledAccount()) {
             Log.d(
