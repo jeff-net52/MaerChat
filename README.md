@@ -1,3 +1,39 @@
+<h1 align="center">Maer Chat</h1>
+
+<p align="center">Messagerie Android XMPP sécurisée pour <code>contacts.chaumont.me</code></p>
+
+Maer Chat est un fork GPLv3 de Conversations. Il conserve son moteur XMPP, OMEMO,
+MAM, notifications, transferts de fichiers et appels Jingle éprouvé, avec une
+identité propre et une connexion simplifiée au serveur
+`contacts.chaumont.me`. Le mode avancé permet toujours d’utiliser un JID complet.
+
+- Paquet Android : `fr.maer.chat`
+- Version Maer Chat : `0.1.0`
+- Base amont : Conversations `2.20.1`, commit
+  `9fdc9ed5b2e2e4981cf58fce871c2ed47623c2bc`
+- Android : API 23 minimum, API 37 cible
+- Compilation : Java 21, Gradle 9.4.1, Android SDK 37
+- Documentation du fork : [`docs/maer-chat`](docs/maer-chat/README.md)
+- Licence et attributions : [`LICENSE`](LICENSE) et [`NOTICE.md`](NOTICE.md)
+
+Compilation rapide :
+
+```shell
+./gradlew assembleConversationsFreeDebug
+```
+
+L’APK Debug est produit sous
+`build/outputs/apk/conversationsFree/debug/`. La variante `free` est le livrable
+de référence : elle maintient directement la connexion XMPP et n’intègre aucune
+clé Firebase appartenant à Conversations.
+
+---
+
+## Projet amont Conversations
+
+Le texte ci-dessous est la documentation amont conservée pour faciliter les
+mises à jour et respecter la provenance du projet.
+
 <h1 align="center">Conversations</h1>
 
 <p align="center">Conversations: the very last word in instant messaging</p>
