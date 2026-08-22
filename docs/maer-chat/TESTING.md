@@ -97,10 +97,12 @@ au moins deux appareils ou instances. Les secrets sont saisis manuellement ou
 injectés par un coffre CI, jamais committés. Une fonction non testable faute de
 capacité serveur est notée « non vérifiée » et non « réussie ».
 
-La Release ARM64 0.2.0 a aussi été installée avec conservation des données sur
-un Samsung XCover 7 SM-G556B sous Android 16/API 36. Le gestionnaire de paquets
-a confirmé la version 0.2.0+free, code 204, et l’activité principale a démarré
-sans exception `AndroidRuntime`.
+La Release ARM64 0.3.0 a été installée avec l’option de mise à jour conservant
+les données sur un Samsung XCover 7 SM-G556B sous Android 16/API 36. Le
+gestionnaire de paquets a confirmé la version 0.3.0+free, code 304. La date de
+première installation est restée celle de la version précédente, l’activité
+principale a répondu `Status: ok`, le processus est demeuré actif et aucun
+plantage `AndroidRuntime` n’a été relevé après le démarrage.
 
 Aucun compte XMPP authentifié n’était disponible pour la validation décrite dans
 ce document. Les résultats hors ligne ne valident donc ni le chemin
