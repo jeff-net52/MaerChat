@@ -2,16 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?colorSurface" />
+            <solid android:color="?attr/maerChatBackground" />
         </shape>
     </item>
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="315"
-                android:centerColor="#0A0089E6"
-                android:endColor="#1600BFEF"
-                android:startColor="#060057B8" />
-        </shape>
-    </item>
+    <item
+        android:drawable="@drawable/maer_chat_pattern"
+        android:gravity="fill" />
 </layer-list>

@@ -18,6 +18,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -236,8 +237,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 viewHolder.indicatorReceived().setImageResource(receivedIndicator);
                 if (status == Message.STATUS_SEND_FAILED) {
                     setImageTintError(viewHolder.indicatorReceived());
+                } else if (status == Message.STATUS_SEND_DISPLAYED) {
+                    setImageTintAttribute(
+                            viewHolder.indicatorReceived(), R.attr.maerChatReceiptRead);
                 } else {
-                    setImageTint(viewHolder.indicatorReceived(), bubbleColor);
+                    setImageTintAttribute(
+                            viewHolder.indicatorReceived(), R.attr.maerChatReceiptDelivered);
                 }
                 viewHolder.indicatorReceived().setVisibility(View.VISIBLE);
             }
@@ -253,7 +258,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                             MaterialColors.getColor(
                                     viewHolder.time(), androidx.appcompat.R.attr.colorError));
         } else {
-            setTextColor(viewHolder.time(), bubbleColor);
+            setMetadataTextColor(viewHolder.time(), bubbleColor);
         }
         if (message.getEncryption() == Message.ENCRYPTION_NONE) {
             viewHolder.indicatorSecurity().setVisibility(View.GONE);
@@ -277,7 +282,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             if (error && sent) {
                 setImageTintError(viewHolder.indicatorSecurity());
             } else {
-                setImageTint(viewHolder.indicatorSecurity(), bubbleColor);
+                setMetadataImageTint(viewHolder.indicatorSecurity(), bubbleColor);
             }
             viewHolder.indicatorSecurity().setVisibility(View.VISIBLE);
         }
@@ -287,7 +292,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             if (error && sent) {
                 setImageTintError(viewHolder.indicatorEdit());
             } else {
-                setImageTint(viewHolder.indicatorEdit(), bubbleColor);
+                setMetadataImageTint(viewHolder.indicatorEdit(), bubbleColor);
             }
         } else {
             viewHolder.indicatorEdit().setVisibility(View.GONE);
@@ -855,12 +860,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         final BubbleColor bubbleColor;
         if (received) {
             if (isInValidSession) {
-                bubbleColor = colorfulBackground ? BubbleColor.SECONDARY : BubbleColor.SURFACE;
+                bubbleColor = colorfulBackground ? BubbleColor.INCOMING : BubbleColor.SURFACE;
             } else {
                 bubbleColor = BubbleColor.WARNING;
             }
         } else {
-            bubbleColor = colorfulBackground ? BubbleColor.TERTIARY : BubbleColor.SURFACE_HIGH;
+            bubbleColor = colorfulBackground ? BubbleColor.OUTGOING : BubbleColor.SURFACE_HIGH;
         }
 
         final var mergeIntoTop = mergeIntoTop(position, message);
@@ -887,7 +892,8 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                                     ? !mergeIntoTop
                                     : !mergeIntoBottom);
             setRequiresAvatar(viewHolder, requiresAvatar);
-            AvatarWorkerTask.loadAvatar(message, viewHolder.contactPicture(), R.dimen.avatar);
+            AvatarWorkerTask.loadAvatar(
+                    message, viewHolder.contactPicture(), R.dimen.bubble_avatar_size);
         } else {
             viewHolder.contactPicture().setVisibility(View.GONE);
         }
@@ -1080,8 +1086,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                             DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
         }
         if (colorfulBackground) {
-            setBackgroundTint(viewHolder.binding.messageBox, BubbleColor.PRIMARY);
-            setTextColor(viewHolder.binding.messageBody, BubbleColor.PRIMARY);
+            setBackgroundTintAttribute(
+                    viewHolder.binding.messageBox, R.attr.maerChatDateBackground);
+            setTextColorAttribute(viewHolder.binding.messageBody, R.attr.maerChatDateText);
         } else {
             setBackgroundTint(viewHolder.binding.messageBox, BubbleColor.SURFACE_HIGH);
             setTextColor(viewHolder.binding.messageBody, BubbleColor.SURFACE_HIGH);
@@ -1454,6 +1461,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         view.setBackgroundTintList(bubbleToColorStateList(view, bubbleColor));
     }
 
+    public static void setBackgroundTintAttribute(
+            final ViewGroup view, final @AttrRes int colorAttributeResId) {
+        view.setBackgroundTintList(
+                ColorStateList.valueOf(MaterialColors.getColor(view, colorAttributeResId)));
+    }
+
     private static ColorStateList bubbleToColorStateList(
             final View view, final BubbleColor bubbleColor) {
         final @AttrRes int colorAttributeResId =
@@ -1470,6 +1483,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                     case PRIMARY -> com.google.android.material.R.attr.colorPrimaryContainer;
                     case SECONDARY -> com.google.android.material.R.attr.colorSecondaryContainer;
                     case TERTIARY -> com.google.android.material.R.attr.colorTertiaryContainer;
+                    case INCOMING -> R.attr.maerChatBubbleIncoming;
+                    case OUTGOING -> R.attr.maerChatBubbleOutgoing;
+                    case COMPOSER -> R.attr.maerChatComposerBackground;
                     case WARNING -> com.google.android.material.R.attr.colorErrorContainer;
                 };
         return ColorStateList.valueOf(MaterialColors.getColor(view, colorAttributeResId));
@@ -1478,6 +1494,19 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     public static void setImageTint(final ImageView imageView, final BubbleColor bubbleColor) {
         ImageViewCompat.setImageTintList(
                 imageView, bubbleToOnSurfaceColorStateList(imageView, bubbleColor));
+    }
+
+    public static void setImageTintAttribute(
+            final ImageView imageView, final @AttrRes int colorAttributeResId) {
+        ImageViewCompat.setImageTintList(
+                imageView,
+                ColorStateList.valueOf(MaterialColors.getColor(imageView, colorAttributeResId)));
+    }
+
+    private static void setMetadataImageTint(
+            final ImageView imageView, final BubbleColor bubbleColor) {
+        ImageViewCompat.setImageTintList(
+                imageView, ColorStateList.valueOf(bubbleToMetadataColor(imageView, bubbleColor)));
     }
 
     public static void setImageTintError(final ImageView imageView) {
@@ -1498,24 +1527,38 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         }
     }
 
+    public static void setTextColorAttribute(
+            final TextView textView, final @AttrRes int colorAttributeResId) {
+        textView.setTextColor(MaterialColors.getColor(textView, colorAttributeResId));
+    }
+
+    private static void setMetadataTextColor(
+            final TextView textView, final BubbleColor bubbleColor) {
+        textView.setTextColor(bubbleToMetadataColor(textView, bubbleColor));
+    }
+
     private static void setTextSize(final TextView textView, final boolean largeFont) {
-        if (largeFont) {
-            textView.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
-        } else {
-            textView.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyMedium);
-        }
+        textView.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, largeFont ? 18 : 16);
     }
 
     private static @ColorInt int bubbleToOnSurfaceVariant(
             final View view, final BubbleColor bubbleColor) {
-        final @AttrRes int colorAttributeResId;
-        if (BubbleColor.SURFACES.contains(bubbleColor)) {
-            colorAttributeResId = com.google.android.material.R.attr.colorOnSurfaceVariant;
-        } else {
-            colorAttributeResId = bubbleToOnSurface(bubbleColor);
-        }
+        return bubbleToMetadataColor(view, bubbleColor);
+    }
+
+    private static @ColorInt int bubbleToMetadataColor(
+            final View view, final BubbleColor bubbleColor) {
+        final @AttrRes int colorAttributeResId =
+                switch (bubbleColor) {
+                    case INCOMING -> R.attr.maerChatBubbleMetaIncoming;
+                    case OUTGOING -> R.attr.maerChatBubbleMetaOutgoing;
+                    case COMPOSER -> R.attr.maerChatComposerContent;
+                    case SURFACE, SURFACE_HIGH ->
+                            com.google.android.material.R.attr.colorOnSurfaceVariant;
+                    default -> bubbleToOnSurface(bubbleColor);
+                };
         return MaterialColors.getColor(view, colorAttributeResId);
     }
 
@@ -1535,6 +1578,9 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             case PRIMARY -> com.google.android.material.R.attr.colorOnPrimaryContainer;
             case SECONDARY -> com.google.android.material.R.attr.colorOnSecondaryContainer;
             case TERTIARY -> com.google.android.material.R.attr.colorOnTertiaryContainer;
+            case INCOMING -> R.attr.maerChatOnBubbleIncoming;
+            case OUTGOING -> R.attr.maerChatOnBubbleOutgoing;
+            case COMPOSER -> R.attr.maerChatComposerContent;
             case WARNING -> com.google.android.material.R.attr.colorOnErrorContainer;
         };
     }
@@ -1545,10 +1591,13 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         PRIMARY,
         SECONDARY,
         TERTIARY,
+        INCOMING,
+        OUTGOING,
+        COMPOSER,
         WARNING;
 
         private static final Collection<BubbleColor> SURFACES =
-                Arrays.asList(BubbleColor.SURFACE, BubbleColor.SURFACE_HIGH);
+                Arrays.asList(BubbleColor.SURFACE, BubbleColor.SURFACE_HIGH, BubbleColor.COMPOSER);
     }
 
     private static class BubbleDesign {

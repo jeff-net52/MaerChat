@@ -29,6 +29,20 @@
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="maerChatBubbleIncoming">#FFFFFF</item>
+        <item name="maerChatBubbleOutgoing">#DDF4FF</item>
+        <item name="maerChatOnBubbleIncoming">#0B1F33</item>
+        <item name="maerChatOnBubbleOutgoing">#0B1F33</item>
+        <item name="maerChatBubbleMetaIncoming">#63717E</item>
+        <item name="maerChatBubbleMetaOutgoing">#476A7F</item>
+        <item name="maerChatReceiptDelivered">#667582</item>
+        <item name="maerChatReceiptRead">#0089E6</item>
+        <item name="maerChatComposerBackground">#FFFFFF</item>
+        <item name="maerChatComposerContent">#566673</item>
+        <item name="maerChatToolbarBackground">#FFFFFF</item>
+        <item name="maerChatDateBackground">#F9FCFE</item>
+        <item name="maerChatDateText">#4B5B69</item>
+        <item name="maerChatBackground">#F1F6FA</item>
         <item name="colorSecondary">@color/md_theme_light_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
         <item name="colorSecondaryContainer">@color/md_theme_light_secondaryContainer</item>
@@ -80,6 +94,20 @@
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
+        <item name="maerChatBubbleIncoming">#13283B</item>
+        <item name="maerChatBubbleOutgoing">#073B5E</item>
+        <item name="maerChatOnBubbleIncoming">#F5F9FC</item>
+        <item name="maerChatOnBubbleOutgoing">#F5F9FC</item>
+        <item name="maerChatBubbleMetaIncoming">#B3C0CC</item>
+        <item name="maerChatBubbleMetaOutgoing">#B7D2E3</item>
+        <item name="maerChatReceiptDelivered">#A7B6C5</item>
+        <item name="maerChatReceiptRead">#4DD7FF</item>
+        <item name="maerChatComposerBackground">#13283B</item>
+        <item name="maerChatComposerContent">#B7C6D4</item>
+        <item name="maerChatToolbarBackground">#0B1F33</item>
+        <item name="maerChatDateBackground">#CC13283B</item>
+        <item name="maerChatDateText">#D6E2EC</item>
+        <item name="maerChatBackground">#07131F</item>
         <item name="colorSecondary">@color/md_theme_dark_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
         <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
@@ -141,11 +169,6 @@
     <style name="ShapeAppearance.RoundedCornersLight" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
-    </style>
-
-    <style name="ShapeAppearance.RoundedCornersVeryLight" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
     </style>
 
     <style name="ShapeAppearance.Circular" parent="ShapeAppearance.MaterialComponents.SmallComponent">

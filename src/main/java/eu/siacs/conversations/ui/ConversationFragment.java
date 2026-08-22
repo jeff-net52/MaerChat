@@ -65,10 +65,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.emoji2.emojipicker.EmojiPickerView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
@@ -115,6 +117,7 @@ import eu.siacs.conversations.ui.adapter.MediaPreviewAdapter;
 import eu.siacs.conversations.ui.adapter.MessageAdapter;
 import eu.siacs.conversations.ui.util.ActivityResult;
 import eu.siacs.conversations.ui.util.Attachment;
+import eu.siacs.conversations.ui.util.AvatarWorkerTask;
 import eu.siacs.conversations.ui.util.ConversationMenuConfigurator;
 import eu.siacs.conversations.ui.util.DateSeparator;
 import eu.siacs.conversations.ui.util.EditMessageActionModeCallback;
@@ -671,8 +674,8 @@ public class ConversationFragment extends XmppFragment
                     final MenuItem menuInviteContact = menu.findItem(R.id.action_invite);
                     final MenuItem menuMute = menu.findItem(R.id.action_mute);
                     final MenuItem menuUnmute = menu.findItem(R.id.action_unmute);
-                    final MenuItem menuCall = menu.findItem(R.id.action_call);
                     final MenuItem menuOngoingCall = menu.findItem(R.id.action_ongoing_call);
+                    final MenuItem menuAudioCall = menu.findItem(R.id.action_audio_call);
                     final MenuItem menuVideoCall = menu.findItem(R.id.action_video_call);
                     final MenuItem menuTogglePinned = menu.findItem(R.id.action_toggle_pinned);
                     final var c = ConversationFragment.this.conversation;
@@ -681,7 +684,8 @@ public class ConversationFragment extends XmppFragment
                     }
                     if (c.getMode() == Conversation.MODE_MULTI) {
                         menuInviteContact.setVisible(c.getMucOptions().canInvite());
-                        menuCall.setVisible(false);
+                        menuAudioCall.setVisible(false);
+                        menuVideoCall.setVisible(false);
                         menuOngoingCall.setVisible(false);
                     } else {
                         final var manager =
@@ -693,7 +697,8 @@ public class ConversationFragment extends XmppFragment
                                         : manager.getOngoingRtpConnection(c.getContact());
                         if (ongoingRtpSession.isPresent()) {
                             menuOngoingCall.setVisible(true);
-                            menuCall.setVisible(false);
+                            menuAudioCall.setVisible(false);
+                            menuVideoCall.setVisible(false);
                         } else {
                             menuOngoingCall.setVisible(false);
                             // use RtpCapability.check(conversation.getContact()); to check if
@@ -701,7 +706,7 @@ public class ConversationFragment extends XmppFragment
                             // actually has support
                             final boolean cameraAvailable =
                                     requireXmppActivity().isCameraFeatureAvailable();
-                            menuCall.setVisible(true);
+                            menuAudioCall.setVisible(true);
                             menuVideoCall.setVisible(cameraAvailable);
                         }
                         final var connection = c.getAccount().getXmppConnection();
@@ -1395,6 +1400,9 @@ public class ConversationFragment extends XmppFragment
         }
         binding.attachButton.setToggleCheckedStateOnClick(false);
         binding.attachButton.setOnClickListener((v) -> toggleAttachmentChoicesVisibility());
+        binding.emojiButton.setOnClickListener(v -> showEmojiPicker());
+        binding.cameraButton.setOnClickListener(
+                v -> handleAttachmentChoice(AttachmentChoice.Type.CAMERA));
         binding.attachmentChoicesFlow.setReferencedIds(Ints.toArray(viewIdBuilder.build()));
         binding.getRoot().setOnClickListener(null); // TODO why the fuck did we do this?
         binding.toolbar.addMenuProvider(
@@ -2960,11 +2968,7 @@ public class ConversationFragment extends XmppFragment
     }
 
     private void setTextInputColors() {
-        final var colorfulChatBubbles = this.inputSettings.colorfulChatBubbles();
-        final var bubbleColor =
-                colorfulChatBubbles
-                        ? MessageAdapter.BubbleColor.TERTIARY
-                        : MessageAdapter.BubbleColor.SURFACE_HIGH;
+        final var bubbleColor = MessageAdapter.BubbleColor.COMPOSER;
         this.binding.textInput.setTextColor(
                 MessageAdapter.bubbleToOnSurfaceColor(this.binding.textInput, bubbleColor));
         this.binding.textInputHint.setTextColor(
@@ -2972,19 +2976,43 @@ public class ConversationFragment extends XmppFragment
         this.binding.attachButton.setIconTint(
                 MessageAdapter.bubbleToOnSurfaceColorStateList(
                         this.binding.attachButton, bubbleColor));
+        this.binding.emojiButton.setIconTint(
+                MessageAdapter.bubbleToOnSurfaceColorStateList(
+                        this.binding.emojiButton, bubbleColor));
+        this.binding.cameraButton.setIconTint(
+                MessageAdapter.bubbleToOnSurfaceColorStateList(
+                        this.binding.cameraButton, bubbleColor));
         MessageAdapter.setBackgroundTint(this.binding.inputLayout, bubbleColor);
-        if (bubbleColor == MessageAdapter.BubbleColor.TERTIARY) {
-            final var color =
-                    ContextCompat.getColorStateList(
-                            requireContext(), R.color.hint_on_tertiary_container);
-            this.binding.textInput.setHintTextColor(color);
-            setTextCursorDrawable(this.binding.textInput, R.drawable.cursor_on_tertiary_container);
-        } else {
-            final var color =
-                    ContextCompat.getColorStateList(requireContext(), R.color.hint_on_surface);
-            this.binding.textInput.setHintTextColor(color);
-            setTextCursorDrawable(this.binding.textInput, R.drawable.cursor_on_surface);
-        }
+        final var color =
+                ContextCompat.getColorStateList(requireContext(), R.color.hint_on_maer_chat_composer);
+        this.binding.textInput.setHintTextColor(color);
+        setTextCursorDrawable(this.binding.textInput, R.drawable.cursor_on_maer_chat_composer);
+    }
+
+    private void showEmojiPicker() {
+        hideSoftKeyboard(requireActivity());
+        final var dialog = new BottomSheetDialog(requireContext());
+        final var picker = new EmojiPickerView(requireContext());
+        final int pickerHeight =
+                Math.round(360 * getResources().getDisplayMetrics().density);
+        picker.setLayoutParams(
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pickerHeight));
+        picker.setOnEmojiPickedListener(
+                item -> {
+                    final Editable editable = this.binding.textInput.getText();
+                    if (editable == null) {
+                        return;
+                    }
+                    final int selectionStart = Math.max(0, this.binding.textInput.getSelectionStart());
+                    final int selectionEnd = Math.max(0, this.binding.textInput.getSelectionEnd());
+                    editable.replace(
+                            Math.min(selectionStart, selectionEnd),
+                            Math.max(selectionStart, selectionEnd),
+                            item.getEmoji());
+                    this.binding.textInput.requestFocus();
+                });
+        dialog.setContentView(picker);
+        dialog.show();
     }
 
     private static void setTextCursorDrawable(
@@ -3380,6 +3408,9 @@ public class ConversationFragment extends XmppFragment
         this.binding.textInput.setFocusable(canWrite);
         this.binding.textInput.setFocusableInTouchMode(canWrite);
         this.binding.textSendButton.setEnabled(canWrite);
+        this.binding.emojiButton.setEnabled(canWrite);
+        this.binding.attachButton.setEnabled(canWrite);
+        this.binding.cameraButton.setEnabled(canWrite);
         this.binding.textInput.setCursorVisible(canWrite);
         this.binding.textInput.setEnabled(canWrite);
     }
@@ -3394,7 +3425,7 @@ public class ConversationFragment extends XmppFragment
 
     private void updateAttachmentButton() {
         if (mediaPreviewAdapter.hasAttachments()) {
-            this.binding.attachButton.setVisibility(View.VISIBLE);
+            setComposerAttachmentButtonsVisible(true);
         } else {
             if (CharSequences.nullToEmpty(this.binding.textInput.getText()).isEmpty()) {
                 final var c = this.conversation;
@@ -3407,14 +3438,22 @@ public class ConversationFragment extends XmppFragment
                 } else {
                     visible = true;
                 }
-                this.binding.attachButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+                setComposerAttachmentButtonsVisible(visible);
             } else {
-                this.binding.attachButton.setVisibility(View.GONE);
+                setComposerAttachmentButtonsVisible(false);
                 // this is a last resort. in most cases this should have already been removed by
                 // focus or onSoftKeyboard listeners
                 setAttachmentChoicesVisibility(false);
             }
         }
+    }
+
+    private void setComposerAttachmentButtonsVisible(final boolean visible) {
+        this.binding.attachButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+        this.binding.cameraButton.setVisibility(
+                visible && requireXmppActivity().isCameraFeatureAvailable()
+                        ? View.VISIBLE
+                        : View.GONE);
     }
 
     public void updateSendButton() {
@@ -3457,6 +3496,11 @@ public class ConversationFragment extends XmppFragment
         this.binding.toolbar.setTitleCentered(isTabletView);
         final var c = this.conversation;
         this.binding.toolbar.setTitle(c.getName());
+        this.binding.toolbarAvatar.setVisibility(isTabletView ? View.GONE : View.VISIBLE);
+        if (!isTabletView) {
+            AvatarWorkerTask.loadAvatar(c, this.binding.toolbarAvatar, R.dimen.home_profile_avatar);
+            this.binding.toolbarAvatar.setOnClickListener(v -> openConversationDetails(c));
+        }
         if (c.getMode() == Conversation.MODE_SINGLE && this.mShowLastUserInteraction) {
             final var contact = conversation.getContact();
             this.binding.toolbar.setSubtitle(

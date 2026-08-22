@@ -49,6 +49,26 @@ public class ThemeConfigurationTest {
                 themedColor(landscape, androidx.appcompat.R.attr.colorPrimary));
     }
 
+    @Test
+    public void conversationThemeKeepsBubblesAndReadReceiptsDistinct() {
+        final Context day =
+                configuredContext(
+                        Configuration.UI_MODE_NIGHT_NO, Configuration.ORIENTATION_PORTRAIT);
+        final Context night =
+                configuredContext(
+                        Configuration.UI_MODE_NIGHT_YES, Configuration.ORIENTATION_PORTRAIT);
+
+        assertNotEquals(
+                themedColor(day, R.attr.maerChatBubbleIncoming),
+                themedColor(day, R.attr.maerChatBubbleOutgoing));
+        assertNotEquals(
+                themedColor(day, R.attr.maerChatReceiptDelivered),
+                themedColor(day, R.attr.maerChatReceiptRead));
+        assertNotEquals(
+                themedColor(day, R.attr.maerChatBackground),
+                themedColor(night, R.attr.maerChatBackground));
+    }
+
     private static Context configuredContext(final int nightMode, final int orientation) {
         final Context application = RuntimeEnvironment.getApplication();
         final Configuration configuration =

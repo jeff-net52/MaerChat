@@ -94,6 +94,8 @@
     <string name="choose_presence">Choisir l\'appareil</string>
     <string name="send_unencrypted_message">Envoyer un message non-chiffré</string>
     <string name="send_message">Envoyer le message</string>
+    <string name="open_emoji_picker">Ouvrir le sélecteur d’émojis</string>
+    <string name="take_photo">Prendre une photo</string>
     <string name="send_message_to_x">Envoyer un message à %s</string>
     <string name="send_omemo_x509_message">Envoyer un message chiffré avec v\\OMEMO</string>
     <string name="your_nick_has_been_changed">Votre pseudo a été changé</string>

@@ -110,6 +110,8 @@
     <string name="choose_presence">Choose device</string>
     <string name="send_unencrypted_message">Send clear text message</string>
     <string name="send_message">Send message</string>
+    <string name="open_emoji_picker">Open emoji picker</string>
+    <string name="take_photo">Take a photo</string>
     <string name="send_message_to_x">Send message to %s</string>
     <string name="send_encrypted_message">Send encrypted message</string>
     <string name="send_omemo_x509_message">Send v\\OMEMO encrypted message</string>

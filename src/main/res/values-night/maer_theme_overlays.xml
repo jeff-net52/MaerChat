@@ -13,6 +13,20 @@
         <item name="colorOnTertiary">#003543</item>
         <item name="colorTertiaryContainer">#004D61</item>
         <item name="colorOnTertiaryContainer">#B8EAFF</item>
+        <item name="maerChatBubbleIncoming">#13283B</item>
+        <item name="maerChatBubbleOutgoing">#073B5E</item>
+        <item name="maerChatOnBubbleIncoming">#F5F9FC</item>
+        <item name="maerChatOnBubbleOutgoing">#F5F9FC</item>
+        <item name="maerChatBubbleMetaIncoming">#B3C0CC</item>
+        <item name="maerChatBubbleMetaOutgoing">#B7D2E3</item>
+        <item name="maerChatReceiptDelivered">#A7B6C5</item>
+        <item name="maerChatReceiptRead">#4DD7FF</item>
+        <item name="maerChatComposerBackground">#13283B</item>
+        <item name="maerChatComposerContent">#B7C6D4</item>
+        <item name="maerChatToolbarBackground">#0B1F33</item>
+        <item name="maerChatDateBackground">#CC13283B</item>
+        <item name="maerChatDateText">#D6E2EC</item>
+        <item name="maerChatBackground">#07131F</item>
     </style>
 
     <style name="ThemeOverlay.MaerChat.Palette.Ocean" parent="">
@@ -28,6 +42,20 @@
         <item name="colorOnTertiary">#003063</item>
         <item name="colorTertiaryContainer">#00478C</item>
         <item name="colorOnTertiaryContainer">#D8E7FF</item>
+        <item name="maerChatBubbleIncoming">#102A31</item>
+        <item name="maerChatBubbleOutgoing">#063E4A</item>
+        <item name="maerChatOnBubbleIncoming">#F1FBFC</item>
+        <item name="maerChatOnBubbleOutgoing">#F1FBFC</item>
+        <item name="maerChatBubbleMetaIncoming">#ADCAD0</item>
+        <item name="maerChatBubbleMetaOutgoing">#B4D9E0</item>
+        <item name="maerChatReceiptDelivered">#9AB9BF</item>
+        <item name="maerChatReceiptRead">#5CDAFF</item>
+        <item name="maerChatComposerBackground">#102A31</item>
+        <item name="maerChatComposerContent">#B5CDD2</item>
+        <item name="maerChatToolbarBackground">#08242C</item>
+        <item name="maerChatDateBackground">#CC102A31</item>
+        <item name="maerChatDateText">#D1E5E9</item>
+        <item name="maerChatBackground">#061A20</item>
     </style>
 
     <style name="ThemeOverlay.MaerChat.Palette.Indigo" parent="">
@@ -43,5 +71,19 @@
         <item name="colorOnTertiary">#00363B</item>
         <item name="colorTertiaryContainer">#004F55</item>
         <item name="colorOnTertiaryContainer">#9DF0F8</item>
+        <item name="maerChatBubbleIncoming">#1C1E38</item>
+        <item name="maerChatBubbleOutgoing">#2D3163</item>
+        <item name="maerChatOnBubbleIncoming">#F6F5FF</item>
+        <item name="maerChatOnBubbleOutgoing">#F6F5FF</item>
+        <item name="maerChatBubbleMetaIncoming">#C3C3DA</item>
+        <item name="maerChatBubbleMetaOutgoing">#CACCF0</item>
+        <item name="maerChatReceiptDelivered">#B0B1CC</item>
+        <item name="maerChatReceiptRead">#BEC2FF</item>
+        <item name="maerChatComposerBackground">#1C1E38</item>
+        <item name="maerChatComposerContent">#C6C5DD</item>
+        <item name="maerChatToolbarBackground">#151730</item>
+        <item name="maerChatDateBackground">#CC1C1E38</item>
+        <item name="maerChatDateText">#DEDEF2</item>
+        <item name="maerChatBackground">#101126</item>
     </style>
 </resources>

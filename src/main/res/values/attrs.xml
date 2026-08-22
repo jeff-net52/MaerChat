@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="maerChatBubbleIncoming" format="reference|color" />
+    <attr name="maerChatBubbleOutgoing" format="reference|color" />
+    <attr name="maerChatOnBubbleIncoming" format="reference|color" />
+    <attr name="maerChatOnBubbleOutgoing" format="reference|color" />
+    <attr name="maerChatBubbleMetaIncoming" format="reference|color" />
+    <attr name="maerChatBubbleMetaOutgoing" format="reference|color" />
+    <attr name="maerChatReceiptDelivered" format="reference|color" />
+    <attr name="maerChatReceiptRead" format="reference|color" />
+    <attr name="maerChatComposerBackground" format="reference|color" />
+    <attr name="maerChatComposerContent" format="reference|color" />
+    <attr name="maerChatToolbarBackground" format="reference|color" />
+    <attr name="maerChatDateBackground" format="reference|color" />
+    <attr name="maerChatDateText" format="reference|color" />
+    <attr name="maerChatBackground" format="reference|color" />
+
     <declare-styleable name="UnreadCountCustomView">
         <attr name="backgroundColor" format="reference|color" />
         <attr name="textColor" format="reference|color" />

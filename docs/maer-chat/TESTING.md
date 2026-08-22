@@ -29,7 +29,7 @@ nécessitent aucun identifiant :
 
 ## État de la validation locale
 
-La suite unitaire complète compte **154 tests réussis** avec `compileSdk` et
+La suite unitaire complète compte **156 tests réussis** avec `compileSdk` et
 `targetSdk` réglés sur l’API 37. Les tests Android hors appareil s’exécutent avec
 un runtime Robolectric API 36 ; ce niveau de runtime ne modifie pas la cible API
 37 de l’application.
@@ -45,12 +45,21 @@ l’échec est affiché proprement, sans fermeture inattendue. Une capture deman
 avec `adb` sur ce build a produit **zéro octet**, ce qui confirme l’application
 de `FLAG_SECURE` sur cet écran.
 
-L’identité Android (`fr.maer.chat`, version code 100, `minSdk` 23,
-`targetSdk` 37), l’alignement ZIP et les signatures des APK ont été contrôlés
-avec les Build Tools 37. Le désassemblage des deux DEX de la Release après R8 ne
-contient aucun appel émetteur à `android.util.Log` ou
-`java.util.logging.Logger` ; seules des méthodes non émettrices de configuration
-ou de test de niveau subsistent.
+Pour la version 0.3.0, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
+et `targetSdk` 37. Le code visible attendu est `300` pour l’APK universelle et
+`304` pour l’APK ARM64 : Gradle multiplie le `versionCode` 3 par 100 puis ajoute
+le suffixe propre à l’ABI. Les deux APK Release de développement 0.3.0 ont été
+alignées puis vérifiées avec les Build Tools 37. Elles portent le même certificat
+de développement que la version 0.2.0 et valident les schémas de signature v1,
+v2 et v3. Leurs empreintes SHA-256 sont :
+
+- ARM64 : `66659A5F2E4720E2D2EB6E8903B0AD5EC0B3E8764197D35AA20DE592B41E31FC` ;
+- universelle : `C7EE063008270334A16DA601C00EAE0A4085704490F8357C882C74FA28617310`.
+
+Le désassemblage des deux DEX de la Release 0.2.0 après R8 ne contient aucun
+appel émetteur à
+`android.util.Log` ou `java.util.logging.Logger` ; seules des méthodes non
+émettrices de configuration ou de test de niveau subsistent.
 
 Les images de documentation [`login.png`](screenshots/login.png) et
 [`login-error.png`](screenshots/login-error.png) ont donc été capturées avec un

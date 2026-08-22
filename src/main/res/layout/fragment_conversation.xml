@@ -11,21 +11,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:gravity="center_vertical"
-                app:buttonGravity="center_vertical"
-                app:subtitleTextAppearance="?textAppearanceBodySmall"
-                app:subtitleTextColor="?colorOnSurfaceVariant" />
+                android:background="?attr/maerChatToolbarBackground">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    app:buttonGravity="center_vertical"
+                    app:contentInsetStart="104dp"
+                    app:contentInsetStartWithNavigation="104dp"
+                    app:subtitleTextAppearance="?textAppearanceBodySmall"
+                    app:subtitleTextColor="?attr/maerChatComposerContent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/toolbar_avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="56dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_person_24dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
+
+            </FrameLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
 
         <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/maerChatBackground">
 
             <ListView
                 android:id="@+id/messages_view"
@@ -82,18 +104,30 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/textSendButton"
-                    android:background="@drawable/background_message_bubble"
-                    android:backgroundTint="?colorTertiaryContainer"
+                    android:background="@drawable/background_chat_composer"
+                    android:backgroundTint="?attr/maerChatComposerBackground"
                     android:orientation="vertical"
                     android:paddingHorizontal="4dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/emoji_button"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/open_emoji_picker"
+                        app:icon="@drawable/ic_mood_24dp"
+                        app:iconSize="24dp"
+                        app:iconTint="?attr/maerChatComposerContent" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginVertical="8dp"
                         android:layout_marginHorizontal="12dp"
+                        android:layout_marginVertical="8dp"
+                        android:layout_toEndOf="@+id/emoji_button"
                         android:layout_toStartOf="@+id/attach_button"
                         android:orientation="vertical">
 
@@ -104,7 +138,7 @@
                             android:layout_marginBottom="8dp"
                             android:maxLines="1"
                             android:textAppearance="?textAppearanceBodySmall"
-                            android:textColor="?colorOnTertiaryContainer"
+                            android:textColor="?attr/maerChatComposerContent"
                             android:visibility="visible"
                             tools:text="@string/private_message_to" />
 
@@ -132,9 +166,9 @@
                             android:maxLines="8"
                             android:minHeight="32dp"
                             android:minLines="1"
-                            android:textColor="?colorOnTertiaryContainer"
-                            android:textColorHint="@color/hint_on_tertiary_container"
-                            android:textCursorDrawable="@drawable/cursor_on_tertiary_container">
+                            android:textColor="?attr/maerChatComposerContent"
+                            android:textColorHint="@color/hint_on_maer_chat_composer"
+                            android:textCursorDrawable="@drawable/cursor_on_maer_chat_composer">
 
                             <requestFocus />
                         </eu.siacs.conversations.ui.widget.EditMessage>
@@ -146,13 +180,26 @@
                         style="?attr/materialIconButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/camera_button"
                         android:checkable="true"
                         android:checked="false"
+                        android:contentDescription="@string/attach_file"
                         app:icon="@drawable/ic_attach_file_24dp"
                         app:iconSize="24dp"
-                        app:iconTint="?colorOnTertiaryContainer" />
+                        app:iconTint="?attr/maerChatComposerContent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/camera_button"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/take_photo"
+                        app:icon="@drawable/ic_camera_alt_24dp"
+                        app:iconSize="24dp"
+                        app:iconTint="?attr/maerChatComposerContent" />
 
 
                 </RelativeLayout>
@@ -160,15 +207,19 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/textSendButton"
                     style="?attr/materialIconButtonFilledTonalStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
                     android:backgroundTint="?colorPrimary"
                     android:contentDescription="@string/send_message"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:cornerRadius="24dp"
                     app:icon="@drawable/ic_send_24dp"
-                    app:iconSize="32dp"
+                    app:iconPadding="0dp"
+                    app:iconSize="24dp"
                     app:iconTint="?colorOnPrimary"
                     app:rippleColor="?colorPrimaryFixedDim" />
             </RelativeLayout>

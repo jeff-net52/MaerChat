@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="112.5dp"
+    android:height="200dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+    <!-- MAER monogram. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M26,70L26,34L46,51L66,34L66,70"
+        android:strokeColor="#100057B8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.4" />
+    <!-- Connected engineering nodes. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M142,76L184,108L226,74M184,108L206,140"
+        android:strokeColor="#0D0089E6"
+        android:strokeLineCap="round"
+        android:strokeWidth="1.8" />
+    <path
+        android:fillColor="#1200BFEF"
+        android:pathData="M142,72A4,4 0,1 0,142,80A4,4 0,1 0,142,72M184,104A4,4 0,1 0,184,112A4,4 0,1 0,184,104M226,70A4,4 0,1 0,226,78A4,4 0,1 0,226,70M206,136A4,4 0,1 0,206,144A4,4 0,1 0,206,136" />
+    <!-- Rounded conversation ring, drawn independently from any third-party asset. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M278,30C252,30 232,48 232,72C232,84 237,94 245,102L240,119L259,112C265,114 271,115 278,115C304,115 324,97 324,72C324,48 304,30 278,30Z"
+        android:strokeColor="#0F0057B8"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.2" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M258,84L258,57L278,72L298,57L298,84"
+        android:strokeColor="#1000BFEF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.2" />
+    <!-- Document and folded corner. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M29,199L70,199L87,216L87,265L29,265ZM70,199L70,216L87,216M42,231L73,231M42,244L66,244"
+        android:strokeColor="#0D0057B8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+    <!-- Original paper-plane and signal motif. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M139,205L223,175L188,252L170,220ZM170,220L223,175"
+        android:strokeColor="#1000BFEF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2" />
+    <!-- Secure account shield. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M278,190L307,202L307,226C307,246 295,261 278,269C261,261 249,246 249,226L249,202ZM268,226L288,226L288,243L268,243ZM272,226L272,219C272,211 284,211 284,219L284,226"
+        android:strokeColor="#0F0057B8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.9" />
+    <!-- MAER bubble mark. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M74,335C44,335 21,356 21,384C21,397 26,409 36,419L30,439L52,431C59,434 66,435 74,435C104,435 127,414 127,384C127,356 104,335 74,335Z"
+        android:strokeColor="#100057B8"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.4" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M50,399L50,366L74,384L98,366L98,399"
+        android:strokeColor="#1200BFEF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.4" />
+    <!-- Camera and engineering aperture. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M242,363L258,363L265,353L287,353L294,363L312,363L312,411L242,411ZM277,371A16,16 0,1 0,277,403A16,16 0,1 0,277,371"
+        android:strokeColor="#0D0057B8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+    <!-- Hexagonal engineering mesh. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M150,340L174,326L198,340L198,368L174,382L150,368ZM198,340L222,326L246,340L246,368L222,382L198,368M174,382L174,410"
+        android:strokeColor="#0D0089E6"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.6" />
+    <!-- Audio waveform. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M24,526L42,526L50,503L61,550L73,515L84,536L94,526L120,526"
+        android:strokeColor="#1000BFEF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.2" />
+    <!-- Networked message blocks. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M159,494L216,494L216,531L188,531L174,543L177,531L159,531ZM216,512L252,512L270,544L252,576L216,576L198,544L216,512"
+        android:strokeColor="#0E0057B8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.8" />
+    <!-- Final MAER M anchor. -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M274,602L274,562L296,580L318,562L318,602"
+        android:strokeColor="#100089E6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.4" />
+</vector>

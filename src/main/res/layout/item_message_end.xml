@@ -15,16 +15,16 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@id/message_box"
             app:layout_constraintEnd_toEndOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.RoundedCornersMedium"/>
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
 
 
-        <LinearLayout
+        <eu.siacs.conversations.ui.widget.MaxWidthLinearLayout
             android:id="@+id/message_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/bubble_avatar_distance"
-            android:background="@drawable/background_message_bubble"
-            android:backgroundTint="?colorSecondaryContainer"
+            android:background="@drawable/background_message_outgoing"
+            android:backgroundTint="?attr/maerChatBubbleOutgoing"
             android:longClickable="true"
             android:minHeight="@dimen/bubble_avatar_size"
             app:layout_constrainedWidth="true"
@@ -61,8 +61,8 @@
                         android:accessibilityTraversalBefore="@id/message_content"
                         android:gravity="center_vertical"
                         android:text="@string/sending"
-                        android:textAppearance="?textAppearanceBodySmall"
-                        android:textColor="?colorOnSecondaryContainer" />
+                        android:textAppearance="?textAppearanceLabelSmall"
+                        android:textColor="?attr/maerChatBubbleMetaOutgoing" />
 
                     <ImageView
                         android:id="@+id/security_indicator"
@@ -72,7 +72,7 @@
                         android:layout_marginStart="4dp"
                         android:gravity="center_vertical"
                         android:src="@drawable/ic_lock_24dp"
-                        app:tint="?colorOnSecondaryContainer" />
+                        app:tint="?attr/maerChatBubbleMetaOutgoing" />
 
                     <ImageView
                         android:id="@+id/edit_indicator"
@@ -82,7 +82,7 @@
                         android:layout_marginStart="4dp"
                         android:gravity="center_vertical"
                         android:src="@drawable/ic_edit_24dp"
-                        app:tint="?colorOnSecondaryContainer" />
+                        app:tint="?attr/maerChatBubbleMetaOutgoing" />
 
                     <ImageView
                         android:id="@+id/indicator_received"
@@ -92,10 +92,10 @@
                         android:layout_marginStart="4dp"
                         android:gravity="center_vertical"
                         android:src="@drawable/ic_done_24dp"
-                        app:tint="?colorOnSecondaryContainer" />
+                        app:tint="?attr/maerChatReceiptDelivered" />
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </eu.siacs.conversations.ui.widget.MaxWidthLinearLayout>
 
         <Space
             android:id="@+id/reactions_anchor"
