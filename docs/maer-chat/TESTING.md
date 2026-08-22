@@ -29,7 +29,7 @@ nécessitent aucun identifiant :
 
 ## État de la validation locale
 
-La suite unitaire complète compte **146 tests réussis** avec `compileSdk` et
+La suite unitaire complète compte **154 tests réussis** avec `compileSdk` et
 `targetSdk` réglés sur l’API 37. Les tests Android hors appareil s’exécutent avec
 un runtime Robolectric API 36 ; ce niveau de runtime ne modifie pas la cible API
 37 de l’application.
@@ -88,11 +88,17 @@ au moins deux appareils ou instances. Les secrets sont saisis manuellement ou
 injectés par un coffre CI, jamais committés. Une fonction non testable faute de
 capacité serveur est notée « non vérifiée » et non « réussie ».
 
+La Release ARM64 0.2.0 a aussi été installée avec conservation des données sur
+un Samsung XCover 7 SM-G556B sous Android 16/API 36. Le gestionnaire de paquets
+a confirmé la version 0.2.0+free, code 204, et l’activité principale a démarré
+sans exception `AndroidRuntime`.
+
 Aucun compte XMPP authentifié n’était disponible pour la validation décrite dans
 ce document. Les résultats hors ligne ne valident donc ni le chemin
 d’authentification réel ni les capacités négociées après connexion au serveur.
-Les essais sur appareil se limitent à l’émulateur Android API 31 ; aucun appareil
-physique n’a été utilisé.
+L’essai physique valide l’installation, la mise à jour et le démarrage ; il ne
+consulte ni ne modifie les conversations existantes et ne remplace pas les tests
+authentifiés à deux comptes.
 
 La livraison automatisée ne prétend donc pas valider, sans compte réel :
 

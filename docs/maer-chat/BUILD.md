@@ -69,10 +69,12 @@ ne signale aucune nouvelle anomalie : **650 constats amont** sont filtrés par l
 baseline et `warningsAsErrors` rend toute nouvelle alerte hors baseline
 bloquante.
 
-L’APK a été installée et démarrée sur un émulateur Android API 31. Aucun essai
-sur appareil physique n’a été effectué. Les scénarios qui demandent une session
-XMPP authentifiée restent soumis aux limites détaillées dans
-[`TESTING.md`](TESTING.md).
+La Release ARM64 a été installée comme mise à jour sur un Samsung XCover 7
+SM-G556B sous Android 16/API 36. Android a confirmé le passage de la version
+`0.1.0+free` (code 100) à `0.2.0+free` (code 204), en conservant la date de
+première installation. L’activité principale a démarré et aucune exception
+`AndroidRuntime` n’a été produite. Les scénarios qui demandent une session XMPP
+authentifiée restent soumis aux limites détaillées dans [`TESTING.md`](TESTING.md).
 
 ## Artefacts livrés — version 0.2.0
 
