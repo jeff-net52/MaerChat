@@ -32,8 +32,12 @@ public class InterfaceSettingsFragment extends XmppPreferenceFragment {
         setPreferencesFromResource(R.xml.preferences_interface, rootKey);
         final var themePreference = findPreference(AppSettings.THEME);
         final var dynamicColors = findPreference(AppSettings.DYNAMIC_COLORS);
+        final var colorPalette = findPreference(AppSettings.COLOR_PALETTE);
         final ListPreference quickAction = findPreference(AppSettings.QUICK_ACTION);
-        if (themePreference == null || dynamicColors == null || quickAction == null) {
+        if (themePreference == null
+                || dynamicColors == null
+                || colorPalette == null
+                || quickAction == null) {
             throw new IllegalStateException(
                     "The preference resource file did not contain theme or color preferences");
         }
@@ -46,8 +50,10 @@ public class InterfaceSettingsFragment extends XmppPreferenceFragment {
                     return true;
                 });
         dynamicColors.setVisible(DynamicColors.isDynamicColorAvailable());
+        colorPalette.setEnabled(!new AppSettings(requireContext()).isDynamicColorsDesired());
         dynamicColors.setOnPreferenceChangeListener(
                 (preference, newValue) -> {
+                    colorPalette.setEnabled(!Boolean.TRUE.equals(newValue));
                     requireSettingsActivity().setDynamicColors(Boolean.TRUE.equals(newValue));
                     return true;
                 });
@@ -67,8 +73,11 @@ public class InterfaceSettingsFragment extends XmppPreferenceFragment {
     @Override
     protected void onSharedPreferenceChanged(@NonNull String key) {
         super.onSharedPreferenceChanged(key);
-        if (key.equals(AppSettings.ALLOW_SCREENSHOTS)) {
-            SettingsUtils.applyScreenshotSetting(requireActivity());
+        switch (key) {
+            case AppSettings.ALLOW_SCREENSHOTS ->
+                    SettingsUtils.applyScreenshotSetting(requireActivity());
+            case AppSettings.COLOR_PALETTE, AppSettings.MESSAGE_FONT ->
+                    requireActivity().recreate();
         }
     }
 

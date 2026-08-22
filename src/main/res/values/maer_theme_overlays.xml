@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ThemeOverlay.MaerChat.Palette.Maer" parent="">
+        <item name="colorPrimary">#0057B8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#D8E7FF</item>
+        <item name="colorOnPrimaryContainer">#001B3E</item>
+        <item name="colorSecondary">#00668C</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#C7E7FF</item>
+        <item name="colorOnSecondaryContainer">#001E2D</item>
+        <item name="colorTertiary">#006780</item>
+        <item name="colorOnTertiary">#FFFFFF</item>
+        <item name="colorTertiaryContainer">#B8EAFF</item>
+        <item name="colorOnTertiaryContainer">#001F29</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Palette.Ocean" parent="">
+        <item name="colorPrimary">#006780</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#B8EAFF</item>
+        <item name="colorOnPrimaryContainer">#001F29</item>
+        <item name="colorSecondary">#00668C</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#C7E7FF</item>
+        <item name="colorOnSecondaryContainer">#001E2D</item>
+        <item name="colorTertiary">#0057B8</item>
+        <item name="colorOnTertiary">#FFFFFF</item>
+        <item name="colorTertiaryContainer">#D8E7FF</item>
+        <item name="colorOnTertiaryContainer">#001B3E</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Palette.Indigo" parent="">
+        <item name="colorPrimary">#4B55C8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#E0E0FF</item>
+        <item name="colorOnPrimaryContainer">#090B5E</item>
+        <item name="colorSecondary">#5D5F89</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondaryContainer">#E2E0FF</item>
+        <item name="colorOnSecondaryContainer">#191A42</item>
+        <item name="colorTertiary">#006B73</item>
+        <item name="colorOnTertiary">#FFFFFF</item>
+        <item name="colorTertiaryContainer">#9DF0F8</item>
+        <item name="colorOnTertiaryContainer">#002022</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Font.System" parent="" />
+
+    <style name="ThemeOverlay.MaerChat.Font.Rounded" parent="">
+        <item name="android:fontFamily">sans-serif-rounded</item>
+        <item name="fontFamily">sans-serif-rounded</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Font.Serif" parent="">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+    </style>
+</resources>

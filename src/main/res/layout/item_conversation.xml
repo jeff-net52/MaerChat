@@ -6,29 +6,27 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorSecondaryContainer"
+        android:background="?colorSurface"
         android:descendantFocusability="blocksDescendants"
         android:foreground="?android:selectableItemBackground"
-        android:minHeight="88dp">
+        android:minHeight="80dp">
 
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/background_conversation_card">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="82dp"
+                android:minHeight="80dp"
                 android:paddingStart="12dp"
-                android:paddingTop="12dp"
+                android:paddingTop="10dp"
                 android:paddingEnd="12dp"
-                android:paddingBottom="12dp">
+                android:paddingBottom="10dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/conversation_image"
@@ -184,6 +182,14 @@
                         app:textColor="?colorOnPrimary"
                         tools:visibility="visible" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="?colorOutlineVariant"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/conversation_image" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
     </FrameLayout>

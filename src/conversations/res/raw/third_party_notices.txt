@@ -1,0 +1,29 @@
+MAER CHAT — OPEN-SOURCE NOTICES
+
+Maer Chat is a modified distribution of Conversations:
+https://codeberg.org/iNPUTmice/Conversations
+
+Upstream copyright:
+Copyright (C) 2014–2026 Daniel Gultsch and Conversations contributors.
+
+Maer Chat and Conversations application code are distributed under the
+GNU General Public License, version 3 or (at your option) any later version.
+The complete license is bundled in this application.
+
+Major third-party components include Android Jetpack, Material Components,
+Guava, OkHttp, Retrofit, ZXing, Android Image Cropper, WebRTC, Transcoder,
+ShortcutBadger, Bouncy Castle, Conscrypt, JXMPP, MiniDNS, osmdroid, HSLuv,
+Immutables, jemoji and libsignal-protocol. Each component remains subject to
+its own copyright notices and license terms, commonly Apache-2.0, MIT,
+BSD-style terms or GPL-compatible terms.
+
+Map data and map presentation may include OpenStreetMap contributors and are
+subject to the applicable OpenStreetMap attribution and database terms.
+
+The complete project notice and the maintained dependency inventory are
+distributed with the corresponding source in NOTICE.md and
+THIRD_PARTY_NOTICES.md. Those source documents take precedence over this
+concise offline summary.
+
+MAER Chat is not affiliated with or endorsed by WhatsApp or Meta. No WhatsApp
+code, logo, icon or graphical asset is included.

@@ -120,7 +120,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     private final DisplayMetrics metrics;
     private OnContactPictureClicked mOnContactPictureClickedListener;
     private OnContactPictureLongClicked mOnContactPictureLongClickedListener;
-    private BubbleDesign bubbleDesign = new BubbleDesign(false, false, false, true, true);
+    private BubbleDesign bubbleDesign =
+            new BubbleDesign(
+                    false, false, false, true, true, AppSettings.AvatarDisplay.ALWAYS);
+    private String messageFontFamily = "sans-serif";
     private final boolean mForceNames;
 
     public MessageAdapter(
@@ -373,7 +376,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         viewHolder.messageBody().setVisibility(View.VISIBLE);
         viewHolder.messageBody().setText(text);
         setTextSize(viewHolder.messageBody(), this.bubbleDesign.largeFont);
-        viewHolder.messageBody().setTypeface(null, Typeface.ITALIC);
+        applyMessageTypeface(viewHolder.messageBody(), Typeface.ITALIC);
         viewHolder
                 .messageBody()
                 .setTextColor(bubbleToOnSurfaceVariant(viewHolder.messageBody(), bubbleColor));
@@ -387,7 +390,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         viewHolder.downloadButton().setVisibility(View.GONE);
         viewHolder.audioPlayer().setVisibility(View.GONE);
         viewHolder.image().setVisibility(View.GONE);
-        viewHolder.messageBody().setTypeface(null, Typeface.NORMAL);
+        applyMessageTypeface(viewHolder.messageBody(), Typeface.NORMAL);
         viewHolder.messageBody().setVisibility(View.VISIBLE);
         setTextColor(viewHolder.messageBody(), bubbleColor);
         final Spannable span = new SpannableString(body);
@@ -489,7 +492,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         viewHolder.messageBody().setVisibility(View.VISIBLE);
         setTextColor(viewHolder.messageBody(), bubbleColor);
         setTextSize(viewHolder.messageBody(), this.bubbleDesign.largeFont);
-        viewHolder.messageBody().setTypeface(null, Typeface.NORMAL);
+        applyMessageTypeface(viewHolder.messageBody(), Typeface.NORMAL);
         final var rawBody = message.getBody();
         if (Strings.isNullOrEmpty(rawBody)) {
             viewHolder.messageBody().setText("");
@@ -724,7 +727,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                     privateMarker.length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             viewHolder.messageBody().setText(body);
-            viewHolder.messageBody().setTypeface(null, Typeface.NORMAL);
+            applyMessageTypeface(viewHolder.messageBody(), Typeface.NORMAL);
             viewHolder.messageBody().setVisibility(View.VISIBLE);
         } else {
             viewHolder.messageBody().setVisibility(View.GONE);
@@ -862,22 +865,27 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         final var mergeIntoTop = mergeIntoTop(position, message);
         final var mergeIntoBottom = mergeIntoBottom(position, message);
+        final boolean avatarsEnabled =
+                bubbleDesign.avatarDisplay != AppSettings.AvatarDisplay.NEVER;
         final boolean showAvatar;
         if (viewHolder instanceof StartBubbleMessageItemViewHolder) {
             showAvatar =
-                    bubbleDesign.showAvatars11
-                            || message.getConversation().getMode() == Conversation.MODE_MULTI;
+                    avatarsEnabled
+                            && (bubbleDesign.showAvatars11
+                                    || message.getConversation().getMode()
+                                            == Conversation.MODE_MULTI);
         } else if (viewHolder instanceof EndBubbleMessageItemViewHolder) {
-            showAvatar = bubbleDesign.showAvatarsAccounts;
+            showAvatar = avatarsEnabled && bubbleDesign.showAvatarsAccounts;
         } else {
             throw new IllegalStateException("Unrecognized BubbleMessageItemViewHolder");
         }
         setBubblePadding(viewHolder.root(), mergeIntoTop, mergeIntoBottom);
         if (showAvatar) {
             final var requiresAvatar =
-                    viewHolder instanceof StartBubbleMessageItemViewHolder
-                            ? !mergeIntoTop
-                            : !mergeIntoBottom;
+                    bubbleDesign.avatarDisplay == AppSettings.AvatarDisplay.ALWAYS
+                            || (viewHolder instanceof StartBubbleMessageItemViewHolder
+                                    ? !mergeIntoTop
+                                    : !mergeIntoBottom);
             setRequiresAvatar(viewHolder, requiresAvatar);
             AvatarWorkerTask.loadAvatar(message, viewHolder.contactPicture(), R.dimen.avatar);
         } else {
@@ -1415,13 +1423,19 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
     public void updatePreferences() {
         final AppSettings appSettings = new AppSettings(activity);
+        this.messageFontFamily = appSettings.getMessageFontFamily();
         this.bubbleDesign =
                 new BubbleDesign(
                         appSettings.isColorfulChatBubbles(),
                         appSettings.isAlignStart(),
                         appSettings.isLargeFont(),
                         appSettings.isShowAvatars11(),
-                        appSettings.isShowAvatarsAccounts());
+                        appSettings.isShowAvatarsAccounts(),
+                        appSettings.getAvatarDisplay());
+    }
+
+    private void applyMessageTypeface(final TextView textView, final int style) {
+        textView.setTypeface(Typeface.create(this.messageFontFamily, style));
     }
 
     public void setHighlightedTerm(List<String> terms) {
@@ -1543,18 +1557,21 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         public final boolean largeFont;
         public final boolean showAvatars11;
         public final boolean showAvatarsAccounts;
+        public final AppSettings.AvatarDisplay avatarDisplay;
 
         private BubbleDesign(
                 final boolean colorfulChatBubbles,
                 final boolean alignStart,
                 final boolean largeFont,
                 final boolean showAvatars11,
-                final boolean showAvatarsAccounts) {
+                final boolean showAvatarsAccounts,
+                final AppSettings.AvatarDisplay avatarDisplay) {
             this.colorfulChatBubbles = colorfulChatBubbles;
             this.alignStart = alignStart;
             this.largeFont = largeFont;
             this.showAvatars11 = showAvatars11;
             this.showAvatarsAccounts = showAvatarsAccounts;
+            this.avatarDisplay = avatarDisplay;
         }
     }
 

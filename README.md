@@ -1,20 +1,29 @@
 <h1 align="center">Maer Chat</h1>
 
-<p align="center">Messagerie Android XMPP sécurisée pour <code>contacts.chaumont.me</code></p>
+<p align="center">Messagerie Android XMPP privée, personnalisable et multi-organisation</p>
 
 Maer Chat est un fork GPLv3 de Conversations. Il conserve son moteur XMPP, OMEMO,
 MAM, notifications, transferts de fichiers et appels Jingle éprouvé, avec une
-identité propre et une connexion simplifiée au serveur
-`contacts.chaumont.me`. Le mode avancé permet toujours d’utiliser un JID complet.
+identité propre, une connexion simplifiée et un sélecteur d’organisation qui
+associe chaque offre à son domaine XMPP. Le mode avancé permet toujours
+d’utiliser un JID complet.
 
 - Paquet Android : `fr.maer.chat`
-- Version Maer Chat : `0.1.0`
+- Version Maer Chat : `0.2.0`
 - Base amont : Conversations `2.20.1`, commit
   `9fdc9ed5b2e2e4981cf58fce871c2ed47623c2bc`
 - Android : API 23 minimum, API 37 cible
 - Compilation : Java 21, Gradle 9.4.1, Android SDK 37
 - Documentation du fork : [`docs/maer-chat`](docs/maer-chat/README.md)
 - Licence et attributions : [`LICENSE`](LICENSE) et [`NOTICE.md`](NOTICE.md)
+- Serveur : [MAER XMPP Server](https://github.com/jeff-net52/MAER-XMPP-Server),
+  basé sur ejabberd Community Server 26.07
+
+Le catalogue livré sélectionne par défaut l’organisation **MAER Engineering**
+et le domaine `contacts.chaumont.me`. Les intégrateurs peuvent ajouter des
+organisations publiques au catalogue sans embarquer d’identifiants ni de
+secrets. Pour une isolation maximale, l’offre serveur dédiée sépare instance,
+base, fichiers, certificats et sauvegardes pour chaque client.
 
 Compilation rapide :
 

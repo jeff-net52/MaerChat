@@ -1222,4 +1222,25 @@
     <string name="attachment_choice_contact">Contact</string>
     <string name="note_to_self">Note to self</string>
     <string name="invalid_contact">Could not parse contact</string>
+    <string name="pref_color_palette">Color palette</string>
+    <string name="pref_color_palette_summary">Choose the Maer Chat accent colors</string>
+    <string name="palette_maer">MAER blue</string>
+    <string name="palette_ocean">Ocean</string>
+    <string name="palette_indigo">Indigo</string>
+    <string name="pref_message_font">Message font</string>
+    <string name="pref_message_font_summary">Choose the typeface used in conversations</string>
+    <string name="font_system">System</string>
+    <string name="font_rounded">Rounded</string>
+    <string name="font_serif">Classic serif</string>
+    <string name="pref_chat_background">Conversation background</string>
+    <string name="pref_chat_background_summary">Choose a discreet built-in background</string>
+    <string name="chat_background_maer">MAER halo</string>
+    <string name="chat_background_plain">Plain</string>
+    <string name="chat_background_ocean">Soft ocean</string>
+    <string name="pref_avatar_display">Avatar frequency</string>
+    <string name="avatar_display_always">Every message</string>
+    <string name="avatar_display_grouped">Message groups</string>
+    <string name="avatar_display_never">Never</string>
+    <string name="legal_information">Terms, privacy and licenses</string>
+    <string name="legal_information_summary">Paid MAER service, data use, GPL and open-source notices</string>
 </resources>

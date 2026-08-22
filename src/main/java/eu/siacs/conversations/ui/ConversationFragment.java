@@ -2913,6 +2913,8 @@ public class ConversationFragment extends XmppFragment
         this.binding.textInput.setKeyboardListener(this);
         this.messageListAdapter.updatePreferences();
         final var appSettings = new AppSettings(requireContext());
+        this.binding.messagesView.setBackgroundResource(
+                appSettings.getChatBackgroundDrawable());
         this.inputSettings =
                 new InputSettings(
                         appSettings.isColorfulChatBubbles(),

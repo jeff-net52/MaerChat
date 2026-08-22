@@ -1192,4 +1192,25 @@
     <string name="dismiss_as_owner">Retirer comme propriétaire</string>
     <string name="video_480p">Moyenne (480p)</string>
     <string name="video_1080p">Très haute (1080p)</string>
+    <string name="pref_color_palette">Palette de couleurs</string>
+    <string name="pref_color_palette_summary">Choisir les couleurs d’accent de Maer Chat</string>
+    <string name="palette_maer">Bleu MAER</string>
+    <string name="palette_ocean">Océan</string>
+    <string name="palette_indigo">Indigo</string>
+    <string name="pref_message_font">Police des messages</string>
+    <string name="pref_message_font_summary">Choisir la police utilisée dans les conversations</string>
+    <string name="font_system">Système</string>
+    <string name="font_rounded">Arrondie</string>
+    <string name="font_serif">Classique avec empattements</string>
+    <string name="pref_chat_background">Fond des conversations</string>
+    <string name="pref_chat_background_summary">Choisir un fond discret intégré à l’application</string>
+    <string name="chat_background_maer">Halo MAER</string>
+    <string name="chat_background_plain">Uni</string>
+    <string name="chat_background_ocean">Océan doux</string>
+    <string name="pref_avatar_display">Fréquence des avatars</string>
+    <string name="avatar_display_always">Chaque message</string>
+    <string name="avatar_display_grouped">Groupes de messages</string>
+    <string name="avatar_display_never">Jamais</string>
+    <string name="legal_information">Conditions, confidentialité et licences</string>
+    <string name="legal_information_summary">Service MAER payant, données, GPL et logiciels libres</string>
 </resources>

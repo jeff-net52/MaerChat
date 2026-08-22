@@ -19,18 +19,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.preference.PreferenceManager;
 import com.google.common.base.Strings;
 import de.gultsch.common.MiniUri;
-import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityWelcomeBinding;
 import eu.siacs.conversations.entities.Account;
+import eu.siacs.conversations.organizations.OrganizationCatalog;
+import eu.siacs.conversations.organizations.OrganizationCatalog.Organization;
+import eu.siacs.conversations.organizations.OrganizationSelection;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.Compatibility;
@@ -46,12 +50,17 @@ public class WelcomeActivity extends QrCodeProcessingActivity
 
     private static final int REQUEST_IMPORT_BACKUP = 0x63fb;
     private static final String STATE_ADVANCED_LOGIN = "advanced_login";
+    private static final String ACCEPTED_SERVICE_INFORMATION =
+            "maer_accepted_service_information_v1";
 
     private MiniUri.Xmpp inviteUri;
     private ActivityWelcomeBinding binding;
     private Account pendingAccount;
     private boolean advancedLogin;
     private boolean navigatingToConversations;
+    private boolean loginBusy;
+    private OrganizationCatalog organizationCatalog;
+    private Organization selectedOrganization;
 
     public static void launch(AppCompatActivity activity) {
         Intent intent = new Intent(activity, WelcomeActivity.class);
@@ -184,9 +193,37 @@ public class WelcomeActivity extends QrCodeProcessingActivity
         advancedLogin =
                 savedInstanceState != null
                         && savedInstanceState.getBoolean(STATE_ADVANCED_LOGIN, false);
+        organizationCatalog = OrganizationCatalog.load(this);
+        selectedOrganization = OrganizationSelection.selected(this, organizationCatalog);
+        final var organizationAdapter =
+                new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        organizationCatalog.organizations());
+        binding.organization.setAdapter(organizationAdapter);
+        binding.organization.setText(selectedOrganization.displayName(), false);
+        binding.organization.setOnItemClickListener(
+                (parent, view, position, id) ->
+                        selectOrganization(organizationAdapter.getItem(position)));
         applyAdvancedLoginMode(false);
         binding.loginButton.setOnClickListener(v -> submitCredentials());
         binding.advancedLoginToggle.setOnClickListener(v -> toggleAdvancedLoginMode());
+        binding.legalInformation.setOnClickListener(
+                v -> startActivity(new Intent(this, MaerLegalActivity.class)));
+        binding.acceptTerms.setChecked(
+                PreferenceManager.getDefaultSharedPreferences(this)
+                        .getBoolean(ACCEPTED_SERVICE_INFORMATION, false));
+        binding.acceptTerms.setOnCheckedChangeListener(
+                (button, checked) -> {
+                    PreferenceManager.getDefaultSharedPreferences(this)
+                            .edit()
+                            .putBoolean(ACCEPTED_SERVICE_INFORMATION, checked)
+                            .apply();
+                    binding.loginButton.setEnabled(!loginBusy && checked);
+                    if (checked) {
+                        clearLoginErrors();
+                    }
+                });
         binding.accountPassword.setOnEditorActionListener(
                 (view, actionId, event) -> {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -233,6 +270,10 @@ public class WelcomeActivity extends QrCodeProcessingActivity
     }
 
     private void submitCredentials() {
+        if (!binding.acceptTerms.isChecked()) {
+            showLoginError(R.string.maer_terms_required, binding.acceptTerms);
+            return;
+        }
         if (!xmppConnectionServiceBound) {
             showLoginError(R.string.maer_login_error_initializing, null);
             return;
@@ -252,7 +293,7 @@ public class WelcomeActivity extends QrCodeProcessingActivity
                     LoginJid.build(
                             binding.accountIdentifier.getText().toString(),
                             advancedLogin,
-                            BuildConfig.DEFAULT_XMPP_DOMAIN);
+                            selectedOrganization.xmppDomain());
         } catch (final IllegalArgumentException e) {
             binding.accountIdentifierLayout.setError(
                     getString(advancedLogin ? R.string.invalid_jid : R.string.invalid_username));
@@ -322,15 +363,23 @@ public class WelcomeActivity extends QrCodeProcessingActivity
         if (advancedLogin && !current.isEmpty() && current.indexOf('@') < 0) {
             try {
                 binding.accountIdentifier.setText(
-                        LoginJid.build(current, false, BuildConfig.DEFAULT_XMPP_DOMAIN).toString());
+                        LoginJid.build(current, false, selectedOrganization.xmppDomain())
+                                .toString());
             } catch (final IllegalArgumentException ignored) {
                 // The regular validation message will be shown if the user submits this value.
             }
         } else if (!advancedLogin && !current.isEmpty()) {
             try {
-                final Jid jid = LoginJid.build(current, true, BuildConfig.DEFAULT_XMPP_DOMAIN);
-                if (BuildConfig.DEFAULT_XMPP_DOMAIN.equals(jid.getDomain().toString())) {
+                final Jid jid = LoginJid.build(current, true, selectedOrganization.xmppDomain());
+                final Organization organization =
+                        organizationCatalog.findByDomain(jid.getDomain().toString());
+                if (organization != null) {
+                    selectOrganization(organization);
                     binding.accountIdentifier.setText(jid.getLocal());
+                } else {
+                    advancedLogin = true;
+                    Toast.makeText(this, R.string.maer_unknown_organization, Toast.LENGTH_LONG)
+                            .show();
                 }
             } catch (final IllegalArgumentException ignored) {
                 // Keep the input intact so switching modes never destroys what the user typed.
@@ -340,6 +389,8 @@ public class WelcomeActivity extends QrCodeProcessingActivity
     }
 
     private void applyAdvancedLoginMode(final boolean requestFocus) {
+        binding.organizationLayout.setVisibility(advancedLogin ? View.GONE : View.VISIBLE);
+        binding.organizationSummary.setVisibility(advancedLogin ? View.GONE : View.VISIBLE);
         if (advancedLogin) {
             binding.accountIdentifierLayout.setHint(R.string.maer_login_complete_jid);
             binding.accountIdentifierLayout.setSuffixText(null);
@@ -347,9 +398,10 @@ public class WelcomeActivity extends QrCodeProcessingActivity
             binding.advancedLoginToggle.setText(R.string.maer_login_use_default_server);
         } else {
             binding.accountIdentifierLayout.setHint(R.string.username);
-            binding.accountIdentifierLayout.setSuffixText("@" + BuildConfig.DEFAULT_XMPP_DOMAIN);
+            binding.accountIdentifierLayout.setSuffixText("@" + selectedOrganization.xmppDomain());
             binding.serverSummary.setText(
-                    getString(R.string.maer_login_server_summary, BuildConfig.DEFAULT_XMPP_DOMAIN));
+                    getString(
+                            R.string.maer_login_server_summary, selectedOrganization.xmppDomain()));
             binding.advancedLoginToggle.setText(R.string.maer_login_use_complete_jid);
         }
         clearLoginErrors();
@@ -360,7 +412,10 @@ public class WelcomeActivity extends QrCodeProcessingActivity
     }
 
     private void populateIdentifier(final Jid jid) {
-        if (BuildConfig.DEFAULT_XMPP_DOMAIN.equals(jid.getDomain().toString())) {
+        final Organization organization =
+                organizationCatalog.findByDomain(jid.getDomain().toString());
+        if (organization != null) {
+            selectOrganization(organization);
             advancedLogin = false;
             binding.accountIdentifier.setText(jid.getLocal());
         } else {
@@ -370,13 +425,29 @@ public class WelcomeActivity extends QrCodeProcessingActivity
         applyAdvancedLoginMode(false);
     }
 
+    private void selectOrganization(final Organization organization) {
+        if (organization == null) {
+            return;
+        }
+        selectedOrganization =
+                OrganizationSelection.select(this, organizationCatalog, organization.id());
+        binding.organization.setText(selectedOrganization.displayName(), false);
+        if (!advancedLogin) {
+            applyAdvancedLoginMode(false);
+        }
+    }
+
     private void setLoginBusy(final boolean busy) {
+        this.loginBusy = busy;
         binding.loginProgress.setVisibility(busy ? View.VISIBLE : View.GONE);
         binding.loginStatus.setVisibility(busy ? View.VISIBLE : View.GONE);
-        binding.loginButton.setEnabled(!busy);
+        binding.loginButton.setEnabled(!busy && binding.acceptTerms.isChecked());
         binding.accountIdentifier.setEnabled(!busy);
         binding.accountPassword.setEnabled(!busy);
         binding.advancedLoginToggle.setEnabled(!busy);
+        binding.organization.setEnabled(!busy);
+        binding.organizationLayout.setEnabled(!busy);
+        binding.acceptTerms.setEnabled(!busy);
     }
 
     private void showConnectionError(final Account.State status) {
@@ -453,18 +524,17 @@ public class WelcomeActivity extends QrCodeProcessingActivity
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_import_backup:
-                if (hasStoragePermission(REQUEST_IMPORT_BACKUP)) {
-                    startActivity(new Intent(this, ImportBackupActivity.class));
-                }
-                break;
-            case R.id.action_scan_qr_code:
-                requestPermissionAndScanQrCode();
-                break;
-            case R.id.action_add_account_with_cert:
-                addAccountFromKey();
-                break;
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_import_backup) {
+            if (hasStoragePermission(REQUEST_IMPORT_BACKUP)) {
+                startActivity(new Intent(this, ImportBackupActivity.class));
+            }
+        } else if (itemId == R.id.action_scan_qr_code) {
+            requestPermissionAndScanQrCode();
+        } else if (itemId == R.id.action_add_account_with_cert) {
+            addAccountFromKey();
+        } else if (itemId == R.id.action_legal_information) {
+            startActivity(new Intent(this, MaerLegalActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

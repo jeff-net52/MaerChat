@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.BoolRes;
 import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StyleRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
@@ -42,6 +44,10 @@ public class AppSettings {
     public static final String ENTITY_TIME = "entity_time";
     public static final String THEME = "theme";
     public static final String DYNAMIC_COLORS = "dynamic_colors";
+    public static final String COLOR_PALETTE = "color_palette";
+    public static final String MESSAGE_FONT = "message_font";
+    public static final String CHAT_BACKGROUND = "chat_background";
+    public static final String AVATAR_DISPLAY = "avatar_display";
     public static final String SHOW_DYNAMIC_TAGS = "show_dynamic_tags";
     public static final String OMEMO = "omemo";
     public static final String ALLOW_SCREENSHOTS = "allow_screenshots";
@@ -81,6 +87,7 @@ public class AppSettings {
     private static final String ACCEPT_INVITES_FROM_STRANGERS = "accept_invites_from_strangers";
     private static final String NOTIFICATIONS_FROM_STRANGERS = "notifications_from_strangers";
     private static final String INSTALLATION_ID = "im.conversations.android.install_id";
+    private static final String MAER_APPEARANCE_DEFAULTS_V2 = "maer_appearance_defaults_v2";
 
     private static final String EXTERNAL_STORAGE_AUTHORITY =
             "com.android.externalstorage.documents";
@@ -156,6 +163,81 @@ public class AppSettings {
 
     public boolean isShowAvatarsAccounts() {
         return getBooleanPreference(SHOW_AVATARS_ACCOUNTS, R.bool.show_avatars_accounts);
+    }
+
+    public AvatarDisplay getAvatarDisplay() {
+        return AvatarDisplay.of(
+                getStringPreference(AVATAR_DISPLAY, R.string.default_avatar_display));
+    }
+
+    public String getColorPalette() {
+        return getStringPreference(COLOR_PALETTE, R.string.default_color_palette);
+    }
+
+    public String getMessageFont() {
+        return getStringPreference(MESSAGE_FONT, R.string.default_message_font);
+    }
+
+    public String getMessageFontFamily() {
+        return switch (getMessageFont()) {
+            case "rounded" -> "sans-serif-rounded";
+            case "serif" -> "serif";
+            default -> "sans-serif";
+        };
+    }
+
+    public String getChatBackground() {
+        return getStringPreference(CHAT_BACKGROUND, R.string.default_chat_background);
+    }
+
+    @StyleRes
+    public int getColorPaletteStyle() {
+        return switch (getColorPalette()) {
+            case "ocean" -> R.style.ThemeOverlay_MaerChat_Palette_Ocean;
+            case "indigo" -> R.style.ThemeOverlay_MaerChat_Palette_Indigo;
+            default -> R.style.ThemeOverlay_MaerChat_Palette_Maer;
+        };
+    }
+
+    @StyleRes
+    public int getFontStyle() {
+        return switch (getMessageFont()) {
+            case "rounded" -> R.style.ThemeOverlay_MaerChat_Font_Rounded;
+            case "serif" -> R.style.ThemeOverlay_MaerChat_Font_Serif;
+            default -> R.style.ThemeOverlay_MaerChat_Font_System;
+        };
+    }
+
+    @DrawableRes
+    public int getChatBackgroundDrawable() {
+        return switch (getChatBackground()) {
+            case "plain" -> R.drawable.background_chat_plain;
+            case "ocean" -> R.drawable.background_chat_ocean;
+            default -> R.drawable.background_chat_maer;
+        };
+    }
+
+    public void applyMaerAppearanceDefaults() {
+        final SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean(MAER_APPEARANCE_DEFAULTS_V2, false)) {
+            return;
+        }
+        final var editor = sharedPreferences.edit();
+        if (!sharedPreferences.contains(COLOR_PALETTE)) {
+            editor.putString(COLOR_PALETTE, context.getString(R.string.default_color_palette));
+        }
+        if (!sharedPreferences.contains(MESSAGE_FONT)) {
+            editor.putString(MESSAGE_FONT, context.getString(R.string.default_message_font));
+        }
+        if (!sharedPreferences.contains(CHAT_BACKGROUND)) {
+            editor.putString(
+                    CHAT_BACKGROUND, context.getString(R.string.default_chat_background));
+        }
+        if (!sharedPreferences.contains(AVATAR_DISPLAY)) {
+            editor.putString(AVATAR_DISPLAY, context.getString(R.string.default_avatar_display));
+        }
+        editor.putBoolean(MAER_APPEARANCE_DEFAULTS_V2, true).apply();
     }
 
     public boolean isAutoSendRecording() {
@@ -435,5 +517,19 @@ public class AppSettings {
                 .edit()
                 .putLong(INSTALLATION_ID, installationId)
                 .apply();
+    }
+
+    public enum AvatarDisplay {
+        ALWAYS,
+        GROUPED,
+        NEVER;
+
+        public static AvatarDisplay of(final String value) {
+            return switch (value) {
+                case "grouped" -> GROUPED;
+                case "never" -> NEVER;
+                default -> ALWAYS;
+            };
+        }
     }
 }

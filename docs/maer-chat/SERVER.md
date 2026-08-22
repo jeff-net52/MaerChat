@@ -1,5 +1,16 @@
 # Serveur XMPP `contacts.chaumont.me`
 
+Le dépôt public
+[MAER XMPP Server](https://github.com/jeff-net52/MAER-XMPP-Server) fournit une
+distribution documentée basée sur ejabberd Community Server 26.07. Son modèle
+multi-organisation associe chaque organisation à un virtual host XMPP et
+documente deux modes : mutualisé avec séparation logique, ou dédié avec
+instance, base, fichiers, certificats et sauvegardes séparés.
+
+Ce dépôt ne prouve pas que la configuration publique décrite ci-dessous a déjà
+été déployée. La production ne doit être modifiée qu’après identification de la
+version installée, sauvegarde complète et validation sur une préproduction.
+
 ## Observations publiques du 21 août 2026
 
 Ces vérifications ne nécessitent ni compte ni mot de passe.

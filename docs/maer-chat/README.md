@@ -10,6 +10,16 @@ utilisateur héritée de Conversations.
 - [`TESTING.md`](TESTING.md) : matrice de validation et résultats reproductibles.
 - [`UPSTREAM.md`](UPSTREAM.md) : architecture conservée et stratégie de mise à
   jour de Conversations.
+- [`CGU.md`](CGU.md) : projet de conditions du service payant, à compléter
+  avec les coordonnées et paramètres contractuels réels.
+- [`PRIVACY.md`](PRIVACY.md) : projet d’information sur les données, à
+  compléter avant ouverture commerciale.
+
+Le code source public du client est publié sur
+[GitHub](https://github.com/jeff-net52/MaerChat). Sa distribution serveur
+associée, multi-organisation et fondée sur ejabberd Community Server, est
+publiée dans
+[MAER XMPP Server](https://github.com/jeff-net52/MAER-XMPP-Server).
 
 ## Aperçus
 

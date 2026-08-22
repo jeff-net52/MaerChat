@@ -98,4 +98,52 @@
 		<item>JABBER_NETWORK</item>
 		<item>LOCAL_SERVER</item>
 	</string-array>
+
+	<string-array name="maer_color_palette_entries">
+		<item>@string/palette_maer</item>
+		<item>@string/palette_ocean</item>
+		<item>@string/palette_indigo</item>
+	</string-array>
+
+	<string-array name="maer_color_palette_values">
+		<item>maer</item>
+		<item>ocean</item>
+		<item>indigo</item>
+	</string-array>
+
+	<string-array name="maer_message_font_entries">
+		<item>@string/font_system</item>
+		<item>@string/font_rounded</item>
+		<item>@string/font_serif</item>
+	</string-array>
+
+	<string-array name="maer_message_font_values">
+		<item>system</item>
+		<item>rounded</item>
+		<item>serif</item>
+	</string-array>
+
+	<string-array name="maer_chat_background_entries">
+		<item>@string/chat_background_maer</item>
+		<item>@string/chat_background_plain</item>
+		<item>@string/chat_background_ocean</item>
+	</string-array>
+
+	<string-array name="maer_chat_background_values">
+		<item>maer</item>
+		<item>plain</item>
+		<item>ocean</item>
+	</string-array>
+
+	<string-array name="maer_avatar_display_entries">
+		<item>@string/avatar_display_always</item>
+		<item>@string/avatar_display_grouped</item>
+		<item>@string/avatar_display_never</item>
+	</string-array>
+
+	<string-array name="maer_avatar_display_values">
+		<item>always</item>
+		<item>grouped</item>
+		<item>never</item>
+	</string-array>
 </resources>

@@ -139,8 +139,16 @@ public class ConversationAdapter
         if (unreadCount > 0) {
             viewHolder.binding.unreadCount.setVisibility(View.VISIBLE);
             viewHolder.binding.unreadCount.setUnreadCount(unreadCount);
+            viewHolder.binding.conversationLastupdate.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.conversationLastupdate,
+                            androidx.appcompat.R.attr.colorPrimary));
         } else {
             viewHolder.binding.unreadCount.setVisibility(View.GONE);
+            viewHolder.binding.conversationLastupdate.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.conversationLastupdate,
+                            com.google.android.material.R.attr.colorOnSurfaceVariant));
         }
 
         if (isRead) {

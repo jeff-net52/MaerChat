@@ -70,6 +70,7 @@ public class Conversations extends Application {
         super.onCreate();
         installSecurityProvider();
         CONTEXT = this.getApplicationContext();
+        new AppSettings(this).applyMaerAppearanceDefaults();
         EmojiInitializationService.execute(getApplicationContext());
         ExceptionHelper.init(getApplicationContext());
         SettingsUtils.applyThemeSettings(this);

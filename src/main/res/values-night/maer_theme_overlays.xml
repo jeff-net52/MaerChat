@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ThemeOverlay.MaerChat.Palette.Maer" parent="">
+        <item name="colorPrimary">#A7C8FF</item>
+        <item name="colorOnPrimary">#003063</item>
+        <item name="colorPrimaryContainer">#00478C</item>
+        <item name="colorOnPrimaryContainer">#D8E7FF</item>
+        <item name="colorSecondary">#83CFFF</item>
+        <item name="colorOnSecondary">#00344A</item>
+        <item name="colorSecondaryContainer">#004C69</item>
+        <item name="colorOnSecondaryContainer">#C7E7FF</item>
+        <item name="colorTertiary">#5CDAFF</item>
+        <item name="colorOnTertiary">#003543</item>
+        <item name="colorTertiaryContainer">#004D61</item>
+        <item name="colorOnTertiaryContainer">#B8EAFF</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Palette.Ocean" parent="">
+        <item name="colorPrimary">#5CDAFF</item>
+        <item name="colorOnPrimary">#003543</item>
+        <item name="colorPrimaryContainer">#004D61</item>
+        <item name="colorOnPrimaryContainer">#B8EAFF</item>
+        <item name="colorSecondary">#83CFFF</item>
+        <item name="colorOnSecondary">#00344A</item>
+        <item name="colorSecondaryContainer">#004C69</item>
+        <item name="colorOnSecondaryContainer">#C7E7FF</item>
+        <item name="colorTertiary">#A7C8FF</item>
+        <item name="colorOnTertiary">#003063</item>
+        <item name="colorTertiaryContainer">#00478C</item>
+        <item name="colorOnTertiaryContainer">#D8E7FF</item>
+    </style>
+
+    <style name="ThemeOverlay.MaerChat.Palette.Indigo" parent="">
+        <item name="colorPrimary">#BEC2FF</item>
+        <item name="colorOnPrimary">#1B2178</item>
+        <item name="colorPrimaryContainer">#333B9E</item>
+        <item name="colorOnPrimaryContainer">#E0E0FF</item>
+        <item name="colorSecondary">#C5C3EC</item>
+        <item name="colorOnSecondary">#2E2F55</item>
+        <item name="colorSecondaryContainer">#45466D</item>
+        <item name="colorOnSecondaryContainer">#E2E0FF</item>
+        <item name="colorTertiary">#81D4DB</item>
+        <item name="colorOnTertiary">#00363B</item>
+        <item name="colorTertiaryContainer">#004F55</item>
+        <item name="colorOnTertiaryContainer">#9DF0F8</item>
+    </style>
+</resources>

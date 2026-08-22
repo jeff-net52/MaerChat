@@ -15,12 +15,17 @@ public class InterfaceBubblesSettingsFragment extends XmppPreferenceFragment {
         setPreferencesFromResource(R.xml.preferences_interface_bubbles, rootKey);
         final var showAvatars11 = findPreference(AppSettings.SHOW_AVATARS_11);
         final var showAvatarsAccount = findPreference(AppSettings.SHOW_AVATARS_ACCOUNTS);
+        final var avatarDisplay = findPreference(AppSettings.AVATAR_DISPLAY);
         final SwitchPreferenceCompat alignStart = findPreference(AppSettings.ALIGN_START);
-        if (showAvatars11 == null || showAvatarsAccount == null || alignStart == null) {
+        if (showAvatars11 == null
+                || showAvatarsAccount == null
+                || avatarDisplay == null
+                || alignStart == null) {
             throw new IllegalStateException(
                     "The preference resource file is missing some preferences");
         }
         updateShowAvatars11Summary(showAvatars11, alignStart.isChecked());
+        updateAvatarPreferences();
     }
 
     @Override
@@ -28,8 +33,22 @@ public class InterfaceBubblesSettingsFragment extends XmppPreferenceFragment {
         super.onSharedPreferenceChanged(key);
         switch (key) {
             case AppSettings.ALIGN_START -> runOnUiThread(this::updateShowAvatars11Summary);
+            case AppSettings.AVATAR_DISPLAY -> runOnUiThread(this::updateAvatarPreferences);
             case AppSettings.SHOW_CONNECTION_OPTIONS -> reconnectAccounts();
         }
+    }
+
+    private void updateAvatarPreferences() {
+        final var showAvatars11 = findPreference(AppSettings.SHOW_AVATARS_11);
+        final var showAvatarsAccount = findPreference(AppSettings.SHOW_AVATARS_ACCOUNTS);
+        if (showAvatars11 == null || showAvatarsAccount == null) {
+            return;
+        }
+        final boolean enabled =
+                new AppSettings(requireContext()).getAvatarDisplay()
+                        != AppSettings.AvatarDisplay.NEVER;
+        showAvatars11.setEnabled(enabled);
+        showAvatarsAccount.setEnabled(enabled);
     }
 
     private void updateShowAvatars11Summary() {

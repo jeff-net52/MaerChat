@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <SwitchPreferenceCompat
         android:defaultValue="@bool/use_green_background"
         android:icon="@drawable/ic_colors_24dp"
@@ -20,6 +21,14 @@
         android:summary="@string/pref_align_start_summary"
         android:title="@string/pref_align_start" />
     <PreferenceCategory android:title="@string/pref_category_avatars">
+        <ListPreference
+            android:defaultValue="@string/default_avatar_display"
+            android:entries="@array/maer_avatar_display_entries"
+            android:entryValues="@array/maer_avatar_display_values"
+            android:icon="@drawable/ic_person_24dp"
+            android:key="avatar_display"
+            android:title="@string/pref_avatar_display"
+            app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             android:defaultValue="@bool/show_avatars"
             android:icon="@drawable/ic_face_right_24dp"
@@ -29,7 +38,6 @@
         <SwitchPreferenceCompat
             android:defaultValue="@bool/show_avatars_accounts"
             android:key="show_avatars_accounts"
-            android:dependency="align_start"
             android:icon="@drawable/ic_face_left_24dp"
             android:summary="@string/pref_account_avatar_summary"
             android:title="@string/pref_account_avatar" />

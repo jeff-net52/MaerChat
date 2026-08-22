@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="@string/appearance">
+        <ListPreference
+            android:defaultValue="@string/default_color_palette"
+            android:entries="@array/maer_color_palette_entries"
+            android:entryValues="@array/maer_color_palette_values"
+            android:icon="@drawable/ic_palette_24dp"
+            android:key="color_palette"
+            android:summary="@string/pref_color_palette_summary"
+            android:title="@string/pref_color_palette"
+            app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             android:defaultValue="@bool/dynamic_colors"
             android:icon="@drawable/ic_palette_24dp"
@@ -15,6 +24,24 @@
             android:icon="@drawable/ic_dark_mode_24dp"
             android:key="theme"
             android:title="@string/pref_light_dark_mode"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:defaultValue="@string/default_message_font"
+            android:entries="@array/maer_message_font_entries"
+            android:entryValues="@array/maer_message_font_values"
+            android:icon="@drawable/ic_format_size_24dp"
+            android:key="message_font"
+            android:summary="@string/pref_message_font_summary"
+            android:title="@string/pref_message_font"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:defaultValue="@string/default_chat_background"
+            android:entries="@array/maer_chat_background_entries"
+            android:entryValues="@array/maer_chat_background_values"
+            android:icon="@drawable/ic_image_24dp"
+            android:key="chat_background"
+            android:summary="@string/pref_chat_background_summary"
+            android:title="@string/pref_chat_background"
             app:useSimpleSummaryProvider="true" />
         <Preference
             android:icon="@drawable/ic_forum_24dp"

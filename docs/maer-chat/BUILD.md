@@ -25,7 +25,7 @@ L’APK universel se trouve dans
 `build/outputs/apk/conversationsFree/debug/`. Pour l’installer :
 
 ```shell
-adb install -r chemin/vers/fr.maer.chat-0.1.0-conversations-free-universal-debug.apk
+adb install -r chemin/vers/fr.maer.chat-0.2.0-conversations-free-arm64-v8a-debug.apk
 ```
 
 Le paquet `fr.maer.chat` peut cohabiter avec Conversations. Une installation
@@ -64,28 +64,31 @@ posséder sa propre configuration applicative et un relais push compatible ; voi
 ## État du build validé
 
 Le build courant utilise `compileSdk` et `targetSdk` 37. Sa suite unitaire
-compte **146 tests réussis** ; Robolectric emploie un runtime API 36 pour les
-tests Android hors appareil. L’analyse Lint finale ne signale aucune nouvelle
-anomalie : **655 constats amont** sont consignés dans la baseline et
-`warningsAsErrors` rend toute nouvelle alerte hors baseline bloquante.
+compte **154 tests réussis**, sans échec ni test ignoré. L’analyse Lint finale
+ne signale aucune nouvelle anomalie : **650 constats amont** sont filtrés par la
+baseline et `warningsAsErrors` rend toute nouvelle alerte hors baseline
+bloquante.
 
 L’APK a été installée et démarrée sur un émulateur Android API 31. Aucun essai
 sur appareil physique n’a été effectué. Les scénarios qui demandent une session
 XMPP authentifiée restent soumis aux limites détaillées dans
 [`TESTING.md`](TESTING.md).
 
-## Artefacts livrés — version 0.1.0
+## Artefacts livrés — version 0.2.0
 
-Les deux APK universelles se trouvent dans `dist/` :
+Les APK ARM64 et universelle se trouvent dans `dist/` :
 
 | Fichier | Taille | SHA-256 |
 |---|---:|---|
-| `Maer-Chat-0.1.0-debug.apk` | 78 584 142 octets | `60ab39e1dbccb832734fb40472791495e0b8c28dc40224e00dc218cc4434f111` |
-| `Maer-Chat-0.1.0-release-dev-signed.apk` | 62 001 419 octets | `628bebd60d782d5e5c5e6d3c7a3d001d12143ea93108b1ac8216f8b182d8768b` |
+| `Maer-Chat-0.2.0-arm64-release-dev-signed.apk` | 32 178 511 octets | `1df7c4e60808ea471e42f2a6f7ba467cd4e57804ce04db3e98313112d558b43b` |
+| `Maer-Chat-0.2.0-universal-release-dev-signed.apk` | 62 534 460 octets | `06eb5ddbc9745eac7a6ff37a2dc9011ec5d9a322de59a09feade0b5e8d894e35` |
 
-L’identité vérifiée de l’application est `fr.maer.chat`, version code `100`,
-version affichée `0.1.0+free`, avec `minSdk` 23 et `targetSdk` 37. La Release est
-alignée et sa signature de développement est valide avec les schémas APK v1,
-v2 et v3. Cette clé de développement permet l’installation et les essais, mais
-elle doit être remplacée par la clé privée de production avant publication sur
-un magasin d’applications.
+L’identité vérifiée de l’application est `fr.maer.chat`, version affichée
+`0.2.0+free`, avec `minSdk` 23 et `targetSdk` 37. Le code de version vaut `204`
+pour l’APK ARM64 et `200` pour l’universelle. Les deux Releases sont alignées et
+leur signature de développement est valide avec les schémas APK v1, v2 et v3.
+L’empreinte SHA-256 du certificat est
+`88b31196c797cae22b75b838c078a95a886fcf94bace75c8f958d52d106f7f4d`,
+identique à la version 0.1.0 de développement afin de permettre une mise à jour
+sans perte de données. Cette clé doit être remplacée par une clé privée de
+production pérenne avant toute publication sur un magasin d’applications.
