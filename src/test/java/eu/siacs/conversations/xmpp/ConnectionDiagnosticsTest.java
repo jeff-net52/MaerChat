@@ -23,13 +23,13 @@ public class ConnectionDiagnosticsTest {
     public void certificateSummaryContainsOnlyDisplayFieldsAndFingerprint() {
         final var summary =
                 ConnectionDiagnostics.summarize(
-                        "CN=contacts.chaumont.me\n",
+                        "CN=xmpp.maer.fr\n",
                         "CN=Issuer\tCA",
                         new Date(1_000L),
                         new Date(2_000L),
                         "abc".getBytes(StandardCharsets.UTF_8));
 
-        assertEquals("CN=contacts.chaumont.me", summary.subject());
+        assertEquals("CN=xmpp.maer.fr", summary.subject());
         assertEquals("CN=Issuer CA", summary.issuer());
         assertEquals(1_000L, summary.validFrom());
         assertEquals(2_000L, summary.validUntil());
@@ -57,12 +57,12 @@ public class ConnectionDiagnosticsTest {
     public void sanitizesTransportValuesAndDoesNotExposeNulls() {
         final var diagnostics =
                 new ConnectionDiagnostics(
-                        " contacts.chaumont.me\r\n",
+                        " xmpp.maer.fr\r\n",
                         null,
                         -1,
                         new ConnectionDiagnostics.TlsSummary(true, "TLSv1.3", " cipher\n", null));
 
-        assertEquals("contacts.chaumont.me", diagnostics.resolvedServer());
+        assertEquals("xmpp.maer.fr", diagnostics.resolvedServer());
         assertEquals("", diagnostics.remoteAddress());
         assertEquals(0, diagnostics.port());
         assertEquals("cipher", diagnostics.tls().cipherSuite());

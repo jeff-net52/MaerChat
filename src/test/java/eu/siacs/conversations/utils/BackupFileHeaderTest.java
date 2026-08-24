@@ -18,7 +18,7 @@ public class BackupFileHeaderTest {
         final var header =
                 new BackupFileHeader(
                         "Maer Chat",
-                        Jid.of("alice@contacts.chaumont.me"),
+                        Jid.of("alice@xmpp.maer.fr"),
                         42L,
                         new byte[12],
                         new byte[16]);
@@ -30,7 +30,7 @@ public class BackupFileHeaderTest {
                         new DataInputStream(new ByteArrayInputStream(output.toByteArray())));
 
         assertEquals(BackupFileHeader.CURRENT_VERSION, restored.getVersion());
-        assertEquals(Jid.of("alice@contacts.chaumont.me"), restored.getJid());
+        assertEquals(Jid.of("alice@xmpp.maer.fr"), restored.getJid());
         assertFalse(restored.toString().contains("alice@"));
         assertFalse(restored.toString().contains("salt"));
         assertFalse(restored.toString().contains("iv="));

@@ -87,7 +87,7 @@ adb install -r build/outputs/apk/conversationsFree/debug/*universal-debug.apk
 
 | Domaine | Validation attendue |
 |---|---|
-| Identifiant | `emilien` devient `emilien@contacts.chaumont.me`; JID complet uniquement en mode avancé |
+| Identifiant | `emilien` devient `emilien@xmpp.maer.fr`; JID complet uniquement en mode avancé |
 | Authentification | succès, mauvais mot de passe, serveur indisponible et certificat invalide différenciés |
 | TLS | nom d’hôte, chaîne, dates, TLS 1.2 minimum et aucune validation désactivée |
 | Réseau | reconnexion, Wi-Fi ↔ mobile, reprise XEP-0198 et rattrapage MAM sans doublon |

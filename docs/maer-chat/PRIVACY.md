@@ -10,7 +10,7 @@
 
 Cette politique couvre l’application Android Maer Chat et l’utilisation du
 service de messagerie MAER auquel elle se connecte. Le serveur XMPP configuré
-par défaut dans le projet est `contacts.chaumont.me`, sous réserve d’évolution
+par défaut dans le projet est `xmpp.maer.fr`, sous réserve d’évolution
 de l’offre.
 
 Le logiciel est un client XMPP libre. D’autres opérateurs peuvent exploiter des

@@ -118,9 +118,9 @@ android {
         resValue "string", "applicationId", applicationId
         def appName = "Maer Chat"
         resValue "string", "app_name", appName
-        resValue "string", "default_xmpp_domain", "contacts.chaumont.me"
+        resValue "string", "default_xmpp_domain", "xmpp.maer.fr"
         buildConfigField "String", "APP_NAME", "\"$appName\""
-        buildConfigField "String", "DEFAULT_XMPP_DOMAIN", "\"contacts.chaumont.me\""
+        buildConfigField "String", "DEFAULT_XMPP_DOMAIN", "\"xmpp.maer.fr\""
         base {
             archivesName = "${android.defaultConfig.applicationId}-${android.defaultConfig.versionName}"
         }

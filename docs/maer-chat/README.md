@@ -4,7 +4,7 @@ Cette documentation décrit le fork Maer Chat sans remplacer la documentation
 utilisateur héritée de Conversations.
 
 - [`BUILD.md`](BUILD.md) : compiler, signer et installer l’application.
-- [`SERVER.md`](SERVER.md) : état vérifié de `contacts.chaumont.me`, XEP et
+- [`SERVER.md`](SERVER.md) : état vérifié de `xmpp.maer.fr`, XEP et
   prérequis serveur.
 - [`SECURITY.md`](SECURITY.md) : modèle de sécurité, secrets, TLS et limites.
 - [`TESTING.md`](TESTING.md) : matrice de validation et résultats reproductibles.
@@ -29,8 +29,8 @@ Les captures suivantes proviennent d’un build temporaire de documentation qui
 n’est pas distribué. L’APK livrée conserve `FLAG_SECURE` sur l’écran de
 connexion ; voir la preuve et le protocole dans [`TESTING.md`](TESTING.md).
 
-- [Connexion](screenshots/login.png)
-- [Erreur de connexion avec identifiants fictifs](screenshots/login-error.png)
+- [Connexion et sélection de l’organisation](screenshots/welcome.png)
+- [Conditions, confidentialité et licences](screenshots/legal.png)
 
 Les informations de capacité XMPP affichées dans l’application sont calculées
 pour le compte connecté. Elles prévalent sur toute liste statique, car un

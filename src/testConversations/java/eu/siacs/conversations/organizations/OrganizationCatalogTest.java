@@ -25,9 +25,9 @@ public class OrganizationCatalogTest {
                 OrganizationCatalog.load(RuntimeEnvironment.getApplication());
 
         assertEquals("maer-engineering", catalog.defaultOrganization().id());
-        assertEquals("contacts.chaumont.me", catalog.defaultOrganization().xmppDomain());
+        assertEquals("xmpp.maer.fr", catalog.defaultOrganization().xmppDomain());
         assertEquals(
-                catalog.defaultOrganization(), catalog.findByDomain("CONTACTS.CHAUMONT.ME"));
+                catalog.defaultOrganization(), catalog.findByDomain("XMPP.MAER.FR"));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class OrganizationCatalogTest {
         final OrganizationCatalog catalog = parse(twoOrganizationCatalogue());
 
         assertEquals(2, catalog.organizations().size());
-        assertEquals("contacts.chaumont.me", catalog.defaultOrganization().xmppDomain());
+        assertEquals("xmpp.maer.fr", catalog.defaultOrganization().xmppDomain());
         assertEquals("chat.client.example", catalog.findById("client-demo").xmppDomain());
         assertEquals("client-demo", catalog.findByDomain("CHAT.CLIENT.EXAMPLE").id());
         assertNull(catalog.findById("missing"));
@@ -149,7 +149,7 @@ public class OrganizationCatalogTest {
                     {
                       "id": "maer-engineering",
                       "display_name": "MAER Engineering",
-                      "xmpp_domain": "contacts.chaumont.me",
+                      "xmpp_domain": "xmpp.maer.fr",
                       "default": true
                     },
                     {

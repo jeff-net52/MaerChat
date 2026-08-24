@@ -1,4 +1,4 @@
-# Serveur XMPP `contacts.chaumont.me`
+# Domaine de messagerie `xmpp.maer.fr`
 
 Le dépôt public
 [MAER XMPP Server](https://github.com/jeff-net52/MAER-XMPP-Server) fournit une
@@ -11,34 +11,38 @@ Ce dépôt ne prouve pas que la configuration publique décrite ci-dessous a dé
 été déployée. La production ne doit être modifiée qu’après identification de la
 version installée, sauvegarde complète et validation sur une préproduction.
 
-## Observations publiques du 21 août 2026
+## Observations publiques du 24 août 2026
 
 Ces vérifications ne nécessitent ni compte ni mot de passe.
 
 | Élément | Observation |
 |---|---|
-| Domaine XMPP | `contacts.chaumont.me` |
+| Domaine XMPP | `xmpp.maer.fr` |
 | IPv4 | `82.67.146.209` |
 | IPv6 | aucune adresse AAAA annoncée |
 | SRV client STARTTLS | aucun enregistrement `_xmpp-client._tcp` |
 | SRV client TLS direct | aucun enregistrement `_xmpps-client._tcp` |
-| Repli utilisé | domaine direct, port 5222, STARTTLS |
-| TLS | TLS 1.3, `TLS_AES_256_GCM_SHA384` lors du contrôle |
-| Certificat | valide pour `contacts.chaumont.me`, émis par Let’s Encrypt YR2 |
-| Validité observée | 6 août 2026 au 4 novembre 2026 |
-| SASL pré-authentification | SCRAM-SHA-512/256/1, DIGEST-MD5, PLAIN, X-OAUTH2 |
-| Création de compte | `jabber:iq:register` annoncé avant authentification |
+| Ports contrôlés | 5222, 5223 et 5269 inaccessibles à 19 h 50 CEST depuis le poste de test |
+| HTTPS | port 443 accessible |
+| TLS XMPP et certificat | non vérifiables tant qu’un port XMPP ne répond pas |
+| SASL et création de compte | non vérifiables avant mise en service XMPP |
 
-L’absence actuelle de SRV n’empêche pas la connexion : Conversations retombe
-sur le domaine et le port XMPP standard. Il reste recommandé de publier un SRV,
+Le port 5222 a brièvement répondu pendant le déploiement, mais le virtual host
+retournait alors `host-unknown`; les ports ont ensuite été fermés pendant le
+redémarrage. Le domaine est désormais la cible configurée dans Maer Chat, mais
+l’observation publique ne permet donc pas encore de considérer le service de
+messagerie comme opérationnel. Publier le SRV client après ouverture et
+validation du port 5222,
 par exemple :
 
 ```dns
-_xmpp-client._tcp.contacts.chaumont.me. 3600 IN SRV 0 5 5222 contacts.chaumont.me.
+_xmpp-client._tcp.xmpp.maer.fr. 3600 IN SRV 0 5 5222 xmpp.maer.fr.
 ```
 
 Ne publiez cette valeur qu’après vérification qu’elle correspond réellement au
-service exploité.
+service exploité. Le certificat présenté par ejabberd devra couvrir
+`xmpp.maer.fr` et la connexion STARTTLS devra être testée avant distribution du
+client configuré pour la production.
 
 ## Capacités après authentification
 

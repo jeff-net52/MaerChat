@@ -6,33 +6,33 @@ import org.junit.Test;
 
 public class LoginJidTest {
 
-    private static final String DEFAULT_DOMAIN = "contacts.chaumont.me";
+    private static final String DEFAULT_DOMAIN = "xmpp.maer.fr";
 
     @Test
     public void appendsDefaultDomainToUsername() {
         assertEquals(
-                "emilien@contacts.chaumont.me",
+                "emilien@xmpp.maer.fr",
                 LoginJid.build("emilien", false, DEFAULT_DOMAIN).toString());
     }
 
     @Test
     public void trimsInputBeforeBuildingJid() {
         assertEquals(
-                "emilien@contacts.chaumont.me",
-                LoginJid.build("  emilien\n", false, " contacts.chaumont.me ").toString());
+                "emilien@xmpp.maer.fr",
+                LoginJid.build("  emilien\n", false, " xmpp.maer.fr ").toString());
     }
 
     @Test
     public void appliesXmppNormalization() {
         assertEquals(
-                "emilien@contacts.chaumont.me",
+                "emilien@xmpp.maer.fr",
                 LoginJid.build("EMILIEN", false, DEFAULT_DOMAIN).toString());
     }
 
     @Test
     public void acceptsUnicodeUsername() {
         assertEquals(
-                "émilie@contacts.chaumont.me",
+                "émilie@xmpp.maer.fr",
                 LoginJid.build("Émilie", false, DEFAULT_DOMAIN).toString());
     }
 
@@ -63,7 +63,7 @@ public class LoginJidTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectsCompleteJidInUsernameMode() {
-        LoginJid.build("emilien@contacts.chaumont.me", false, DEFAULT_DOMAIN);
+        LoginJid.build("emilien@xmpp.maer.fr", false, DEFAULT_DOMAIN);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -73,12 +73,12 @@ public class LoginJidTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectsDomainOnlyInAdvancedMode() {
-        LoginJid.build("contacts.chaumont.me", true, DEFAULT_DOMAIN);
+        LoginJid.build("xmpp.maer.fr", true, DEFAULT_DOMAIN);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void rejectsResourceInAdvancedMode() {
-        LoginJid.build("emilien@contacts.chaumont.me/phone", true, DEFAULT_DOMAIN);
+        LoginJid.build("emilien@xmpp.maer.fr/phone", true, DEFAULT_DOMAIN);
     }
 
     @Test(expected = IllegalArgumentException.class)
