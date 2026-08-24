@@ -33,17 +33,17 @@
     <string name="maer_login_error_generic">La connexion a échoué. Vérifiez vos informations puis réessayez.</string>
     <string name="maer_login_error_save">Le compte n’a pas pu être enregistré. Réessayez.</string>
     <string name="maer_service_required_summary">L’accès au service de messagerie MAER nécessite un compte payant actif fourni par MAER Engineering. Cette condition de service est distincte de la licence GPL de l’application.</string>
-    <string name="maer_accept_service_terms">Je dispose d’un compte MAER actif et j’accepte les conditions du service et les informations de confidentialité.</string>
+    <string name="maer_accept_service_terms">Je confirme être autorisé à utiliser un compte MAER actif et avoir reçu les conditions du service et la notice de confidentialité applicables.</string>
     <string name="maer_terms_required">Acceptez les conditions du service et les informations de confidentialité avant de vous connecter.</string>
     <string name="maer_open_legal">Lire les conditions, la confidentialité et les licences</string>
-    <string name="maer_legal_version">Maer Chat %1$s · Informations mises à jour le 22 août 2026</string>
+    <string name="maer_legal_version">Maer Chat %1$s · Informations mises à jour le 24 août 2026</string>
     <string name="maer_legal_intro">Ces informations restent consultables hors ligne, avant comme après la connexion.</string>
     <string name="maer_legal_service_title">Service de messagerie MAER payant</string>
-    <string name="maer_legal_service_body">Maer Chat est un logiciel libre. L’accès à l’infrastructure de messagerie exploitée pour MAER nécessite un compte payant actif fourni par MAER Engineering. Les tarifs, la durée, le renouvellement, la résiliation, l’assistance et les coordonnées légales de l’exploitant sont ceux de l’offre commerciale ou du contrat remis au client ; ces documents contractuels prévalent.</string>
+    <string name="maer_legal_service_body">Maer Chat est un logiciel libre utilisable avec des serveurs XMPP compatibles. Seul l’accès aux serveurs de messagerie MAER exige un compte payant actif. Le service est exploité par Emilien REEVES, entrepreneur individuel sous le nom commercial MAER Engineering, 16 ZI Saint Roch Box 1, 52340 Biesles, France, SIRET 523 560 175 00045, contact@maer.fr. Les tarifs, la durée, le renouvellement, la résiliation et l’assistance figurent dans l’offre commerciale ou le contrat remis au client.</string>
     <string name="maer_legal_use_title">Conditions d’utilisation du service</string>
     <string name="maer_legal_use_body">Gardez vos identifiants confidentiels, protégez vos appareils et utilisez le service légalement, sans abus, spam ni perturbation. L’activation, la suspension et la résiliation du compte sont gérées par le serveur selon le contrat commercial applicable. La fin de l’accès au service MAER ne retire pas les droits accordés par la GPL sur le logiciel.</string>
     <string name="maer_legal_privacy_title">Confidentialité et sécurité</string>
-    <string name="maer_legal_privacy_body">L’application traite localement l’identifiant du compte, les contacts choisis, les messages, médias, photos de profil, éléments cryptographiques et diagnostics nécessaires à la messagerie. Les services XMPP et d’envoi de fichiers configurés traitent les données nécessaires à l’acheminement et au stockage des communications. TLS protège le transport. Le chiffrement de bout en bout ne s’applique que lorsque la conversation affiche explicitement le chiffrement OMEMO. Les durées, destinataires, contacts d’assistance et modalités d’exercice des droits figurent dans le contrat et la notice de confidentialité du service MAER.</string>
+    <string name="maer_legal_privacy_body">L’application traite localement l’identifiant du compte, les contacts choisis, les messages, médias, photos de profil, éléments cryptographiques et diagnostics nécessaires à la messagerie. Les données des serveurs MAER sont hébergées en France sur une infrastructure exploitée en interne. TLS protège le transport. Le chiffrement de bout en bout ne s’applique que lorsque la conversation affiche explicitement le chiffrement OMEMO. Les durées et les rôles respectifs de MAER et de chaque organisation cliente doivent être précisés par le contrat et la notice applicables. Les demandes relatives aux données peuvent être adressées à contact@maer.fr.</string>
     <string name="maer_legal_software_title">Licences de logiciel libre</string>
     <string name="maer_legal_software_body">Maer Chat est dérivé de Conversations et distribué sous licence GNU GPL version 3 ou ultérieure. Vous pouvez étudier, modifier et redistribuer l’application selon cette licence. Le paiement concerne le service MAER, et non l’autorisation d’exercer les droits accordés par la GPL. Les composants tiers conservent leurs propres licences et mentions.</string>
     <string name="maer_legal_source_title">Code source et provenance</string>
@@ -52,6 +52,14 @@
     <string name="maer_legal_trademark_body">La GPL couvre les droits d’auteur sur le logiciel. Elle n’accorde pas un droit général de présenter un service modifié comme un service MAER officiel. Maer Chat est indépendant de WhatsApp : les habitudes d’interface familières n’impliquent aucune affiliation et aucune ressource WhatsApp n’est incluse.</string>
     <string name="maer_show_gpl">Lire la GNU GPLv3 complète</string>
     <string name="maer_show_notices">Lire les mentions des logiciels libres</string>
+    <string name="maer_show_apache_license">Lire la licence Apache 2.0</string>
+    <string name="maer_apache_license_title">Licence Apache 2.0</string>
+    <string name="maer_show_lgpl_license">Lire la GNU LGPL 2.1</string>
+    <string name="maer_lgpl_license_title">GNU LGPL version 2.1</string>
+    <string name="maer_show_permissive_notices">Lire les mentions MIT et BSD</string>
+    <string name="maer_permissive_notices_title">Mentions des licences MIT et BSD</string>
+    <string name="maer_show_release_notes">Lire les notes de version</string>
+    <string name="maer_release_notes_title">Notes de version</string>
     <string name="maer_document_unavailable">Le document juridique embarqué n’a pas pu être ouvert.</string>
     <string name="maer_third_party_notice_title">Mentions des logiciels libres</string>
 </resources>

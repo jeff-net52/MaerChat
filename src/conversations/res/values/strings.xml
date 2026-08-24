@@ -31,17 +31,17 @@
     <string name="maer_login_error_generic">Sign-in failed. Check your details and try again.</string>
     <string name="maer_login_error_save">The account could not be saved. Please try again.</string>
     <string name="maer_service_required_summary">Access to the MAER messaging service requires an active paid account supplied by MAER Engineering. This service requirement is separate from the GPL license of the application.</string>
-    <string name="maer_accept_service_terms">I have an active MAER account and accept the service terms and privacy information.</string>
+    <string name="maer_accept_service_terms">I confirm that I am authorized to use an active MAER account and that I have received the applicable service terms and privacy notice.</string>
     <string name="maer_terms_required">Please accept the service terms and privacy information before signing in.</string>
     <string name="maer_open_legal">Read terms, privacy and licenses</string>
-    <string name="maer_legal_version">Maer Chat %1$s · Information updated 22 August 2026</string>
+    <string name="maer_legal_version">Maer Chat %1$s · Information updated 24 August 2026</string>
     <string name="maer_legal_intro">The following information remains available offline, before and after sign-in.</string>
     <string name="maer_legal_service_title">MAER paid messaging service</string>
-    <string name="maer_legal_service_body">Maer Chat is free software. Access to the messaging infrastructure operated for MAER requires an active paid account supplied by MAER Engineering. Pricing, duration, renewal, termination, support and the operator’s legal details are those stated in the commercial offer or contract provided to the customer; those contractual documents prevail.</string>
+    <string name="maer_legal_service_body">Maer Chat is free software and may be used with compatible XMPP servers. Only access to MAER messaging servers requires an active paid account. The service is operated by Emilien REEVES, sole trader under the business name MAER Engineering, 16 ZI Saint Roch Box 1, 52340 Biesles, France, SIRET 523 560 175 00045, contact@maer.fr. Pricing, duration, renewal, termination and support are stated in the commercial offer or contract provided to the customer.</string>
     <string name="maer_legal_use_title">Service usage conditions</string>
     <string name="maer_legal_use_body">Keep your credentials confidential, protect your devices and use the service lawfully without abuse, spam or interference. Account activation, suspension and termination are managed by the server under the applicable commercial contract. The GPL rights in the software are not withdrawn if access to the MAER service ends.</string>
     <string name="maer_legal_privacy_title">Privacy and security</string>
-    <string name="maer_legal_privacy_body">The application processes locally the account identifier, contacts you choose, messages, media, profile pictures, cryptographic material and connection diagnostics needed for messaging. The configured XMPP and upload services process the data required to route and store communications. TLS protects transport. End-to-end encryption applies only when the conversation explicitly shows OMEMO encryption. Retention, recipients, support contacts and exercise of privacy rights are specified by the MAER service contract and privacy notice.</string>
+    <string name="maer_legal_privacy_body">The application processes locally the account identifier, contacts you choose, messages, media, profile pictures, cryptographic material and connection diagnostics needed for messaging. MAER server data is hosted in France on internally operated infrastructure. TLS protects transport. End-to-end encryption applies only when the conversation explicitly shows OMEMO encryption. Retention periods and the privacy role of MAER and each customer organization must be specified by the applicable service contract and privacy notice. Privacy requests may be sent to contact@maer.fr.</string>
     <string name="maer_legal_software_title">Free-software licenses</string>
     <string name="maer_legal_software_body">Maer Chat is derived from Conversations and is distributed under the GNU GPL version 3 or any later version. You may study, modify and redistribute the application under that license. Payment concerns the MAER service, not permission to exercise GPL rights. Third-party components keep their own licenses and notices.</string>
     <string name="maer_legal_source_title">Source code and provenance</string>
@@ -50,6 +50,14 @@
     <string name="maer_legal_trademark_body">The GPL covers copyright permissions in the software. It does not grant a general right to present a modified service as an official MAER service. MAER Chat is independent from WhatsApp; familiar messaging patterns do not imply affiliation and no WhatsApp asset is included.</string>
     <string name="maer_show_gpl">Read the complete GNU GPLv3</string>
     <string name="maer_show_notices">Read open-source notices</string>
+    <string name="maer_show_apache_license">Read Apache License 2.0</string>
+    <string name="maer_apache_license_title">Apache License 2.0</string>
+    <string name="maer_show_lgpl_license">Read GNU LGPL 2.1</string>
+    <string name="maer_lgpl_license_title">GNU LGPL version 2.1</string>
+    <string name="maer_show_permissive_notices">Read MIT and BSD notices</string>
+    <string name="maer_permissive_notices_title">MIT and BSD license notices</string>
+    <string name="maer_show_release_notes">Read release notes</string>
+    <string name="maer_release_notes_title">Release notes</string>
     <string name="maer_document_unavailable">The bundled legal document could not be opened.</string>
     <string name="maer_third_party_notice_title">Open-source notices</string>
 </resources>

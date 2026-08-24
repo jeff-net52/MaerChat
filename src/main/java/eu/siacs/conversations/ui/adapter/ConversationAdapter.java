@@ -28,6 +28,7 @@ import eu.siacs.conversations.xmpp.Jid;
 import eu.siacs.conversations.xmpp.jingle.OngoingRtpSession;
 import eu.siacs.conversations.xmpp.manager.JingleManager;
 import java.util.List;
+import java.util.function.Function;
 
 public class ConversationAdapter
         extends RecyclerView.Adapter<ConversationAdapter.ConversationViewHolder> {
@@ -35,6 +36,8 @@ public class ConversationAdapter
     private final XmppActivity activity;
     private final List<Conversation> conversations;
     private OnConversationClickListener listener;
+    private Function<Conversation, Message> messageProvider = Conversation::getLatestMessage;
+    private boolean showDrafts = true;
 
     public ConversationAdapter(XmppActivity activity, List<Conversation> conversations) {
         this.activity = activity;
@@ -73,7 +76,9 @@ public class ConversationAdapter
             viewHolder.binding.frame.setBackgroundResource(R.drawable.background_conversation_card);
         }
 
-        final Message message = conversation.getLatestMessage();
+        final Message selectedMessage = messageProvider.apply(conversation);
+        final Message message =
+                selectedMessage == null ? conversation.getLatestMessage() : selectedMessage;
         final int status = message.getStatus();
         final int unreadCount = conversation.unreadCount();
         final boolean isRead = conversation.isRead();
@@ -135,7 +140,7 @@ public class ConversationAdapter
             }
             viewHolder.binding.messageStatus.setVisibility(View.VISIBLE);
         }
-        final Conversation.Draft draft = isRead ? conversation.getDraft() : null;
+        final Conversation.Draft draft = isRead && showDrafts ? conversation.getDraft() : null;
         if (unreadCount > 0) {
             viewHolder.binding.unreadCount.setVisibility(View.VISIBLE);
             viewHolder.binding.unreadCount.setUnreadCount(unreadCount);
@@ -279,7 +284,7 @@ public class ConversationAdapter
         if (draft != null) {
             timestamp = draft.getTimestamp();
         } else {
-            timestamp = conversation.getLatestMessage().getTimeSent();
+            timestamp = message.getTimeSent();
         }
         final boolean pinned =
                 conversation.getBooleanAttribute(Conversation.ATTRIBUTE_PINNED_ON_TOP, false);
@@ -302,6 +307,14 @@ public class ConversationAdapter
 
     public void setConversationClickListener(OnConversationClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setMessageProvider(final Function<Conversation, Message> messageProvider) {
+        this.messageProvider = messageProvider;
+    }
+
+    public void setShowDrafts(final boolean showDrafts) {
+        this.showDrafts = showDrafts;
     }
 
     public void insert(Conversation c, int position) {

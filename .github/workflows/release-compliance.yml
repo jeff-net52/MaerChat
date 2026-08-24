@@ -1,0 +1,20 @@
+name: Release compliance
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the tagged source
+        uses: actions/checkout@v4
+
+      - name: Verify version, notices and legal publication gates
+        run: bash tools/check-release-compliance.sh

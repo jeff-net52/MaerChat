@@ -23,9 +23,19 @@
                 android:layout_height="64dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
-                app:title="@string/app_name"
-                app:titleTextAppearance="?textAppearanceTitleLarge"
-                tools:title="Maer Chat">
+                app:contentInsetStart="8dp"
+                app:contentInsetStartWithNavigation="8dp"
+                app:title="">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/brand_wordmark"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/maer_chat_wordmark"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MaerChat.Brand" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_avatar"
@@ -58,35 +68,56 @@
                 app:shapeAppearance="@style/ShapeAppearance.MaerChat.Search"
                 app:strokeWidth="0dp" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/home_tabs"
+            <HorizontalScrollView
+                android:id="@+id/message_filters"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:contentDescription="@string/conversation_categories"
-                app:tabGravity="fill"
-                app:tabIndicatorAnimationMode="elastic"
-                app:tabIndicatorColor="?colorPrimary"
-                app:tabIndicatorFullWidth="false"
-                app:tabMode="fixed"
-                app:tabRippleColor="?colorPrimaryContainer"
-                app:tabSelectedTextColor="?colorPrimary"
-                app:tabTextColor="?colorOnSurfaceVariant">
+                android:layout_height="52dp"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:scrollbars="none">
 
-                <com.google.android.material.tabs.TabItem
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/conversation_filters"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/chats" />
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    app:chipSpacingHorizontal="8dp"
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/contacts" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_all"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/filter_all" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/groups" />
-            </com.google.android.material.tabs.TabLayout>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_unread"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_unread" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_groups"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/groups" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/filter_favorites"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_favorites" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -95,7 +126,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="4dp"
-            android:paddingBottom="96dp"
+            android:paddingBottom="168dp"
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="6"
@@ -134,6 +165,7 @@
                     app:tint="?colorOnPrimaryContainer" />
 
                 <TextView
+                    android:id="@+id/empty_chat_hint_title"
                     style="?textAppearanceTitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -159,7 +191,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="88dp"
             android:contentDescription="@string/start_chat"
             android:text="@string/start_chat"
             app:backgroundTint="?colorPrimaryContainer"
@@ -167,6 +201,18 @@
             app:iconTint="?colorOnPrimaryContainer"
             app:rippleColor="?colorPrimaryFixedDim"
             app:textColor="?colorOnPrimaryContainer" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/home_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="bottom"
+            android:background="?colorSurfaceContainer"
+            android:contentDescription="@string/home_navigation"
+            android:elevation="8dp"
+            app:itemIconSize="26dp"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/home_bottom_navigation" />
 
         <com.google.android.material.search.SearchView
             android:id="@+id/search_view"

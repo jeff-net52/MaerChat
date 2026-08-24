@@ -1,12 +1,10 @@
-# Informations d’utilisation et conditions provisoires du service Maer Chat
+# Conditions d’utilisation provisoires du service Maer Chat
 
-> **Statut : projet de travail du 22 août 2026 — à compléter et à faire
-> valider avant publication.** Ce document ne constitue pas des conditions
-> générales de vente finalisées. La raison sociale exacte de l’opérateur, sa
-> forme juridique, son adresse, son immatriculation, ses coordonnées de
-> contact, les prix, la durée d’engagement, les modalités de résiliation et les
-> éventuels niveaux de service n’ont pas été fournis et ne sont donc pas
-> inventés ici.
+> **Statut : projet de travail mis à jour le 24 août 2026 — non opposable en
+> l’état.** L’identité de l’opérateur et le périmètre logiciel/service sont
+> renseignés. Le téléphone professionnel, le public B2B ou B2C, les tarifs, la
+> durée, la résiliation et les niveaux de service restent à compléter et à faire
+> valider avant ouverture commerciale.
 
 ## 1. Deux éléments juridiquement distincts
 
@@ -31,9 +29,14 @@ accordés sur le code par la GPLv3+.
 
 ## 2. Opérateur et documents contractuels
 
-« MAER Engineering » est le nom communiqué pour le service. Avant toute
-publication destinée aux utilisateurs, ce document doit identifier sans
-ambiguïté l’entité juridique qui contracte et exploite le service.
+Le service est exploité par :
+
+- **Emilien REEVES**, entrepreneur individuel ;
+- nom commercial : **MAER Engineering** ;
+- adresse : **16 ZI Saint Roch Box 1, 52340 Biesles, France** ;
+- SIRET : **523 560 175 00045** ;
+- contact et assistance : **contact@maer.fr** ;
+- téléphone professionnel : **à compléter**.
 
 Le bon de commande, le devis, le contrat d’abonnement ou tout autre document
 commercial accepté avec l’opérateur précise notamment le prix, la facturation,
@@ -55,9 +58,10 @@ Le compte est personnel ou affecté à une organisation selon le contrat
 commercial. Le partage d’identifiants, l’usurpation d’identité ou le
 contournement des mesures de contrôle d’accès sont interdits.
 
-L’application peut techniquement se connecter à un serveur XMPP compatible.
-Cette capacité du logiciel libre ne vaut pas droit d’accès à l’infrastructure
-MAER sans compte actif.
+L’application peut être utilisée librement avec un serveur XMPP compatible,
+sans compte ni paiement auprès de MAER Engineering. Cette liberté ne vaut pas
+droit d’accès aux serveurs exploités par MAER : cet accès nécessite un compte
+payant actif attribué dans le cadre d’une offre ou d’un contrat MAER.
 
 ## 4. Usage acceptable
 
@@ -120,9 +124,17 @@ le logiciel au titre de la GPLv3+.
 
 Le traitement des données personnelles est décrit dans la
 [politique de confidentialité provisoire](PRIVACY.md). Cette politique doit
-être complétée avec l’identité et les coordonnées du responsable de traitement,
-les durées de conservation, les destinataires et les éventuels transferts avant
-la mise à disposition publique du service.
+être complétée avec les rôles de chaque responsable de traitement, les
+coordonnées encore manquantes, les durées de conservation, les destinataires et
+les éventuels transferts avant la mise à disposition publique du service.
+
+Pour une organisation cliente, les rôles RGPD ne peuvent pas être fixés par une
+simple étiquette contractuelle : ils dépendent de qui décide des finalités et
+des moyens essentiels. Le contrat devra donc préciser si l’organisation agit
+comme responsable de traitement et MAER Engineering comme sous-traitant pour la
+messagerie, ainsi que les traitements pour lesquels MAER Engineering agit pour
+son propre compte, notamment la facturation, la sécurité et la gestion du
+service.
 
 ## 9. Logiciel libre, absence d’exclusivité et provenance
 
@@ -136,13 +148,25 @@ Le service MAER peut recommander une version déterminée de l’application pou
 des raisons de compatibilité ou de support. Cela ne transforme pas le logiciel
 libre en logiciel sous licence propriétaire.
 
-## 10. Informations obligatoires à compléter
+## 10. Qualification réglementaire à faire valider
+
+Un service XMPP payant permettant des échanges directs entre un nombre fini de
+personnes est susceptible de relever des services de communications
+interpersonnelles non fondés sur la numérotation. Avant commercialisation,
+l’opérateur doit faire qualifier le service au regard du code des postes et des
+communications électroniques et prendre contact, si nécessaire, avec les
+interlocuteurs compétents de l’ARCEP et du CCED pour les obligations applicables.
+
+Cette qualification ne dépend pas de la licence GPL du client Android.
+
+## 11. Informations obligatoires à compléter
 
 Avant publication comme conditions opposables, un professionnel compétent doit
 au minimum renseigner et valider :
 
-- l’identité juridique complète et les coordonnées de l’opérateur ;
-- les coordonnées du support et du contact relatif aux données personnelles ;
+- le numéro de téléphone professionnel de l’opérateur ;
+- la confirmation que `contact@maer.fr` reçoit les demandes RGPD et l’existence
+  ou non d’un délégué à la protection des données ;
 - le public visé, le territoire, l’âge minimal et les règles applicables aux
   comptes d’organisation ;
 - le catalogue des offres, les prix TTC/HT, la facturation et les moyens de
@@ -156,4 +180,3 @@ au minimum renseigner et valider :
   consommation si elle s’applique et la juridiction compétente ;
 - la date d’entrée en vigueur, la procédure d’acceptation et l’historique des
   versions.
-

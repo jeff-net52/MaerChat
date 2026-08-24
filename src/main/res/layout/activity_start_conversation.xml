@@ -18,14 +18,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/app_bar_layout"
-                app:tabGravity="fill"
-                app:tabMode="fixed" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -33,7 +25,8 @@
             android:id="@+id/start_conversation_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/app_bar_layout">
+            android:layout_below="@id/app_bar_layout"
+            android:layout_above="@id/home_navigation">
 
 
         </androidx.viewpager.widget.ViewPager>
@@ -42,7 +35,8 @@
             android:id="@+id/overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/app_bar_layout" />
+            android:layout_below="@id/app_bar_layout"
+            android:layout_above="@id/home_navigation" />
 
 
         <com.leinardi.android.speeddial.SpeedDialView
@@ -50,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/home_navigation"
+            android:layout_marginBottom="12dp"
             android:contentDescription="@string/add_contact_or_create_or_join_group_chat"
             app:sdMainFabClosedBackgroundColor="?colorPrimaryContainer"
             app:sdMainFabClosedIconColor="?colorOnPrimaryContainer"
@@ -59,5 +54,17 @@
             app:sdMainFabOpenedIconColor="?colorOnPrimaryContainer"
             app:sdOverlayLayout="@id/overlay"
             app:sdUseReverseAnimationOnClose="true" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/home_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:background="?colorSurfaceContainer"
+            android:contentDescription="@string/home_navigation"
+            android:elevation="8dp"
+            app:itemIconSize="26dp"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/home_bottom_navigation" />
     </RelativeLayout>
 </layout>

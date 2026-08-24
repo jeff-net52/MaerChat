@@ -1,6 +1,6 @@
 # Maer Chat — mentions et provenance
 
-Maer Chat 0.2.0 est un logiciel libre dérivé de
+Maer Chat 0.5.0 est un logiciel libre dérivé de
 [Conversations](https://codeberg.org/iNPUTmice/Conversations), créé et maintenu
 en amont par Daniel Gultsch et ses contributeurs.
 
@@ -31,6 +31,9 @@ Le titulaire et les règles d’utilisation de l’identité Maer Chat restent �
 documenter avant publication ; voir [`TRADEMARKS.md`](TRADEMARKS.md).
 
 Toute distribution binaire de Maer Chat doit être accompagnée d’un accès au
-code source correspondant, aux scripts de compilation, à cette notice et à la
-licence GPLv3. Le dépôt public du fork est
-[github.com/jeff-net52/MaerChat](https://github.com/jeff-net52/MaerChat).
+code source correspondant exact, aux scripts de compilation, à cette notice et
+à la licence GPLv3. Le dépôt public du fork est
+[github.com/jeff-net52/MaerChat](https://github.com/jeff-net52/MaerChat). Chaque
+APK publiée doit identifier un tag ou un commit immuable permettant de
+reconstruire cette même version ; une branche mouvante ou le seul code amont ne
+suffit pas.

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
@@ -46,11 +47,13 @@
                     android:foreground="@drawable/foreground_round_cutout_overlay"
                     android:background="@drawable/background_account_profile_picture">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/account_image"
                         android:layout_width="@dimen/publish_avatar_size"
                         android:layout_height="@dimen/publish_avatar_size"
-                        android:contentDescription="@string/your_avatar_tap_to_select_new_avatar" />
+                        android:contentDescription="@string/your_avatar_tap_to_select_new_avatar"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Circular" />
                 </FrameLayout>
 
                 <TextView

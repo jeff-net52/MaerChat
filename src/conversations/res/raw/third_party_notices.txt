@@ -10,20 +10,23 @@ Maer Chat and Conversations application code are distributed under the
 GNU General Public License, version 3 or (at your option) any later version.
 The complete license is bundled in this application.
 
-Major third-party components include Android Jetpack, Material Components,
-Guava, OkHttp, Retrofit, ZXing, Android Image Cropper, WebRTC, Transcoder,
-ShortcutBadger, Bouncy Castle, Conscrypt, JXMPP, MiniDNS, osmdroid, HSLuv,
-Immutables, jemoji and libsignal-protocol. Each component remains subject to
-its own copyright notices and license terms, commonly Apache-2.0, MIT,
-BSD-style terms or GPL-compatible terms.
+The conversations/free 0.5.0 build directly declares, among others: AndroidX
+and Android Jetpack; Material Components 1.14.0; Guava 33.6.0-android; OkHttp
+5.3.2; Retrofit 3.0.0; ZXing 3.5.4; Android Image Cropper 4.7.0; WebRTC Android
+129.0.0; Transcoder 0.11.2; ShortcutBadger 1.1.22; Bouncy Castle 1.84;
+Conscrypt 2.5.3; JXMPP 1.1.0; MiniDNS 1.1.1; osmdroid 6.1.20; HSLuv 1.0;
+Immutables 2.12.2; jemoji 1.7.6; and signal-protocol-java 2.6.2. Each component,
+including its transitive dependencies, remains subject to its own copyright
+notices and license terms, commonly Apache-2.0, MIT, BSD-style terms or
+GPL-compatible terms.
 
-Map data and map presentation may include OpenStreetMap contributors and are
-subject to the applicable OpenStreetMap attribution and database terms.
+Map data © OpenStreetMap contributors and is available under the Open Database
+License (ODbL). Attribution and terms: https://www.openstreetmap.org/copyright
 
-The complete project notice and the maintained dependency inventory are
-distributed with the corresponding source in NOTICE.md and
-THIRD_PARTY_NOTICES.md. Those source documents take precedence over this
-concise offline summary.
+The complete project notice and maintained dependency inventory are distributed
+with the corresponding source in NOTICE.md and THIRD_PARTY_NOTICES.md. The
+exact source tag or commit must be identified beside every published APK at:
+https://github.com/jeff-net52/MaerChat
 
 MAER Chat is not affiliated with or endorsed by WhatsApp or Meta. No WhatsApp
 code, logo, icon or graphical asset is included.

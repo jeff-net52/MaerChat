@@ -51,6 +51,25 @@ MAER déterministe sert de remplacement ; il ne doit pas changer au redémarrage
 Les images sont recadrées en cercle sans déformation et une description
 accessible reprend le nom du contact ou du groupe.
 
+## Accueil
+
+L’en-tête affiche le visuel officiel complet MAER Chat plutôt qu’un titre rendu
+avec une police système. Les filtres « Tous », « Non lues », « Groupes » et
+« Favoris » restent dans la zone supérieure et filtrent immédiatement la liste
+sans modifier les conversations.
+
+La navigation principale est ancrée en bas sous forme d’icônes accessibles :
+discussions, contacts, groupes et appels. Elle reste visible dans les listes de
+contacts et de groupes ; un changement de page met immédiatement à jour
+l’icône sélectionnée. L’onglet Appels regroupe les conversations comportant un
+historique audio ou vidéo et présente le dernier événement d’appel. Le retour
+vers Discussions ou Appels ramène toujours à la vue d’accueil.
+
+Tous les avatars de personnes, comptes, contacts, groupes, salons et
+participants emploient le même masque circulaire. Le sélecteur de photo de
+profil propose aussi bien la galerie que l’appareil photo, avant un recadrage
+carré centré destiné à l’avatar rond.
+
 ## Compositeur
 
 Le compositeur est une surface arrondie et compacte : action de pièce jointe à

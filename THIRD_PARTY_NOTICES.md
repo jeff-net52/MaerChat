@@ -1,7 +1,7 @@
 # Maer Chat — composants tiers et obligations de distribution
 
 > **Inventaire de travail, non exhaustif.** Il décrit le graphe de dépendances
-> déclaré pour Maer Chat 0.2.0 au 22 août 2026 et les mentions déjà présentes
+> déclaré pour Maer Chat 0.5.0 au 24 août 2026 et les mentions déjà présentes
 > dans le projet. Les fichiers de licence et métadonnées de chaque version
 > effectivement résolue font foi. Un contrôle automatisé du binaire final reste
 > nécessaire avant chaque publication.
@@ -39,14 +39,20 @@ remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
 - ZXing Core 3.5.4 ;
 - Floating Action Button Speed Dial 3.3.0 ;
 - OkHttp 5.3.2 ;
+- Okio 3.16.4 ;
 - Retrofit 3.0.0 et son convertisseur Gson ;
+- Gson 2.13.1 ;
 - Android Image Cropper 4.7.0 ;
 - Transcoder 0.11.2 ;
 - ShortcutBadger 1.1.22 ;
 - Conscrypt Android 2.5.3 ;
 - JXMPP 1.1.0 ;
 - osmdroid Android 6.1.20 ;
-- les outils de désucrage Android `desugar_jdk_libs` 2.1.5.
+- les outils de désucrage Android `desugar_jdk_libs` 2.1.5 ;
+- Kotlin standard library 2.2.21 et Kotlin Coroutines 1.9.0 ;
+- Jemoji 1.7.6 ;
+- Egloo 0.6.1 ;
+- les annotations JSpecify, Error Prone et J2ObjC résolues par le build.
 
 ### Licences permissives ou multiples
 
@@ -54,16 +60,36 @@ remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
 - HSLuv Java 1.0 : licence MIT ;
 - MiniDNS 1.1.1 : fichiers du projet sous choix de licences, notamment Apache
   License 2.0, LGPL 2.1 ou ultérieure, ou WTFPL selon les sources concernées ;
-- WebRTC Android 129.0.0 : copyright des auteurs du projet WebRTC et ensemble de
-  licences permissives et de notices tierces à reprendre depuis l’archive
-  effectivement distribuée ;
-- Jemoji 1.7.6 et les données Unicode/emoji qu’il embarque : vérifier et
-  reproduire les licences et attributions de l’artefact résolu.
+- WebRTC Android 129.0.0 : le paquet de distribution d’iNPUTmice déclare Apache
+  2.0 et MIT ; le moteur WebRTC conserve son avis BSD 3 clauses et ses notices
+  tierces propres ;
+- Protocol Buffers Java 2.5.0 : licence BSD 3 clauses ;
+- les données Unicode/emoji incorporées par Jemoji : conserver les attributions
+  et conditions de l’artefact effectivement résolu.
 
 ### Copyleft compatible avec le programme
 
 - `signal-protocol-java` 2.6.2 (libsignal-protocol Java) : GNU General Public
-  License version 3.
+  License version 3 ;
+- `curve25519-java` 0.4.1 : GNU General Public License version 3 ;
+- GNU Libidn Java 1.15 : GNU Lesser General Public License version 2.1 ou
+  ultérieure. Le texte LGPL 2.1 est embarqué dans l’écran des licences.
+
+## Textes embarqués dans le client
+
+L’écran « Conditions, confidentialité et licences » de la variante distribuée
+donne accès hors ligne :
+
+- à la GNU GPLv3 complète ;
+- à la GNU LGPLv2.1 complète ;
+- à la licence Apache 2.0 complète ;
+- aux avis MIT de Bouncy Castle et HSLuv ;
+- aux avis BSD de WebRTC et Protocol Buffers ;
+- à l’inventaire synthétique des composants et aux notes de version.
+
+Ces textes ne dispensent pas de conserver les éventuels fichiers `NOTICE`, avis
+additionnels et licences des composants natifs et données embarquées dans
+l’archive exacte publiée.
 
 Les variantes Quicksy et Play Store sont exclues du produit Maer Chat actuel.
 Leurs dépendances conditionnelles ne doivent être déclarées comme distribuées
@@ -115,4 +141,3 @@ Pour chaque APK ou autre binaire distribué :
 
 Ce document est une aide de conformité technique et ne constitue pas un avis
 juridique.
-

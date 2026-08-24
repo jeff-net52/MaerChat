@@ -1,9 +1,10 @@
 # Maer Chat — marques, noms et identité visuelle
 
-> **Statut : politique provisoire à compléter avant publication publique.** Le
-> titulaire juridique des noms et logos, leur éventuel enregistrement et la
-> licence de copyright applicable aux fichiers graphiques n’ont pas été fournis.
-> Ce document ne les invente pas et ne prétend pas créer une marque enregistrée.
+> **Statut : politique provisoire à compléter avant publication publique.**
+> L’identité de l’exploitant est renseignée. L’auteur du logo, la chaîne de
+> droits sur le fichier graphique, son éventuel enregistrement comme marque et
+> la licence applicable à sa redistribution restent à confirmer. Ce document ne
+> les invente pas et ne prétend pas créer une marque enregistrée.
 
 ## 1. Éléments concernés
 
@@ -71,9 +72,13 @@ Les noms de bibliothèques, services, projets et sociétés mentionnés dans
 l’attribution et l’identification des composants. Leur mention n’implique aucun
 parrainage.
 
-## 5. Point de contact à compléter
+## 5. Titulaire déclaré et point de contact
 
-Les demandes relatives à l’utilisation des noms et logos devront être adressées
-au titulaire des droits. Son identité juridique et son adresse de contact
-doivent être ajoutées ici avant publication.
+L’exploitant déclaré du projet est **Emilien REEVES**, entrepreneur individuel,
+nom commercial **MAER Engineering**, 16 ZI Saint Roch Box 1, 52340 Biesles,
+France, SIRET 523 560 175 00045, `contact@maer.fr`.
 
+Cette identification ne suffit pas à prouver la titularité du copyright sur le
+logo. L’auteur, la cession ou licence reçue et les droits de redistribution
+doivent être archivés avant publication du fichier dans le dépôt public ou dans
+un APK redistribué.

@@ -14,6 +14,8 @@ utilisateur héritée de Conversations.
   avec les coordonnées et paramètres contractuels réels.
 - [`PRIVACY.md`](PRIVACY.md) : projet d’information sur les données, à
   compléter avant ouverture commerciale.
+- [`RELEASE_COMPLIANCE.md`](RELEASE_COMPLIANCE.md) : preuves, contrôles et
+  blocages à lever avant publication d’un APK ou ouverture commerciale.
 
 Le code source public du client est publié sur
 [GitHub](https://github.com/jeff-net52/MaerChat). Sa distribution serveur

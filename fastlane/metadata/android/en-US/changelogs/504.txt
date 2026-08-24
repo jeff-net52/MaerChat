@@ -1,0 +1,4 @@
+* “Start a call” button in the Calls tab
+* Choice between audio and video calls
+* Contact selection and just-in-time call permissions
+* Updated licensing, provenance and legal information

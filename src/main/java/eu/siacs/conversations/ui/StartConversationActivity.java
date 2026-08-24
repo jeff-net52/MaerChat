@@ -290,12 +290,12 @@ public class StartConversationActivity extends XmppActivity
         configureActionBar(getSupportActionBar());
 
         inflateFab(binding.speedDial, R.menu.start_conversation_fab_submenu);
-        binding.tabLayout.setupWithViewPager(binding.startConversationViewPager);
         binding.startConversationViewPager.addOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
                         updateSearchViewHint();
+                        updateStartConversationNavigation(position);
                     }
                 });
         mListPagerAdapter = new ListPagerAdapter(getSupportFragmentManager());
@@ -305,7 +305,9 @@ public class StartConversationActivity extends XmppActivity
         mContactsAdapter = new ListItemAdapter(this, contacts, this.mOnTagClickedListener);
         final int initialTab =
                 Math.max(0, Math.min(1, getIntent().getIntExtra(EXTRA_INITIAL_TAB, 0)));
+        binding.homeNavigation.setOnItemSelectedListener(this::onHomeNavigationSelected);
         binding.startConversationViewPager.setCurrentItem(initialTab, false);
+        updateStartConversationNavigation(initialTab);
 
         final SharedPreferences preferences = getPreferences();
 
@@ -390,6 +392,30 @@ public class StartConversationActivity extends XmppActivity
                 });
         final var backDispatcher = this.getOnBackPressedDispatcher();
         backDispatcher.addCallback(this, this.fabBackPressedCallback);
+    }
+
+    private boolean onHomeNavigationSelected(@NonNull final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.nav_contacts) {
+            binding.startConversationViewPager.setCurrentItem(0, true);
+            return true;
+        } else if (id == R.id.nav_groups) {
+            binding.startConversationViewPager.setCurrentItem(1, true);
+            return true;
+        } else if (id == R.id.nav_chats || id == R.id.nav_calls) {
+            ConversationsActivity.launchHomeSection(this, id);
+            finish();
+            return false;
+        }
+        return false;
+    }
+
+    private void updateStartConversationNavigation(final int position) {
+        final int itemId = position == 1 ? R.id.nav_groups : R.id.nav_contacts;
+        if (binding.homeNavigation.getSelectedItemId() != itemId) {
+            binding.homeNavigation.setSelectedItemId(itemId);
+        }
+        setTitle(position == 1 ? R.string.group_chats : R.string.contacts);
     }
 
     private void inflateFab(final SpeedDialView speedDialView, final @MenuRes int menuRes) {

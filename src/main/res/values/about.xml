@@ -31,7 +31,7 @@
 <resources>
     <string name="pref_about_message" translatable="false">
 			Maer Chat • messagerie XMPP sécurisée.
-			\n\nMaer Chat 0.2.0 est un logiciel libre dérivé de Conversations 2.20.1.
+			\n\nMaer Chat est un logiciel libre dérivé de Conversations 2.20.1. Le numéro de version exact est affiché par l’application.
 			\n\nL’accès au service de messagerie MAER nécessite un compte payant actif auprès de MAER Engineering. Cette condition de service est distincte de la licence du logiciel.
 			\n\nCopyright du fork © 2026 contributeurs de Maer Chat
 			\nCopyright amont © 2014-2026 Daniel Gultsch et contributeurs de Conversations
@@ -74,6 +74,6 @@
 			\n\nAndroid port of Googles’s libphonenumber\nhttps://github.com/MichaelRocks/libphonenumber-android\n(Apache License, Version 2.0)
 
 			\n\n\nMaps:
-			\n\nMaps by Open Street Map (https://www.openstreetmap.org). Copyright restrictions may apply.
+			\n\nMap data © OpenStreetMap contributors, available under the Open Database License (ODbL): https://www.openstreetmap.org/copyright
 	</string>
 </resources>

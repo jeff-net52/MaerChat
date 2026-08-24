@@ -49,7 +49,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceTitleMedium"
-                    tools:text="Maer Chat 0.2.0" />
+                    tools:text="Maer Chat 0.5.0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -190,6 +190,34 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/maer_show_notices" />
+
+                        <Button
+                            android:id="@+id/apache_license"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/maer_show_apache_license" />
+
+                        <Button
+                            android:id="@+id/lgpl_license"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/maer_show_lgpl_license" />
+
+                        <Button
+                            android:id="@+id/permissive_notices"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/maer_show_permissive_notices" />
+
+                        <Button
+                            android:id="@+id/release_notes"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/maer_show_release_notes" />
 
                     </LinearLayout>
 

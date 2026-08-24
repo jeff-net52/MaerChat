@@ -1,0 +1,4 @@
+* Bouton « Lancer un appel » dans l’onglet Appels
+* Choix entre appel audio et appel vidéo
+* Sélection du contact et autorisations demandées au moment de l’appel
+* Mise à jour des licences, mentions de provenance et informations légales

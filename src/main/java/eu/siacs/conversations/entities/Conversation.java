@@ -192,6 +192,17 @@ public class Conversation extends AbstractEntity
         return first;
     }
 
+    public @Nullable Message getLatestRtpSession() {
+        synchronized (this.messages) {
+            for (final Message message : Lists.reverse(this.messages)) {
+                if (message.getType() == Message.TYPE_RTP_SESSION) {
+                    return message;
+                }
+            }
+        }
+        return null;
+    }
+
     public String findMostRecentRemoteDisplayableId() {
         final boolean multi = mode == Conversation.MODE_MULTI;
         synchronized (this.messages) {

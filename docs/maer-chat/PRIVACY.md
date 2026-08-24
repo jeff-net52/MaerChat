@@ -1,12 +1,10 @@
 # Politique de confidentialité provisoire de Maer Chat
 
-> **Statut : projet de transparence du 22 août 2026 — incomplet et non prêt
-> pour une publication juridique.** L’identité du responsable de traitement,
-> ses coordonnées, celles de son éventuel délégué à la protection des données,
-> les prestataires d’hébergement, les durées de conservation et les éventuels
-> transferts hors Espace économique européen n’ont pas été fournis. Ces
-> informations doivent être renseignées et validées avant l’ouverture publique
-> du service.
+> **Statut : projet de transparence mis à jour le 24 août 2026 — incomplet et
+> non prêt comme notice juridique finale.** L’identité de l’exploitant et la
+> localisation générale de l’hébergement sont renseignées. Les rôles précis par
+> traitement, les durées de conservation, le téléphone, le DPO éventuel et les
+> sous-traitants ultérieurs restent à confirmer avant l’ouverture commerciale.
 
 ## 1. Périmètre et responsables
 
@@ -18,16 +16,24 @@ de l’offre.
 Le logiciel est un client XMPP libre. D’autres opérateurs peuvent exploiter des
 serveurs compatibles et traiter les données selon leurs propres politiques.
 
-L’entité juridique responsable du traitement pour le service MAER doit être
-précisée ici avant publication :
+L’exploitant technique et commercial déclaré est :
 
-- **responsable de traitement :** à compléter ;
-- **adresse :** à compléter ;
-- **contact vie privée / exercice des droits :** à compléter ;
-- **délégué à la protection des données, s’il existe :** à compléter.
+- **Emilien REEVES**, entrepreneur individuel, nom commercial **MAER
+  Engineering** ;
+- **16 ZI Saint Roch Box 1, 52340 Biesles, France** ;
+- SIRET **523 560 175 00045** ;
+- contact vie privée et exercice des droits : **contact@maer.fr**, sous réserve
+  de confirmation ;
+- téléphone et délégué à la protection des données : **à compléter**.
 
-La désignation « MAER Engineering » utilisée dans le projet ne suffit pas, à
-elle seule, à identifier juridiquement le responsable.
+Pour les comptes fournis à une organisation, cette dernière peut être
+responsable du traitement des communications de ses utilisateurs et MAER
+Engineering son sous-traitant technique. MAER Engineering peut parallèlement
+être responsable de ses traitements propres, par exemple la relation client,
+la facturation, la sécurité de son infrastructure et la réponse aux obligations
+légales. Cette répartition doit être déterminée traitement par traitement et
+formalisée dans le contrat, notamment par des clauses conformes à l’article 28
+du RGPD lorsque MAER agit comme sous-traitant.
 
 ## 2. Données susceptibles d’être traitées
 
@@ -96,10 +102,15 @@ automatique Android est désactivée dans la configuration actuelle. Une
 sauvegarde manuelle chiffrée peut être créée à la demande de l’utilisateur ; sa
 protection dépend aussi de la robustesse de la phrase secrète choisie.
 
+Les données des serveurs MAER sont hébergées en France sur une infrastructure
+exploitée en interne par MAER Engineering. Cette indication n’exclut pas
+d’éventuels fournisseurs de réseau, DNS, certificats, sauvegarde ou autres
+sous-traitants : leur liste exacte doit être vérifiée et publiée.
+
 Le serveur peut conserver des données de compte, des métadonnées, des messages
 hors ligne ou archivés et des fichiers selon les modules activés. Les durées et
-règles de suppression du serveur doivent être ajoutées ici après vérification
-de sa configuration effective.
+règles de suppression doivent être ajoutées ici après vérification de la
+configuration effective des serveurs et sauvegardes.
 
 Les destinataires peuvent comprendre :
 
@@ -171,13 +182,12 @@ Chaque changement significatif du service, du serveur, des dépendances de
 télémétrie, des destinataires ou des finalités doit déclencher une mise à jour
 de cette politique avec une date et un historique de versions.
 
-Avant publication, l’opérateur doit au minimum compléter : son identité et ses
-contacts, les bases juridiques par finalité, les durées de conservation, les
-sous-traitants, les transferts, la procédure d’exercice des droits, le public
-visé et les règles particulières éventuellement applicables aux mineurs ou aux
-comptes professionnels.
+Avant publication, l’opérateur doit au minimum compléter : son téléphone et le
+contact DPO éventuel, les rôles et bases juridiques par finalité, les durées de
+conservation, les sous-traitants, les transferts, la procédure d’exercice des
+droits, le public visé et les règles particulières éventuellement applicables
+aux mineurs ou aux comptes professionnels.
 
 Pour les principes de sécurité technique connus du projet, voir
 [`SECURITY.md`](SECURITY.md). Les conditions provisoires du service figurent
 dans [`CGU.md`](CGU.md).
-

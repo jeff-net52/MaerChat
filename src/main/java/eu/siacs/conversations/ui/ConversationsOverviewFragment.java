@@ -32,10 +32,14 @@ package eu.siacs.conversations.ui;
 import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
 import static androidx.recyclerview.widget.ItemTouchHelper.RIGHT;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,8 +50,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -56,9 +66,9 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.search.SearchView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
@@ -66,13 +76,16 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import de.gultsch.common.MiniUri;
 import de.gultsch.common.Patterns;
+import eu.siacs.conversations.AppSettings;
 import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.FragmentConversationsOverviewBinding;
 import eu.siacs.conversations.entities.Account;
+import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Conversational;
+import eu.siacs.conversations.services.CallIntegrationConnectionService;
 import eu.siacs.conversations.services.QuickConversationsService;
 import eu.siacs.conversations.ui.activity.SettingsActivity;
 import eu.siacs.conversations.ui.adapter.ConversationAdapter;
@@ -82,12 +95,16 @@ import eu.siacs.conversations.ui.interfaces.OnConversationSelected;
 import eu.siacs.conversations.ui.util.AvatarWorkerTask;
 import eu.siacs.conversations.ui.util.PendingActionHelper;
 import eu.siacs.conversations.ui.util.PendingItem;
+import eu.siacs.conversations.ui.util.PresenceSelector;
 import eu.siacs.conversations.ui.util.ScrollState;
 import eu.siacs.conversations.ui.widget.AccountPickerDialog;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.CharSequences;
 import eu.siacs.conversations.utils.XmppUriLauncher;
+import eu.siacs.conversations.xmpp.Jid;
+import eu.siacs.conversations.xmpp.jingle.RtpCapability;
 import eu.siacs.conversations.xmpp.manager.BookmarkManager;
+import eu.siacs.conversations.xmpp.manager.JingleManager;
 import eu.siacs.conversations.xmpp.manager.RosterManager;
 import im.conversations.android.model.SearchSuggestion;
 import im.conversations.android.provider.SearchSuggestionProvider;
@@ -95,12 +112,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ConversationsOverviewFragment extends XmppFragment {
 
     private static final String STATE_SCROLL_POSITION =
             ConversationsOverviewFragment.class.getName() + ".scroll_state";
+    private static final String STATE_FILTER =
+            ConversationsOverviewFragment.class.getName() + ".conversation_filter";
+    private static final String STATE_PENDING_CALL_ACTION =
+            ConversationsOverviewFragment.class.getName() + ".pending_call_action";
+    private static final String STATE_PENDING_CALL_ACCOUNT =
+            ConversationsOverviewFragment.class.getName() + ".pending_call_account";
+    private static final String STATE_PENDING_CALL_CONTACT =
+            ConversationsOverviewFragment.class.getName() + ".pending_call_contact";
 
+    enum ConversationFilter {
+        ALL,
+        UNREAD,
+        GROUPS,
+        FAVORITES,
+        CALLS
+    }
+
+    private final List<Conversation> allConversations = new ArrayList<>();
     private final List<Conversation> conversations = new ArrayList<>();
     private final PendingItem<Conversation> swipedConversation = new PendingItem<>();
     private final PendingItem<ScrollState> pendingScrollState = new PendingItem<>();
@@ -108,6 +143,46 @@ public class ConversationsOverviewFragment extends XmppFragment {
     private ConversationAdapter conversationsAdapter;
     private SearchSuggestionAdapter searchSuggestionAdapter;
     private final PendingActionHelper pendingActionHelper = new PendingActionHelper();
+    private String pendingCallAction;
+    private String pendingCallAccount;
+    private Jid pendingCallContact;
+
+    private final ActivityResultLauncher<Intent> callContactLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        final Intent data = result.getData();
+                        if (result.getResultCode() != Activity.RESULT_OK || data == null) {
+                            clearPendingCall();
+                            return;
+                        }
+                        final List<Jid> contacts = ChooseContactActivity.extractJabberIds(data);
+                        final String account =
+                                data.getStringExtra(ChooseContactActivity.EXTRA_ACCOUNT);
+                        if (contacts.isEmpty() || account == null || pendingCallAction == null) {
+                            clearPendingCall();
+                            return;
+                        }
+                        this.pendingCallAccount = account;
+                        this.pendingCallContact = contacts.get(0).asBareJid();
+                        requestPendingCallPermissions();
+                    });
+
+    private final ActivityResultLauncher<String[]> callPermissionLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestMultiplePermissions(),
+                    permissions -> {
+                        if (!isPermissionGranted(permissions, Manifest.permission.RECORD_AUDIO)) {
+                            showCallPermissionDenied(R.string.no_microphone_permission);
+                            return;
+                        }
+                        if (RtpSessionActivity.ACTION_MAKE_VIDEO_CALL.equals(pendingCallAction)
+                                && !isPermissionGranted(permissions, Manifest.permission.CAMERA)) {
+                            showCallPermissionDenied(R.string.no_camera_permission);
+                            return;
+                        }
+                        placePendingCall();
+                    });
 
     private final ItemTouchHelper.SimpleCallback callback =
             new ItemTouchHelper.SimpleCallback(0, LEFT | RIGHT) {
@@ -117,6 +192,15 @@ public class ConversationsOverviewFragment extends XmppFragment {
                         @NonNull RecyclerView.ViewHolder viewHolder,
                         @NonNull RecyclerView.ViewHolder target) {
                     return false;
+                }
+
+                @Override
+                public int getSwipeDirs(
+                        @NonNull RecyclerView recyclerView,
+                        @NonNull RecyclerView.ViewHolder viewHolder) {
+                    return currentFilter == ConversationFilter.CALLS
+                            ? 0
+                            : super.getSwipeDirs(recyclerView, viewHolder);
                 }
 
                 @Override
@@ -388,7 +472,8 @@ public class ConversationsOverviewFragment extends XmppFragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (this.binding != null) {
-            this.binding.homeTabs.clearOnTabSelectedListeners();
+            this.binding.conversationFilters.setOnCheckedStateChangeListener(null);
+            this.binding.homeNavigation.setOnItemSelectedListener(null);
         }
         this.binding = null;
         this.conversationsAdapter = null;
@@ -405,6 +490,26 @@ public class ConversationsOverviewFragment extends XmppFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            final String savedFilter = savedInstanceState.getString(STATE_FILTER);
+            if (savedFilter != null) {
+                try {
+                    this.currentFilter = ConversationFilter.valueOf(savedFilter);
+                } catch (final IllegalArgumentException ignored) {
+                    this.currentFilter = ConversationFilter.ALL;
+                }
+            }
+            this.pendingCallAction = savedInstanceState.getString(STATE_PENDING_CALL_ACTION);
+            this.pendingCallAccount = savedInstanceState.getString(STATE_PENDING_CALL_ACCOUNT);
+            final String pendingContact = savedInstanceState.getString(STATE_PENDING_CALL_CONTACT);
+            if (pendingContact != null) {
+                try {
+                    this.pendingCallContact = Jid.of(pendingContact);
+                } catch (final IllegalArgumentException ignored) {
+                    clearPendingCall();
+                }
+            }
+        }
         requireActivity()
                 .getOnBackPressedDispatcher()
                 .addCallback(this, this.searchViewOnBackPressedCallback);
@@ -445,7 +550,13 @@ public class ConversationsOverviewFragment extends XmppFragment {
                     searchViewOnBackPressedCallback.setEnabled(isShowing);
                 });
         this.binding.fab.setOnClickListener(
-                (view) -> StartConversationActivity.launch(getActivity()));
+                view -> {
+                    if (this.currentFilter == ConversationFilter.CALLS) {
+                        showCallTypeChooser();
+                    } else {
+                        StartConversationActivity.launch(getActivity());
+                    }
+                });
         this.binding.profileAvatar.setOnClickListener(
                 view -> {
                     final var service = requireXmppActivity().xmppConnectionService;
@@ -457,30 +568,31 @@ public class ConversationsOverviewFragment extends XmppFragment {
                         requireXmppActivity().switchToAccount(account);
                     }
                 });
-        this.binding.homeTabs.addOnTabSelectedListener(
-                new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(@NonNull final TabLayout.Tab tab) {
-                        final int position = tab.getPosition();
-                        if (position == 0) {
-                            return;
-                        }
-                        final var chatsTab = binding.homeTabs.getTabAt(0);
-                        if (chatsTab != null) {
-                            chatsTab.select();
-                        }
-                        StartConversationActivity.launch(requireContext(), position - 1);
+        this.binding.conversationFilters.check(chipIdForFilter(this.currentFilter));
+        this.binding.conversationFilters.setOnCheckedStateChangeListener(
+                (group, checkedIds) -> {
+                    if (checkedIds.isEmpty()) {
+                        return;
                     }
-
-                    @Override
-                    public void onTabUnselected(@NonNull final TabLayout.Tab tab) {}
-
-                    @Override
-                    public void onTabReselected(@NonNull final TabLayout.Tab tab) {}
+                    this.currentFilter = filterForChip(checkedIds.get(0));
+                    applyConversationFilter();
                 });
+        this.binding.homeNavigation.setOnItemSelectedListener(this::onHomeNavigationSelected);
+        final int initialNavigation =
+                this.currentFilter == ConversationFilter.CALLS
+                        ? R.id.nav_calls
+                        : requireActivity() instanceof ConversationsActivity conversationsActivity
+                                ? conversationsActivity.consumeInitialHomeNavigation()
+                                : R.id.nav_chats;
+        this.binding.homeNavigation.setSelectedItemId(initialNavigation);
 
         this.conversationsAdapter =
                 new ConversationAdapter(requireXmppActivity(), this.conversations);
+        this.conversationsAdapter.setMessageProvider(
+                conversation ->
+                        this.currentFilter == ConversationFilter.CALLS
+                                ? conversation.getLatestRtpSession()
+                                : conversation.getLatestMessage());
         this.conversationsAdapter.setConversationClickListener(
                 (view, conversation) -> {
                     if (getActivity() instanceof OnConversationSelected callback) {
@@ -501,6 +613,196 @@ public class ConversationsOverviewFragment extends XmppFragment {
         this.touchHelper = new ItemTouchHelper(this.callback);
         this.touchHelper.attachToRecyclerView(this.binding.list);
         return binding.getRoot();
+    }
+
+    void selectHomeNavigationItem(@IdRes final int itemId) {
+        if (this.binding == null) {
+            this.currentFilter =
+                    itemId == R.id.nav_calls ? ConversationFilter.CALLS : ConversationFilter.ALL;
+            return;
+        }
+        this.binding.homeNavigation.setSelectedItemId(itemId);
+    }
+
+    private boolean onHomeNavigationSelected(@NonNull final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == R.id.nav_chats) {
+            if (this.currentFilter == ConversationFilter.CALLS) {
+                this.currentFilter = ConversationFilter.ALL;
+                this.binding.conversationFilters.check(R.id.filter_all);
+            }
+            updateHomeSectionUi();
+            applyConversationFilter();
+            return true;
+        } else if (id == R.id.nav_contacts) {
+            StartConversationActivity.launch(requireContext(), 0);
+            return false;
+        } else if (id == R.id.nav_groups) {
+            StartConversationActivity.launch(requireContext(), 1);
+            return false;
+        } else if (id == R.id.nav_calls) {
+            this.currentFilter = ConversationFilter.CALLS;
+            updateHomeSectionUi();
+            applyConversationFilter();
+            return true;
+        }
+        return false;
+    }
+
+    private void updateHomeSectionUi() {
+        final boolean calls = this.currentFilter == ConversationFilter.CALLS;
+        this.binding.messageFilters.setVisibility(calls ? View.GONE : View.VISIBLE);
+        this.binding.fab.setVisibility(View.VISIBLE);
+        this.binding.fab.setText(fabLabelForFilter(this.currentFilter));
+        this.binding.fab.setContentDescription(getString(fabLabelForFilter(this.currentFilter)));
+        this.binding.fab.setIconResource(fabIconForFilter(this.currentFilter));
+        this.binding.searchBar.setHint(calls ? R.string.search_calls : R.string.search_in_chats);
+    }
+
+    private void showCallTypeChooser() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.start_call)
+                .setItems(
+                        new CharSequence[] {
+                            getString(R.string.audio_call), getString(R.string.video_call)
+                        },
+                        (dialog, which) -> launchCallContactChooser(callActionForChoice(which)))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void launchCallContactChooser(final String action) {
+        this.pendingCallAction = action;
+        this.pendingCallAccount = null;
+        this.pendingCallContact = null;
+        final Intent intent = new Intent(requireContext(), ChooseContactActivity.class);
+        intent.putExtra(ChooseContactActivity.EXTRA_SHOW_ENTER_JID, true);
+        intent.putExtra(ChooseContactActivity.EXTRA_TITLE_RES_ID, R.string.choose_call_contact);
+        this.callContactLauncher.launch(intent);
+    }
+
+    private void requestPendingCallPermissions() {
+        if (this.pendingCallAction == null
+                || this.pendingCallAccount == null
+                || this.pendingCallContact == null) {
+            clearPendingCall();
+            return;
+        }
+        final List<String> permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.RECORD_AUDIO);
+        if (RtpSessionActivity.ACTION_MAKE_VIDEO_CALL.equals(this.pendingCallAction)) {
+            permissions.add(Manifest.permission.CAMERA);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
+        }
+        this.callPermissionLauncher.launch(permissions.toArray(new String[0]));
+    }
+
+    private boolean isPermissionGranted(
+            final Map<String, Boolean> permissions, final String permission) {
+        return ContextCompat.checkSelfPermission(requireContext(), permission)
+                        == PackageManager.PERMISSION_GRANTED
+                || Boolean.TRUE.equals(permissions.get(permission));
+    }
+
+    private void showCallPermissionDenied(@StringRes final int message) {
+        Toast.makeText(
+                        requireContext(),
+                        getString(message, getString(R.string.app_name)),
+                        Toast.LENGTH_SHORT)
+                .show();
+        clearPendingCall();
+    }
+
+    private void placePendingCall() {
+        final var service = getXmppConnectionService();
+        final String accountAddress = this.pendingCallAccount;
+        final Jid contactAddress = this.pendingCallContact;
+        final String action = this.pendingCallAction;
+        clearPendingCall();
+        if (service == null || accountAddress == null || contactAddress == null || action == null) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        final Account account;
+        try {
+            account = service.findAccountByJid(Jid.of(accountAddress));
+        } catch (final IllegalArgumentException e) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (account == null) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (new AppSettings(requireContext()).isUseTor() || account.isOnion()) {
+            Toast.makeText(requireContext(), R.string.disable_tor_to_make_call, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (JingleManager.isBusy(service.getAccounts())) {
+            Toast.makeText(requireContext(), R.string.only_one_call_at_a_time, Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        if (account.setOption(Account.OPTION_SOFT_DISABLED, false)) {
+            service.updateAccount(account);
+        }
+        final Contact contact = account.getRoster().getContact(contactAddress);
+        if (Config.USE_JINGLE_MESSAGE_INIT && RtpCapability.jmiSupport(contact)) {
+            CallIntegrationConnectionService.placeCall(
+                    service, account, contactAddress, RtpSessionActivity.actionToMedia(action));
+            return;
+        }
+        final RtpCapability.Capability capability =
+                RtpSessionActivity.ACTION_MAKE_VIDEO_CALL.equals(action)
+                        ? RtpCapability.Capability.VIDEO
+                        : RtpCapability.Capability.AUDIO;
+        PresenceSelector.selectFullJidForDirectRtpConnection(
+                requireActivity(),
+                contact,
+                capability,
+                fullJid ->
+                        CallIntegrationConnectionService.placeCall(
+                                service,
+                                account,
+                                fullJid,
+                                RtpSessionActivity.actionToMedia(action)));
+    }
+
+    private void clearPendingCall() {
+        this.pendingCallAction = null;
+        this.pendingCallAccount = null;
+        this.pendingCallContact = null;
+    }
+
+    static @StringRes int fabLabelForFilter(final ConversationFilter filter) {
+        return filter == ConversationFilter.CALLS ? R.string.start_call : R.string.start_chat;
+    }
+
+    static @DrawableRes int fabIconForFilter(final ConversationFilter filter) {
+        return filter == ConversationFilter.CALLS
+                ? R.drawable.ic_call_24dp
+                : R.drawable.ic_chat_24dp;
+    }
+
+    static String callActionForChoice(final int choice) {
+        return choice == 0
+                ? RtpSessionActivity.ACTION_MAKE_VOICE_CALL
+                : RtpSessionActivity.ACTION_MAKE_VIDEO_CALL;
     }
 
     private void startSearch(final String term) {
@@ -643,6 +945,12 @@ public class ConversationsOverviewFragment extends XmppFragment {
         if (scrollState != null) {
             bundle.putParcelable(STATE_SCROLL_POSITION, scrollState);
         }
+        bundle.putString(STATE_FILTER, this.currentFilter.name());
+        bundle.putString(STATE_PENDING_CALL_ACTION, this.pendingCallAction);
+        bundle.putString(STATE_PENDING_CALL_ACCOUNT, this.pendingCallAccount);
+        if (this.pendingCallContact != null) {
+            bundle.putString(STATE_PENDING_CALL_CONTACT, this.pendingCallContact.toString());
+        }
     }
 
     private ScrollState getScrollState() {
@@ -691,22 +999,17 @@ public class ConversationsOverviewFragment extends XmppFragment {
         refreshProfileAvatar();
         this.requireXmppActivity()
                 .xmppConnectionService
-                .populateWithOrderedConversations(this.conversations);
+                .populateWithOrderedConversations(this.allConversations);
         Conversation removed = this.swipedConversation.peek();
         if (removed != null) {
             if (removed.isRead()) {
-                this.conversations.remove(removed);
+                this.allConversations.remove(removed);
             } else {
                 pendingActionHelper.execute();
             }
         }
-        if (this.conversations.isEmpty()) {
-            this.binding.list.setVisibility(View.GONE);
-            this.binding.emptyChatHint.setVisibility(View.VISIBLE);
-        } else {
-            this.binding.emptyChatHint.setVisibility(View.GONE);
-            this.binding.list.setVisibility(View.VISIBLE);
-            this.conversationsAdapter.notifyDataSetChanged();
+        applyConversationFilter();
+        if (!this.conversations.isEmpty()) {
             final var scrollState = pendingScrollState.pop();
             if (scrollState != null) {
                 setScrollPosition(scrollState);
@@ -730,8 +1033,86 @@ public class ConversationsOverviewFragment extends XmppFragment {
                 account, this.binding.profileAvatar, R.dimen.home_profile_avatar);
     }
 
+    private ConversationFilter currentFilter = ConversationFilter.ALL;
+
+    private static ConversationFilter filterForChip(@IdRes final int checkedId) {
+        if (checkedId == R.id.filter_unread) {
+            return ConversationFilter.UNREAD;
+        } else if (checkedId == R.id.filter_groups) {
+            return ConversationFilter.GROUPS;
+        } else if (checkedId == R.id.filter_favorites) {
+            return ConversationFilter.FAVORITES;
+        } else {
+            return ConversationFilter.ALL;
+        }
+    }
+
+    private static @IdRes int chipIdForFilter(final ConversationFilter filter) {
+        return switch (filter) {
+            case UNREAD -> R.id.filter_unread;
+            case GROUPS -> R.id.filter_groups;
+            case FAVORITES -> R.id.filter_favorites;
+            case ALL, CALLS -> R.id.filter_all;
+        };
+    }
+
+    private boolean matchesCurrentFilter(final Conversation conversation) {
+        return matchesFilter(
+                this.currentFilter,
+                conversation.isRead(),
+                conversation.getMode() == Conversational.MODE_MULTI,
+                conversation.getBooleanAttribute(Conversation.ATTRIBUTE_PINNED_ON_TOP, false),
+                conversation.getLatestRtpSession() != null);
+    }
+
+    static boolean matchesFilter(
+            final ConversationFilter filter,
+            final boolean read,
+            final boolean group,
+            final boolean favorite,
+            final boolean hasCalls) {
+        return switch (filter) {
+            case ALL -> true;
+            case UNREAD -> !read;
+            case GROUPS -> group;
+            case FAVORITES -> favorite;
+            case CALLS -> hasCalls;
+        };
+    }
+
+    private void applyConversationFilter() {
+        final Conversation removed = this.swipedConversation.peek();
+        this.conversations.clear();
+        for (final Conversation conversation : this.allConversations) {
+            if (conversation != removed && matchesCurrentFilter(conversation)) {
+                this.conversations.add(conversation);
+            }
+        }
+        if (this.conversationsAdapter != null) {
+            this.conversationsAdapter.setShowDrafts(this.currentFilter != ConversationFilter.CALLS);
+            this.conversationsAdapter.notifyDataSetChanged();
+        }
+        toggleHintVisibility();
+    }
+
     private void toggleHintVisibility() {
         if (this.conversations.isEmpty()) {
+            final boolean hasUnfilteredConversations = !this.allConversations.isEmpty();
+            if (this.currentFilter == ConversationFilter.CALLS) {
+                this.binding.emptyChatHintTitle.setText(R.string.no_recent_calls_title);
+                this.binding.emptyChatHintText.setText(R.string.no_recent_calls_hint);
+                this.binding.list.setVisibility(View.GONE);
+                this.binding.emptyChatHint.setVisibility(View.VISIBLE);
+                return;
+            }
+            this.binding.emptyChatHintTitle.setText(
+                    hasUnfilteredConversations
+                            ? R.string.no_filtered_conversations_title
+                            : R.string.empty_conversations_title);
+            this.binding.emptyChatHintText.setText(
+                    hasUnfilteredConversations
+                            ? R.string.no_filtered_conversations_hint
+                            : R.string.empty_conversations_list_hint);
             this.binding.list.setVisibility(View.GONE);
             this.binding.emptyChatHint.setVisibility(View.VISIBLE);
         } else {

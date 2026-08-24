@@ -22,6 +22,8 @@ nécessitent aucun identifiant :
 - persistance du brouillon via la sérialisation de la conversation ;
 - politique TLS 1.2/1.3, refus du trafic en clair et autorités système uniquement ;
 - permissions de notification et service XMPP non exporté dans le manifeste ;
+- filtres de l’accueil (toutes, non lues, groupes et favorites), présentation
+  du bouton Appels et choix audio/vidéo ;
 - résolution des thèmes clair/sombre et des ressources après changement de
   configuration portrait/paysage ;
 - garde statique contre un JID Maer personnel embarqué et contre le passage
@@ -29,13 +31,13 @@ nécessitent aucun identifiant :
 
 ## État de la validation locale
 
-La suite unitaire complète compte **156 tests réussis** avec `compileSdk` et
+La suite unitaire complète compte **163 tests réussis** avec `compileSdk` et
 `targetSdk` réglés sur l’API 37. Les tests Android hors appareil s’exécutent avec
 un runtime Robolectric API 36 ; ce niveau de runtime ne modifie pas la cible API
 37 de l’application.
 
 L’analyse Lint finale ne signale aucune nouvelle anomalie hors baseline. La
-baseline explicite fige **655 constats amont** encore présents ; avec
+baseline explicite fige **647 constats amont** encore présents ; avec
 `warningsAsErrors`, toute nouvelle erreur ou tout nouvel avertissement non
 baseliné fait échouer le contrôle.
 
@@ -45,16 +47,23 @@ l’échec est affiché proprement, sans fermeture inattendue. Une capture deman
 avec `adb` sur ce build a produit **zéro octet**, ce qui confirme l’application
 de `FLAG_SECURE` sur cet écran.
 
-Pour la version 0.3.0, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
-et `targetSdk` 37. Le code visible attendu est `300` pour l’APK universelle et
-`304` pour l’APK ARM64 : Gradle multiplie le `versionCode` 3 par 100 puis ajoute
-le suffixe propre à l’ABI. Les deux APK Release de développement 0.3.0 ont été
-alignées puis vérifiées avec les Build Tools 37. Elles portent le même certificat
-de développement que la version 0.2.0 et valident les schémas de signature v1,
-v2 et v3. Leurs empreintes SHA-256 sont :
+Un test instrumenté supplémentaire s’exécute sur l’AVD
+`RTM_Tablet_API31` sous Android 12/API 31. Il lance réellement l’écran
+Contacts, vérifie la présence des quatre entrées de navigation, bascule entre
+Contacts et Groupes, contrôle la présence d’Appels sur l’accueil et confirme
+que le logo emploie `FIT_CENTER`. Le dernier passage compte **1 test réussi**,
+sans échec ni erreur.
 
-- ARM64 : `66659A5F2E4720E2D2EB6E8903B0AD5EC0B3E8764197D35AA20DE592B41E31FC` ;
-- universelle : `C7EE063008270334A16DA601C00EAE0A4085704490F8357C882C74FA28617310`.
+Pour la version 0.5.0, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
+et `targetSdk` 37. Le code visible attendu est `500` pour l’APK universelle et
+`504` pour l’APK ARM64 : Gradle multiplie le `versionCode` 5 par 100 puis ajoute
+le suffixe propre à l’ABI. Les précédentes APK Release de développement 0.4.0
+ont été alignées puis vérifiées avec les Build Tools 37. Elles portent le même
+certificat de développement que les versions 0.1.0 à 0.4.0 et valident les
+schémas de signature v1, v2 et v3. Leurs empreintes SHA-256 historiques sont :
+
+- ARM64 : `31A61D5FEC62A0C25B034297DB7791D326B87D34CDDD91F2E7CB2B37F3BA342A` ;
+- universelle : `39A6CEACA8235677BCEDC10573BB499BE43A1D27F3733AA88CFAC32831FC860D`.
 
 Le désassemblage des deux DEX de la Release 0.2.0 après R8 ne contient aucun
 appel émetteur à
@@ -97,19 +106,25 @@ au moins deux appareils ou instances. Les secrets sont saisis manuellement ou
 injectés par un coffre CI, jamais committés. Une fonction non testable faute de
 capacité serveur est notée « non vérifiée » et non « réussie ».
 
-La Release ARM64 0.3.0 a été installée avec l’option de mise à jour conservant
-les données sur un Samsung XCover 7 SM-G556B sous Android 16/API 36. Le
-gestionnaire de paquets a confirmé la version 0.3.0+free, code 304. La date de
-première installation est restée celle de la version précédente, l’activité
-principale a répondu `Status: ok`, le processus est demeuré actif et aucun
-plantage `AndroidRuntime` n’a été relevé après le démarrage.
+L’APK Debug ARM64 0.5.0 a été installée sur un Samsung XCover 7 SM-G556B sous
+Android 16/API 36. Android a d’abord refusé la mise à jour de la Release 0.4.0,
+car sa signature de développement historique différait de la clé Debug locale.
+Après autorisation explicite, la 0.4.0 et ses données locales ont été supprimées,
+puis la 0.5.0 a été installée comme nouvelle application. Le gestionnaire de
+paquets a confirmé `0.5.0+free`, code 504 ; l’activité `WelcomeActivity` et le
+processus sont restés actifs et aucun plantage `AndroidRuntime` n’a été relevé.
+
+La capture automatisée de l’interface n’a pas été possible : `FLAG_SECURE`
+protège l’écran et l’appareil s’est reverrouillé. Cette limite n’affecte ni
+l’installation ni le contrôle du processus, mais l’apparence finale doit être
+confirmée directement sur l’écran déverrouillé du téléphone.
 
 Aucun compte XMPP authentifié n’était disponible pour la validation décrite dans
 ce document. Les résultats hors ligne ne valident donc ni le chemin
 d’authentification réel ni les capacités négociées après connexion au serveur.
-L’essai physique valide l’installation, la mise à jour et le démarrage ; il ne
-consulte ni ne modifie les conversations existantes et ne remplace pas les tests
-authentifiés à deux comptes.
+L’essai physique valide l’installation neuve et le démarrage ; il ne valide pas
+la migration des données depuis une version signée avec une autre clé et ne
+remplace pas les tests authentifiés à deux comptes.
 
 La livraison automatisée ne prétend donc pas valider, sans compte réel :
 

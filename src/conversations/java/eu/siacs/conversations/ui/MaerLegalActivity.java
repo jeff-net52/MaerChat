@@ -33,8 +33,18 @@ public class MaerLegalActivity extends ActionBarActivity {
         binding.thirdPartyNotices.setOnClickListener(
                 view ->
                         showDocument(
-                                R.string.maer_third_party_notice_title,
-                                R.raw.third_party_notices));
+                                R.string.maer_third_party_notice_title, R.raw.third_party_notices));
+        binding.apacheLicense.setOnClickListener(
+                view -> showDocument(R.string.maer_apache_license_title, R.raw.apache_2_0));
+        binding.lgplLicense.setOnClickListener(
+                view -> showDocument(R.string.maer_lgpl_license_title, R.raw.lgpl_v2_1));
+        binding.permissiveNotices.setOnClickListener(
+                view ->
+                        showDocument(
+                                R.string.maer_permissive_notices_title,
+                                R.raw.permissive_license_notices));
+        binding.releaseNotes.setOnClickListener(
+                view -> showDocument(R.string.maer_release_notes_title, R.raw.release_notes));
     }
 
     private void showDocument(@StringRes final int title, @RawRes final int resource) {

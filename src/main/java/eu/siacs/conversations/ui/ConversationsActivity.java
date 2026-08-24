@@ -98,6 +98,8 @@ public class ConversationsActivity extends QrCodeProcessingActivity
     public static final String EXTRA_POST_INIT_ACTION = "post_init_action";
     public static final String POST_ACTION_RECORD_VOICE = "record_voice";
     public static final String EXTRA_TYPE = "type";
+    public static final String EXTRA_HOME_NAVIGATION =
+            "eu.siacs.conversations.extra.HOME_NAVIGATION";
 
     private static final List<String> VIEW_AND_SHARE_ACTIONS =
             Arrays.asList(
@@ -115,6 +117,7 @@ public class ConversationsActivity extends QrCodeProcessingActivity
     private final PendingItem<ActivityResult> postponedActivityResult = new PendingItem<>();
     private ActivityConversationsBinding binding;
     private boolean mActivityPaused = true;
+    private @IdRes int pendingHomeNavigation = R.id.nav_chats;
 
     private static boolean isViewOrShareIntent(Intent i) {
         Log.d(Config.LOGTAG, "action: " + (i == null ? null : i.getAction()));
@@ -128,6 +131,50 @@ public class ConversationsActivity extends QrCodeProcessingActivity
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         return intent;
+    }
+
+    public static void launchHomeSection(
+            final Context context, final @IdRes int navigationItemId) {
+        final Intent intent = createLauncherIntent(context);
+        intent.putExtra(EXTRA_HOME_NAVIGATION, navigationItemId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(intent);
+    }
+
+    @IdRes
+    int consumeInitialHomeNavigation() {
+        final int navigation = this.pendingHomeNavigation;
+        this.pendingHomeNavigation = R.id.nav_chats;
+        return navigation;
+    }
+
+    private void applyHomeNavigationIntent(final Intent intent) {
+        if (intent == null || !intent.hasExtra(EXTRA_HOME_NAVIGATION)) {
+            return;
+        }
+        this.pendingHomeNavigation =
+                intent.getIntExtra(EXTRA_HOME_NAVIGATION, R.id.nav_chats);
+        Fragment fragment =
+                getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        if (!(fragment instanceof ConversationsOverviewFragment)
+                && binding.secondaryFragment == null) {
+            final FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(
+                    null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragment = fragmentManager.findFragmentById(R.id.main_fragment);
+            if (!(fragment instanceof ConversationsOverviewFragment)) {
+                final ConversationsOverviewFragment overview =
+                        new ConversationsOverviewFragment();
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.main_fragment, overview)
+                        .commitNowAllowingStateLoss();
+                fragment = overview;
+            }
+        }
+        if (fragment instanceof ConversationsOverviewFragment overviewFragment) {
+            overviewFragment.selectHomeNavigationItem(consumeInitialHomeNavigation());
+        }
     }
 
     @Override
@@ -352,7 +399,7 @@ public class ConversationsActivity extends QrCodeProcessingActivity
         OmemoSetting.load(this);
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_conversations);
         Activities.setStatusAndNavigationBarColors(this, binding.getRoot());
-        ;
+        applyHomeNavigationIntent(getIntent());
         this.getSupportFragmentManager()
                 .addOnBackStackChangedListener(this::showDialogsIfMainIsOverview);
         this.initializeFragments();
@@ -502,6 +549,7 @@ public class ConversationsActivity extends QrCodeProcessingActivity
     @Override
     protected void onNewIntent(@NonNull final Intent intent) {
         super.onNewIntent(intent);
+        applyHomeNavigationIntent(intent);
         if (isViewOrShareIntent(intent)) {
             if (xmppConnectionService != null) {
                 clearPendingViewIntent();

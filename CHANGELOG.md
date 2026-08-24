@@ -1,5 +1,43 @@
 # Changelog
 
+Ce fichier distingue les versions du fork Maer Chat de l’historique conservé
+du projet Conversations. Une note de version ne modifie pas les conditions de
+la licence GPLv3+ et ne doit pas annoncer une conformité juridique non validée.
+
+## Maer Chat
+
+### Version 0.5.0 — 24 août 2026
+
+* Ajout du bouton « Lancer un appel » dans l’onglet Appels.
+* Choix explicite entre appel audio et appel vidéo avant la sélection du
+  contact.
+* Demande contextuelle des autorisations microphone, caméra et Bluetooth.
+* Mise à jour des mentions de provenance, des notices de licences et de la
+  documentation de conformité de publication.
+* Clarification : le client reste librement utilisable avec un serveur XMPP
+  compatible ; seul l’accès aux serveurs exploités par MAER Engineering exige
+  un compte payant.
+
+### Version 0.4.0 — 24 août 2026
+
+* Navigation basse persistante entre Discussions, Contacts, Groupes et Appels.
+* Ajout de l’historique des appels audio et vidéo.
+* Correction du cadrage du logo d’accueil.
+* Ajout de tests instrumentés sur Android 12.
+
+### Version 0.3.0 — 22 août 2026
+
+* Refonte des conversations avec bulles, fond, barre de saisie et avatars
+  circulaires dans l’identité Maer Chat.
+
+### Version 0.2.0 — 22 août 2026
+
+* Première version Android du fork Maer Chat, issue de Conversations 2.20.1.
+* Identité visuelle, connexion par organisation et informations légales
+  initiales.
+
+## Historique Conversations amont
+
 ### Version 2.20.1
 
 * Add 'Note to self' as search suggestion
