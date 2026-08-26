@@ -18,6 +18,11 @@
             android:exported="false"
             android:label="@string/legal_information" />
         <activity
+            android:name=".ui.LinkedDevicesActivity"
+            android:exported="false"
+            android:label="@string/linked_devices"
+            android:parentActivityName=".ui.activity.SettingsActivity" />
+        <activity
             android:name=".ui.EasyOnboardingInviteActivity"
             android:label="@string/server_invite"
             android:launchMode="singleTask" />

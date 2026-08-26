@@ -1256,4 +1256,26 @@
     <string name="avatar_display_never">Never</string>
     <string name="legal_information">Terms, privacy and licenses</string>
     <string name="legal_information_summary">Paid MAER service, data use, GPL and open-source notices</string>
+    <string name="linked_devices">Linked devices</string>
+    <string name="pref_linked_devices_summary">Link and revoke computers connected to your MAER account</string>
+    <string name="choose_account_for_linked_devices">Choose an online MAER account to view its linked devices.</string>
+    <string name="linked_devices_offline">This MAER account must be online to manage linked devices.</string>
+    <string name="loading_linked_devices">Loading linked devices…</string>
+    <string name="could_not_load_linked_devices">Could not load linked devices. Check the connection and try again.</string>
+    <string name="no_linked_devices">No computer is linked to this account.</string>
+    <string name="associate_linked_device">Link a device</string>
+    <string name="invalid_pairing_qr_code">This is not a valid MAER device QR code.</string>
+    <string name="could_not_inspect_pairing_request">Could not verify this pairing request.</string>
+    <string name="confirm_link_device">Link this computer?</string>
+    <string name="confirm_link_device_message">Computer: %1$s\nPlatform: %2$s\nAccount: %3$s\nCode: %4$s\nExpires: %5$s\n\nCheck that the six-digit code matches the one shown on the computer.</string>
+    <string name="link_device">Link</string>
+    <string name="computer_linked">Computer linked</string>
+    <string name="could_not_link_device">Could not link this computer.</string>
+    <string name="revoke_linked_device">Revoke</string>
+    <string name="revoke_linked_device_description">Revoke %1$s</string>
+    <string name="revoke_linked_device_message">Revoke access for %1$s?</string>
+    <string name="linked_device_revoked">Device revoked</string>
+    <string name="could_not_revoke_linked_device">Could not revoke this device.</string>
+    <string name="linked_device_never_seen">Never</string>
+    <string name="linked_device_details">%1$s · Linked %2$s\nLast active %3$s · Expires %4$s</string>
 </resources>

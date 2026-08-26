@@ -57,6 +57,16 @@ public class ScanResultProcessorTest {
                 .get();
     }
 
+    @Test(expected = ExecutionException.class)
+    public void maerPairingUriIsNotConsumedByXmppQrProcessor()
+            throws ExecutionException, InterruptedException {
+        new ScanResultProcessor(RuntimeEnvironment.getApplication())
+                .process(
+                        "maerchat://pair?v=1&host=xmpp.maer.fr&sid="
+                                + "S1M4g7D8u2kL9pQ3xY6w&code=482913")
+                .get();
+    }
+
     @Test
     public void xmppUriInVCard() throws ExecutionException, InterruptedException {
         final String vCard =

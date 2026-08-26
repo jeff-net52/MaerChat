@@ -1226,4 +1226,26 @@
     <string name="avatar_display_never">Jamais</string>
     <string name="legal_information">Conditions, confidentialité et licences</string>
     <string name="legal_information_summary">Service MAER payant, données, GPL et logiciels libres</string>
+    <string name="linked_devices">Appareils liés</string>
+    <string name="pref_linked_devices_summary">Associer et révoquer les ordinateurs connectés à votre compte MAER</string>
+    <string name="choose_account_for_linked_devices">Choisissez un compte MAER en ligne pour afficher ses appareils liés.</string>
+    <string name="linked_devices_offline">Ce compte MAER doit être en ligne pour gérer ses appareils liés.</string>
+    <string name="loading_linked_devices">Chargement des appareils liés…</string>
+    <string name="could_not_load_linked_devices">Impossible de charger les appareils liés. Vérifiez la connexion puis réessayez.</string>
+    <string name="no_linked_devices">Aucun ordinateur n’est lié à ce compte.</string>
+    <string name="associate_linked_device">Associer un appareil</string>
+    <string name="invalid_pairing_qr_code">Ce QR code n’est pas un code d’appareil MAER valide.</string>
+    <string name="could_not_inspect_pairing_request">Impossible de vérifier cette demande d’association.</string>
+    <string name="confirm_link_device">Associer cet ordinateur ?</string>
+    <string name="confirm_link_device_message">Ordinateur : %1$s\nPlateforme : %2$s\nCompte : %3$s\nCode : %4$s\nExpiration : %5$s\n\nVérifiez que le code à six chiffres correspond à celui affiché sur l’ordinateur.</string>
+    <string name="link_device">Associer</string>
+    <string name="computer_linked">Ordinateur associé</string>
+    <string name="could_not_link_device">Impossible d’associer cet ordinateur.</string>
+    <string name="revoke_linked_device">Révoquer</string>
+    <string name="revoke_linked_device_description">Révoquer %1$s</string>
+    <string name="revoke_linked_device_message">Révoquer l’accès de %1$s ?</string>
+    <string name="linked_device_revoked">Appareil révoqué</string>
+    <string name="could_not_revoke_linked_device">Impossible de révoquer cet appareil.</string>
+    <string name="linked_device_never_seen">Jamais</string>
+    <string name="linked_device_details">%1$s · Associé le %2$s\nDernière activité %3$s · Expire le %4$s</string>
 </resources>

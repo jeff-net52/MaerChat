@@ -7,6 +7,11 @@
         app:summary="@string/pref_account_and_profile_summary"
         app:title="@string/pref_account_and_profile" />
     <Preference
+        android:icon="@drawable/ic_devices_24dp"
+        android:key="linked_devices"
+        app:summary="@string/pref_linked_devices_summary"
+        app:title="@string/linked_devices" />
+    <Preference
         android:icon="@drawable/ic_touch_app_24dp"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.InterfaceSettingsFragment"
         app:summary="@string/pref_summary_appearance"

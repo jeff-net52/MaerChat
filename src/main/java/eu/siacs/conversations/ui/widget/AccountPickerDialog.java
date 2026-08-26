@@ -9,6 +9,7 @@ import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.ui.XmppActivity;
 import eu.siacs.conversations.xmpp.XmppConnection;
 import eu.siacs.conversations.xmpp.manager.EasyOnboardingManager;
+import eu.siacs.conversations.xmpp.manager.LinkedDevicesManager;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -91,6 +92,17 @@ public class AccountPickerDialog {
     public static class Enabled extends AccountPickerDialog {
         public Enabled(final XmppActivity xmppActivity) {
             super(xmppActivity, xmppConnection -> true);
+        }
+    }
+
+    public static class LinkedDevices extends AccountPickerDialog {
+        public LinkedDevices(final XmppActivity xmppActivity) {
+            super(
+                    xmppActivity,
+                    xmppConnection ->
+                            xmppConnection
+                                    .getManager(LinkedDevicesManager.class)
+                                    .isAvailable());
         }
     }
 }
