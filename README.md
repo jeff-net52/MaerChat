@@ -1,17 +1,16 @@
 <h1 align="center">Maer Chat</h1>
 
-<p align="center">Messagerie Android privée, personnalisable et multi-organisation</p>
+<p align="center">Messagerie Android privée pour la suite de communication MAER</p>
 
 Maer Chat est un fork GPLv3 de Conversations. Il conserve son moteur XMPP, OMEMO,
 MAM, notifications, transferts de fichiers et appels Jingle éprouvé, avec une
-identité propre, une connexion simplifiée et un sélecteur d’organisation qui
-associe chaque offre à son domaine XMPP. Le mode avancé permet toujours
-d’utiliser un JID complet.
+identité propre et une connexion simplifiée. L’utilisateur saisit uniquement son
+nom ; l’application construit systématiquement l’adresse canonique
+`utilisateur@xmpp.maer.fr`.
 
 ## Captures d’écran
 
 <p align="center">
-  <img src="docs/maer-chat/screenshots/welcome.png" alt="Connexion et sélection de l’organisation dans Maer Chat" width="300">
   <img src="docs/maer-chat/screenshots/legal.png" alt="Conditions, confidentialité et licences dans Maer Chat" width="300">
 </p>
 
@@ -26,11 +25,10 @@ d’utiliser un JID complet.
 - Serveur : [MAER XMPP Server](https://github.com/jeff-net52/MAER-XMPP-Server),
   basé sur ejabberd Community Server 26.07
 
-Le catalogue livré sélectionne par défaut l’organisation **MAER Engineering**
-et le domaine `xmpp.maer.fr`. Les intégrateurs peuvent ajouter des
-organisations publiques au catalogue sans embarquer d’identifiants ni de
-secrets. Pour une isolation maximale, l’offre serveur dédiée sépare instance,
-base, fichiers, certificats et sauvegardes pour chaque client.
+La distribution MAER applique le domaine canonique `xmpp.maer.fr` à tous les
+chemins sensibles : saisie, reprise d’un compte en attente, certificat client et
+restauration de sauvegarde. Un compte historique d’un autre domaine n’est ni
+prérempli ni supprimé implicitement.
 
 Compilation rapide :
 

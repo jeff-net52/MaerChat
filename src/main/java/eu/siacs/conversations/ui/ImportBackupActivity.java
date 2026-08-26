@@ -31,6 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import eu.siacs.conversations.BuildConfig;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityImportBackupBinding;
@@ -383,6 +384,7 @@ public class ImportBackupActivity extends ActionBarActivity
                         switch (reason) {
                             case DECRYPTION_FAILED -> onBackupDecryptionFailed();
                             case ACCOUNT_ALREADY_EXISTS -> onAccountAlreadySetup();
+                            case NON_MAER_ACCOUNT -> onNonMaerAccount();
                             default -> onBackupRestoreFailed();
                         }
                     } else if (state == WorkInfo.State.SUCCEEDED) {
@@ -403,6 +405,16 @@ public class ImportBackupActivity extends ActionBarActivity
 
     private void onAccountAlreadySetup() {
         Snackbar.make(binding.coordinator, R.string.account_already_setup, Snackbar.LENGTH_LONG)
+                .show();
+    }
+
+    private void onNonMaerAccount() {
+        Snackbar.make(
+                        binding.coordinator,
+                        getString(
+                                R.string.maer_backup_account_domain_not_supported,
+                                BuildConfig.DEFAULT_XMPP_DOMAIN),
+                        Snackbar.LENGTH_LONG)
                 .show();
     }
 

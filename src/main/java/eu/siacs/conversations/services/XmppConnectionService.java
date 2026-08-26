@@ -91,6 +91,7 @@ import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.Compatibility;
 import eu.siacs.conversations.utils.ConversationsFileObserver;
 import eu.siacs.conversations.utils.CryptoHelper;
+import eu.siacs.conversations.utils.MaerAccountPolicy;
 import eu.siacs.conversations.utils.MimeUtils;
 import eu.siacs.conversations.utils.NetworkManager;
 import eu.siacs.conversations.utils.PhoneHelper;
@@ -2414,6 +2415,10 @@ public class XmppConnectionService extends Service {
                                 Pair<Jid, String> info = CryptoHelper.extractJidAndName(cert);
                                 if (info == null) {
                                     callback.informUser(R.string.certificate_does_not_contain_jid);
+                                    return;
+                                }
+                                if (!MaerAccountPolicy.isCanonical(info.first)) {
+                                    callback.informUser(R.string.maer_account_domain_not_supported);
                                     return;
                                 }
                                 if (findAccountByJid(info.first) == null) {

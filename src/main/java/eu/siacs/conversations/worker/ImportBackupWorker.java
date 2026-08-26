@@ -39,6 +39,7 @@ import eu.siacs.conversations.services.QuickConversationsService;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.BackupFileHeader;
+import eu.siacs.conversations.utils.MaerAccountPolicy;
 import eu.siacs.conversations.xmpp.Jid;
 import im.conversations.android.json.Services;
 import java.io.BufferedReader;
@@ -177,6 +178,10 @@ public class ImportBackupWorker extends Worker {
             final CountingInputStream countingInputStream = new CountingInputStream(inputStream);
             final DataInputStream dataInputStream = new DataInputStream(countingInputStream);
             backupFileHeader = BackupFileHeader.read(dataInputStream);
+
+            if (!MaerAccountPolicy.isCanonical(backupFileHeader.getJid())) {
+                return failure(Reason.NON_MAER_ACCOUNT);
+            }
 
             final var accounts = database.getAccountAddresses();
 
@@ -416,6 +421,7 @@ public class ImportBackupWorker extends Worker {
         ACCOUNT_ALREADY_EXISTS,
         DECRYPTION_FAILED,
         FILE_NOT_FOUND,
+        NON_MAER_ACCOUNT,
         GENERIC;
 
         public static Reason valueOfOrGeneric(final String value) {

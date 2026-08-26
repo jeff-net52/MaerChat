@@ -27,9 +27,7 @@ public class LinkedDevicesManagerTest {
     private static final String DEVICE_ID = "device_1234567890abcdef";
     private static final MaerPairingUri PAIRING_URI =
             MaerPairingUri.parse(
-                    "maerchat://pair?v=1&host=xmpp.maer.fr&sid="
-                            + SESSION
-                            + "&code=482913");
+                    "maerchat://pair?v=1&host=xmpp.maer.fr&sid=" + SESSION + "&code=482913");
 
     @Test
     public void buildsExactInspectIq() {
@@ -56,8 +54,7 @@ public class LinkedDevicesManagerTest {
         assertEquals(Iq.Type.GET, devicesIq.getType());
         assertEquals(DOMAIN, devicesIq.getTo());
         assertEquals(
-                "urn:maer:pairing:1",
-                devicesIq.getOnlyExtension(Devices.class).getNamespace());
+                "urn:maer:pairing:1", devicesIq.getOnlyExtension(Devices.class).getNamespace());
 
         final var revokeIq = LinkedDevicesManager.buildRevoke(DOMAIN, DEVICE_ID);
         final var revoke = revokeIq.getOnlyExtension(Revoke.class);
@@ -72,7 +69,7 @@ public class LinkedDevicesManagerTest {
                 IllegalArgumentException.class,
                 () ->
                         LinkedDevicesManager.buildInspect(
-                                Jid.ofDomain("contacts.chaumont.me"), PAIRING_URI));
+                                Jid.ofDomain("legacy.example"), PAIRING_URI));
     }
 
     @Test
@@ -84,8 +81,7 @@ public class LinkedDevicesManagerTest {
         session.setAttribute("expires", "2026-08-26T13:00:00Z");
 
         final var result =
-                LinkedDevicesManager.parseSession(
-                        new Iq(Iq.Type.RESULT, session), SESSION);
+                LinkedDevicesManager.parseSession(new Iq(Iq.Type.RESULT, session), SESSION);
 
         assertEquals("PC Atelier", result.getLabel());
         assertEquals("windows", result.getPlatform());
@@ -97,8 +93,7 @@ public class LinkedDevicesManagerTest {
         final var approved = new Approved();
         approved.setAttribute("device-id", DEVICE_ID);
         assertEquals(
-                DEVICE_ID,
-                LinkedDevicesManager.parseApproved(new Iq(Iq.Type.RESULT, approved)));
+                DEVICE_ID, LinkedDevicesManager.parseApproved(new Iq(Iq.Type.RESULT, approved)));
 
         final var revoked = new Revoked();
         revoked.setAttribute("device-id", DEVICE_ID);
@@ -144,9 +139,7 @@ public class LinkedDevicesManagerTest {
         duplicateDevices.addExtension(device(DEVICE_ID));
         assertThrows(
                 LinkedDevicesManager.MalformedResponseException.class,
-                () ->
-                        LinkedDevicesManager.parseDevices(
-                                new Iq(Iq.Type.RESULT, duplicateDevices)));
+                () -> LinkedDevicesManager.parseDevices(new Iq(Iq.Type.RESULT, duplicateDevices)));
 
         final var wrongRevoked = new Revoked();
         wrongRevoked.setAttribute("device-id", "device_abcdef1234567890");

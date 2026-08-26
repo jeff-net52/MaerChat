@@ -942,6 +942,8 @@
     <string name="outdated_backup_file_format">You are trying to import an outdated backup file format</string>
     <string name="non_quicksy_backup">Quicksy can only restore backups for quicksy.im accounts</string>
     <string name="account_already_setup">This account has already been setup</string>
+    <string name="maer_account_domain_not_supported">Only accounts on xmpp.maer.fr are supported.</string>
+    <string name="maer_backup_account_domain_not_supported">This backup is not for an account on %1$s and cannot be restored.</string>
     <string name="please_enter_password">Please enter the password for this account</string>
     <string name="unable_to_perform_this_action">Could not perform this action</string>
     <string name="open_join_dialog">Join public channel…</string>

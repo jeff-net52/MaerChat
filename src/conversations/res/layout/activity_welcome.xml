@@ -67,38 +67,11 @@
                         android:padding="20dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/organization_layout"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/maer_organization">
-
-                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                                android:id="@+id/organization"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:importantForAutofill="no"
-                                android:inputType="none"
-                                android:maxLines="1" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:id="@+id/organization_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginEnd="16dp"
-                            android:text="@string/maer_organization_summary"
-                            android:textAppearance="?textAppearanceBodySmall" />
-
-                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/account_identifier_layout"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="4dp"
                             android:hint="@string/username"
                             app:errorEnabled="true">
 
@@ -213,15 +186,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:text="@string/connect" />
-
-                        <Button
-                            android:id="@+id/advanced_login_toggle"
-                            style="@style/Widget.Material3.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/maer_login_use_complete_jid" />
 
                     </LinearLayout>
 

@@ -14,9 +14,7 @@ public class MaerPairingUriTest {
     public void parsesValidUriIndependentOfQueryOrder() {
         final var pairingUri =
                 MaerPairingUri.parse(
-                        "maerchat://pair?code=482913&host=xmpp.maer.fr&sid="
-                                + SESSION
-                                + "&v=1");
+                        "maerchat://pair?code=482913&host=xmpp.maer.fr&sid=" + SESSION + "&v=1");
 
         assertEquals("xmpp.maer.fr", pairingUri.getHost());
         assertEquals(SESSION, pairingUri.getSessionId());
@@ -33,12 +31,13 @@ public class MaerPairingUriTest {
         assertInvalid("maerchat://user@pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1");
         assertInvalid("maerchat://pair:443?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1");
         assertInvalid("maerchat://pair/?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1");
-        assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1#fragment");
+        assertInvalid(
+                "maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1#fragment");
     }
 
     @Test
     public void rejectsInvalidContractValues() {
-        assertInvalid("maerchat://pair?host=contacts.chaumont.me&sid=" + SESSION + "&code=482913&v=1");
+        assertInvalid("maerchat://pair?host=legacy.example&sid=" + SESSION + "&code=482913&v=1");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=2");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=too-short&code=482913&v=1");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=12345&v=1");
@@ -47,8 +46,12 @@ public class MaerPairingUriTest {
 
     @Test
     public void rejectsAmbiguousQueries() {
-        assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&code=482913&v=1");
-        assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1&extra=x");
+        assertInvalid(
+                "maerchat://pair?host=xmpp.maer.fr&sid="
+                        + SESSION
+                        + "&code=482913&code=482913&v=1");
+        assertInvalid(
+                "maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1&extra=x");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1&");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=%31");
         assertInvalid("maerchat://pair?host=xmpp.maer.fr&sid=" + SESSION + "&code=482913&v=1+0");
