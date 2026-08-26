@@ -64,39 +64,38 @@ posséder sa propre configuration applicative et un relais push compatible ; voi
 ## État du build validé
 
 Le build courant utilise `compileSdk` et `targetSdk` 37. Sa suite unitaire
-compte **163 tests réussis**, sans échec ni test ignoré. L’analyse Lint finale
-ne signale aucune nouvelle anomalie : **647 constats amont** sont filtrés par la
-baseline et `warningsAsErrors` rend toute nouvelle alerte hors baseline
-bloquante.
+compte **178 tests réussis**, sans échec. L’assemblage
+`conversationsFreeRelease` minifié réussit et produit cinq APK dont le nom se
+termine explicitement par `release-unsigned`.
+
+Le portail de publication reste toutefois rouge : `spotlessCheck` signale des
+écarts préexistants dans 14 fichiers Java, et `lintConversationsFreeDebug`
+signale 8 erreurs hors baseline (une mise à niveau disponible d’AGP et sept
+ressources MAER devenues inutilisées). Les 645 constats amont restants sont
+filtrés par la baseline. Ces contrôles doivent passer sans régénération aveugle
+de la baseline avant toute livraison.
 
 Le test instrumenté de navigation passe également sur l’émulateur Android
 API 31 : **1 test réussi**, sans échec ni erreur.
 
-L’APK Debug ARM64 0.5.0 a été installée sur un Samsung XCover 7 SM-G556B sous
-Android 16/API 36. La précédente Release de développement 0.4.0 employait une
-autre clé : Android a correctement refusé la mise à jour, puis la 0.4.0 a été
-désinstallée avec autorisation explicite avant l’installation neuve de la 0.5.0.
-Android a confirmé `0.5.0+free`, code 504. L’activité d’accueil a démarré et
-aucune exception `AndroidRuntime` n’a été produite. Les scénarios nécessitant
-une session XMPP authentifiée restent soumis aux limites détaillées dans
+Une APK Debug ARM64 0.5.0 antérieure a été installée sur un Samsung XCover 7
+SM-G556B sous Android 16/API 36. Cette validation historique démontre la
+procédure d’installation neuve ; elle ne qualifie ni les APK Debug du build
+courant, ni une future Release de production. Aucun appareil n’était connecté
+pendant le contrôle du présent état des sources. Les scénarios nécessitant une
+session XMPP authentifiée restent soumis aux limites détaillées dans
 [`TESTING.md`](TESTING.md).
 
-## Artefacts historiques locaux — version 0.4.0
+## Artefacts Debug et historiques
 
-Les APK ARM64 et universelle de validation se trouvent dans le répertoire local
-ignoré `dist/`. Elles ne sont pas publiées avec le dépôt source :
+Les APK 0.4.0 signées avec une clé de développement et toutes les APK 0.5.0
+Debug sont des artefacts de test **non publiables**. Le dépôt ne conserve plus
+leurs anciennes empreintes comme s’il s’agissait d’une livraison. Le fichier
+[`../../dist/0.5.0/MANIFEST.md`](../../dist/0.5.0/MANIFEST.md) décrit les preuves
+à produire pour une future Release.
 
-| Fichier | Taille | SHA-256 |
-|---|---:|---|
-| `Maer-Chat-0.4.0-arm64-release-dev-signed.apk` | 32 211 653 octets | `31a61d5fec62a0c25b034297db7791d326b87d34cddd91f2e7cb2b37f3ba342a` |
-| `Maer-Chat-0.4.0-universal-release-dev-signed.apk` | 62 567 602 octets | `39a6ceaca8235677bcedc10573bb499be43a1d27f3733aa88cfac32831fc860d` |
-
-L’identité vérifiée de l’application est `fr.maer.chat`, version affichée
-`0.4.0+free`, avec `minSdk` 23 et `targetSdk` 37. Le code de version vaut `404`
-pour l’APK ARM64 et `400` pour l’universelle. Les deux Releases sont alignées et
-leur signature de développement est valide avec les schémas APK v1, v2 et v3.
-L’empreinte SHA-256 du certificat est
-`88b31196c797cae22b75b838c078a95a886fcf94bace75c8f958d52d106f7f4d`,
-identique à la version 0.1.0 de développement afin de permettre une mise à jour
-sans perte de données. Cette clé doit être remplacée par une clé privée de
-production pérenne avant toute publication sur un magasin d’applications.
+L’identité de l’application candidate reste `fr.maer.chat`, avec `minSdk` 23 et
+`targetSdk` 37. Les codes de version attendus sont `500` pour l’APK universelle
+et `504` pour l’APK ARM64. Une clé privée de production pérenne, distincte de
+toute clé Debug ou de développement historique, doit être établie avant toute
+publication sur un magasin d’applications.

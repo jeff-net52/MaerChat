@@ -27,6 +27,8 @@ require_file LICENSE
 require_file NOTICE.md
 require_file THIRD_PARTY_NOTICES.md
 require_file TRADEMARKS.md
+require_file conversations.doap
+require_file dist/0.5.0/MANIFEST.md
 require_file "fastlane/metadata/android/fr-FR/changelogs/${fastlane_code}.txt"
 require_file "fastlane/metadata/android/en-US/changelogs/${fastlane_code}.txt"
 require_file src/conversations/res/raw/gpl_v3.txt
@@ -42,6 +44,20 @@ require_text NOTICE.md "Maer Chat ${version_name}"
 require_text THIRD_PARTY_NOTICES.md "Maer Chat ${version_name}"
 require_text CHANGELOG.md "Version ${version_name}"
 require_text src/conversations/res/raw/release_notes.txt "VERSION ${version_name}"
+require_text conversations.doap "<name>MAER Chat</name>"
+require_text conversations.doap "https://github.com/jeff-net52/MaerChat.git"
+require_text conversations.doap "https://github.com/jeff-net52/MaerChat/issues"
+require_text conversations.doap "https://codeberg.org/iNPUTmice/Conversations"
+require_text dist/0.5.0/MANIFEST.md "AUCUN ARTEFACT DE CE DOSSIER N’EST PUBLIABLE"
+
+if git remote get-url upstream >/dev/null 2>&1; then
+    upstream_push_url="$(git remote get-url --push upstream)"
+    if [[ "$upstream_push_url" != "https://upstream-push-disabled.invalid/Conversations.git" ]]; then
+        printf 'ERREUR: le push du remote upstream n’est pas neutralisé: %s\n' \
+            "$upstream_push_url" >&2
+        errors=$((errors + 1))
+    fi
+fi
 
 if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
     expected_tag="v${version_name}"

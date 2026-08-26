@@ -21,7 +21,23 @@ modernisation se fait par ressources, composants et façades incrémentales.
 
 ## Mise à jour amont
 
-1. Ajouter ou actualiser le remote officiel Codeberg.
+Le remote `upstream` est réservé à la lecture. Pour éviter qu’une commande
+exécutée dans le mauvais terminal publie le fork sur le dépôt Conversations,
+chaque clone de maintenance doit conserver cette configuration locale :
+
+```shell
+git remote set-url upstream https://codeberg.org/iNPUTmice/Conversations.git
+git remote set-url --push upstream https://upstream-push-disabled.invalid/Conversations.git
+```
+
+Le suffixe `.invalid` est réservé et ne peut pas désigner un serveur Git réel.
+`git fetch upstream` continue donc à lire Codeberg, tandis que
+`git push upstream` échoue avant tout envoi. Cette protection appartient à la
+configuration locale du clone et doit être réappliquée après un nouveau clone.
+La publication du fork utilise exclusivement `origin`, après les contrôles et
+l’autorisation de livraison.
+
+1. Vérifier les URL de lecture et de push avec `git remote -v`.
 2. Lire le changelog et les migrations de base avant toute fusion.
 3. Fusionner sur une branche temporaire, sans écraser l’identité, la politique
    TLS, le stockage sécurisé ni le parcours de connexion Maer Chat.

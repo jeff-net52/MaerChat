@@ -31,17 +31,20 @@ nécessitent aucun identifiant :
 
 ## État de la validation locale
 
-La suite unitaire complète compte **163 tests réussis** avec `compileSdk` et
+La suite unitaire complète compte **178 tests réussis** avec `compileSdk` et
 `targetSdk` réglés sur l’API 37. Les tests Android hors appareil s’exécutent avec
 un runtime Robolectric API 36 ; ce niveau de runtime ne modifie pas la cible API
 37 de l’application.
 
-L’analyse Lint finale ne signale aucune nouvelle anomalie hors baseline. La
-baseline explicite fige **647 constats amont** encore présents ; avec
-`warningsAsErrors`, toute nouvelle erreur ou tout nouvel avertissement non
-baseliné fait échouer le contrôle.
+`lintConversationsFreeDebug` échoue actuellement sur **8 erreurs hors
+baseline** : une alerte de version AGP et sept chaînes MAER inutilisées après la
+simplification de la connexion. **645 constats amont** restent filtrés par la
+baseline. `spotlessCheck` échoue également sur le format de 14 fichiers Java
+préexistants. Ces dettes ne sont pas masquées et restent bloquantes pour la
+publication, même si `lintVitalConversationsFreeRelease` est vert.
 
-L’APK distribuée a été installée et démarrée sur un émulateur Android API 31.
+Une APK Debug de validation, non publiable, a été installée et démarrée sur un
+émulateur Android API 31.
 L’écran de connexion a été exercé avec des identifiants entièrement fictifs :
 l’échec est affiché proprement, sans fermeture inattendue. Une capture demandée
 avec `adb` sur ce build a produit **zéro octet**, ce qui confirme l’application
@@ -57,13 +60,9 @@ sans échec ni erreur.
 Pour la version 0.5.0, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
 et `targetSdk` 37. Le code visible attendu est `500` pour l’APK universelle et
 `504` pour l’APK ARM64 : Gradle multiplie le `versionCode` 5 par 100 puis ajoute
-le suffixe propre à l’ABI. Les précédentes APK Release de développement 0.4.0
-ont été alignées puis vérifiées avec les Build Tools 37. Elles portent le même
-certificat de développement que les versions 0.1.0 à 0.4.0 et valident les
-schémas de signature v1, v2 et v3. Leurs empreintes SHA-256 historiques sont :
-
-- ARM64 : `31A61D5FEC62A0C25B034297DB7791D326B87D34CDDD91F2E7CB2B37F3BA342A` ;
-- universelle : `39A6CEACA8235677BCEDC10573BB499BE43A1D27F3733AA88CFAC32831FC860D`.
+le suffixe propre à l’ABI. Les anciennes APK 0.4.0 signées avec une clé de
+développement et les APK 0.5.0 Debug sont explicitement **non publiables** ;
+leurs anciennes empreintes ne constituent pas une preuve de Release.
 
 Le désassemblage des deux DEX de la Release 0.2.0 après R8 ne contient aucun
 appel émetteur à
@@ -106,13 +105,16 @@ au moins deux appareils ou instances. Les secrets sont saisis manuellement ou
 injectés par un coffre CI, jamais committés. Une fonction non testable faute de
 capacité serveur est notée « non vérifiée » et non « réussie ».
 
-L’APK Debug ARM64 0.5.0 a été installée sur un Samsung XCover 7 SM-G556B sous
-Android 16/API 36. Android a d’abord refusé la mise à jour de la Release 0.4.0,
+À titre historique, une APK Debug ARM64 0.5.0 a été installée sur un Samsung
+XCover 7 SM-G556B sous Android 16/API 36. Android a d’abord refusé la mise à
+jour de la Release 0.4.0,
 car sa signature de développement historique différait de la clé Debug locale.
 Après autorisation explicite, la 0.4.0 et ses données locales ont été supprimées,
 puis la 0.5.0 a été installée comme nouvelle application. Le gestionnaire de
 paquets a confirmé `0.5.0+free`, code 504 ; l’activité `WelcomeActivity` et le
 processus sont restés actifs et aucun plantage `AndroidRuntime` n’a été relevé.
+Cet essai portait sur un artefact de test antérieur ; il ne qualifie pas le
+commit courant et ne doit pas être cité comme validation d’une Release.
 
 La capture automatisée de l’interface n’a pas été possible : `FLAG_SECURE`
 protège l’écran et l’appareil s’est reverrouillé. Cette limite n’affecte ni

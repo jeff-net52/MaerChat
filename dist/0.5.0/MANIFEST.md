@@ -1,14 +1,26 @@
-# APK Android 0.5.0 testée
+# Maer Chat 0.5.0 — artefacts retirés de la publication
 
-Ce dossier conserve l'APK ARM64 Debug exacte utilisée pour la validation physique
-documentée de Maer Chat 0.5.0. Il s'agit d'un artefact de test, pas d'une Release
-de production.
+> **AUCUN ARTEFACT DE CE DOSSIER N’EST PUBLIABLE.**
 
-- Fichier : `fr.maer.chat-0.5.0-conversations-free-arm64-v8a-debug.apk`
-- Taille : `48 856 173` octets
-- SHA-256 : `280114B10C4C7B571EE18862D5701BC56A68FA57B0A69D2E9456783DF514491C`
-- Dernière modification d'origine : `2026-08-24 19:44:04` (Europe/Paris)
-- Chemin d'origine : `build/outputs/apk/conversationsFree/debug/`
+Ce dossier ne contient actuellement aucun APK. Son ancien manifeste référençait
+une APK Debug ARM64 qui n’est plus présente et dont l’empreinte ne décrit pas
+les sorties du build courant. Cette ancienne empreinte est donc retirée pour
+éviter qu’elle soit confondue avec une preuve de livraison.
 
-Le fichier a été copié avant le nettoyage des sorties Gradle, sans modifier son
-horodatage de création ni de dernière modification.
+Les fichiers produits sous
+`build/outputs/apk/conversationsFree/debug/` sont signés avec la clé Debug
+locale, varient selon l’environnement de compilation et servent uniquement aux
+tests. Ils ne doivent être ni publiés, ni renommés en Release, ni versés sur un
+magasin d’applications.
+
+Une future livraison 0.5.0 exige un manifeste neuf, généré depuis le commit ou
+tag immuable effectivement compilé, et doit identifier au minimum :
+
+- la variante `conversationsFreeRelease` exacte ;
+- le commit et le tag source signés ;
+- le nom, la taille et le SHA-256 de chaque APK publiée ;
+- l’empreinte du certificat de production et les schémas de signature validés ;
+- le rapport de dépendances/licences et les résultats de tests associés.
+
+Les blocages juridiques et techniques restants sont suivis dans
+[`../../docs/maer-chat/RELEASE_COMPLIANCE.md`](../../docs/maer-chat/RELEASE_COMPLIANCE.md).

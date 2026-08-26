@@ -1,10 +1,14 @@
 # Maer Chat — composants tiers et obligations de distribution
 
-> **Inventaire de travail, non exhaustif.** Il décrit le graphe de dépendances
-> déclaré pour Maer Chat 0.5.0 au 24 août 2026 et les mentions déjà présentes
-> dans le projet. Les fichiers de licence et métadonnées de chaque version
-> effectivement résolue font foi. Un contrôle automatisé du binaire final reste
-> nécessaire avant chaque publication.
+> **Inventaire de travail, volontairement non exhaustif.** Il rapproche les
+> dépendances déclarées dans `build.gradle`, le graphe Gradle résolu pour
+> `conversationsFreeReleaseRuntimeClasspath` le 27 août 2026 et les
+> métadonnées POM disponibles pour les versions résolues. Il ne constitue ni un
+> SBOM du binaire final, ni une preuve que tous les avis transitifs ou natifs ont
+> été collectés. Les fichiers de licence et avis contenus dans chaque artefact
+> effectivement publié font foi.
+
+Cet état de travail concerne Maer Chat 0.5.0.
 
 ## Base amont et licence du programme
 
@@ -22,16 +26,19 @@ en amont par Daniel Gultsch et ses contributeurs.
 Le fait que l’accès au service de messagerie MAER soit payant ne modifie pas la
 licence GPLv3+ du logiciel.
 
-## Principales bibliothèques intégrées
+## Dépendances identifiées dans la variante candidate
 
-Le build Android `conversations/free` déclare notamment les composants suivants.
-Les regroupements ci-dessous sont destinés à faciliter l’audit ; ils ne
-remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
+Le build Android `conversations/free` déclare directement une partie des
+composants suivants ; les éléments signalés comme transitifs proviennent du
+graphe Gradle résolu. Les regroupements de licences reprennent les métadonnées
+POM et les avis présents dans le dépôt : ils facilitent l’audit mais ne
+remplacent ni les textes de licence, ni les fichiers `NOTICE`, ni l’inspection
+du contenu exact des AAR/JAR intégrés.
 
 ### Apache License 2.0
 
-- AndroidX / Android Jetpack, y compris AppCompat, WorkManager, Preference,
-  Emoji2 et les autres modules déclarés dans `build.gradle` ;
+- AndroidX / Android Jetpack, y compris AppCompat, WorkManager, Preference et
+  Emoji2, ainsi que leurs modules AndroidX transitifs résolus ;
 - Material Components for Android 1.14.0 ;
 - OpenKeychain OpenPGP API 5.7.1 ;
 - Immutables 2.12.2 ;
@@ -47,6 +54,7 @@ remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
 - ShortcutBadger 1.1.22 ;
 - Conscrypt Android 2.5.3 ;
 - JXMPP 1.1.0 ;
+- MiniDNS 1.1.1 : les POM des artefacts résolus déclarent Apache License 2.0 ;
 - osmdroid Android 6.1.20 ;
 - les outils de désucrage Android `desugar_jdk_libs` 2.1.5 ;
 - Kotlin standard library 2.2.21 et Kotlin Coroutines 1.9.0 ;
@@ -58,11 +66,9 @@ remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
 
 - Bouncy Castle 1.84 : licence permissive de type MIT fournie par le projet ;
 - HSLuv Java 1.0 : licence MIT ;
-- MiniDNS 1.1.1 : fichiers du projet sous choix de licences, notamment Apache
-  License 2.0, LGPL 2.1 ou ultérieure, ou WTFPL selon les sources concernées ;
 - WebRTC Android 129.0.0 : le paquet de distribution d’iNPUTmice déclare Apache
-  2.0 et MIT ; le moteur WebRTC conserve son avis BSD 3 clauses et ses notices
-  tierces propres ;
+  2.0 et MIT dans son POM ; le moteur WebRTC conserve son avis BSD 3 clauses et
+  des notices tierces propres qui doivent être extraites de l’artefact livré ;
 - Protocol Buffers Java 2.5.0 : licence BSD 3 clauses ;
 - les données Unicode/emoji incorporées par Jemoji : conserver les attributions
   et conditions de l’artefact effectivement résolu.
@@ -77,7 +83,7 @@ remplacent ni leurs textes de licence ni leurs fichiers `NOTICE` respectifs.
 
 ## Textes embarqués dans le client
 
-L’écran « Conditions, confidentialité et licences » de la variante distribuée
+L’écran « Conditions, confidentialité et licences » de la variante candidate
 donne accès hors ligne :
 
 - à la GNU GPLv3 complète ;
@@ -89,7 +95,9 @@ donne accès hors ligne :
 
 Ces textes ne dispensent pas de conserver les éventuels fichiers `NOTICE`, avis
 additionnels et licences des composants natifs et données embarquées dans
-l’archive exacte publiée.
+l’archive exacte publiée. En particulier, les notices tierces complètes du
+binaire WebRTC, les données Unicode/emoji et tout code natif doivent encore
+être inventoriés automatiquement avant une publication binaire.
 
 Les variantes Quicksy et Play Store sont exclues du produit Maer Chat actuel.
 Leurs dépendances conditionnelles ne doivent être déclarées comme distribuées
@@ -138,6 +146,10 @@ Pour chaque APK ou autre binaire distribué :
    ressources graphiques dans la distribution ;
 8. vérifier séparément les droits d’utilisation des polices, icônes, images,
    sons, cartes, tuiles et marques ajoutés au fork.
+
+Tant que les étapes 1 à 4 ne sont pas archivées pour l’APK Release exacte, cet
+inventaire ne doit pas être présenté comme exhaustif ni comme une validation de
+publication.
 
 Ce document est une aide de conformité technique et ne constitue pas un avis
 juridique.

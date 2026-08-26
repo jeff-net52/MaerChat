@@ -2,39 +2,24 @@
 <?xml-stylesheet href="../style.xsl" type="text/xsl"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <Project xmlns="http://usefulinc.com/ns/doap#"
-         xmlns:foaf="http://xmlns.com/foaf/0.1/"
          xmlns:xmpp="https://linkmauve.fr/ns/xmpp-doap#"
          xmlns:schema="https://schema.org/">
-    <name>Conversations</name>
+    <name>MAER Chat</name>
 
-    <created>2014-01-14</created>
+    <shortdesc xml:lang="fr">Client XMPP Android de la suite MAER</shortdesc>
+    <shortdesc xml:lang="en">Android XMPP client for the MAER suite</shortdesc>
 
-    <shortdesc xml:lang="en">Android XMPP Client</shortdesc>
+    <description xml:lang="fr">MAER Chat est un fork libre de Conversations, adapté au domaine canonique xmpp.maer.fr.</description>
+    <description xml:lang="en">MAER Chat is a free-software fork of Conversations, adapted for the canonical xmpp.maer.fr domain.</description>
 
-    <description xml:lang="en">Conversations is an open source XMPP/Jabber client for the Android platform</description>
-
-    <homepage rdf:resource="https://conversations.im/"/>
-    <download-page rdf:resource="https://play.google.com/store/apps/details?id=eu.siacs.conversations"/>
-    <bug-database rdf:resource="https://codeberg.org/iNPUTmice/Conversations/issues"/>
-    <!-- See https://github.com/ewilderj/doap/issues/53 -->
-    <developer-forum rdf:resource="xmpp:conversations@conference.siacs.eu?join"/>
-    <support-forum rdf:resource="xmpp:conversations@conference.siacs.eu?join"/>
-
-    <license rdf:resource="https://codeberg.org/iNPUTmice/Conversations/src/branch/master/LICENSE"/>
+    <homepage rdf:resource="https://github.com/jeff-net52/MaerChat"/>
+    <bug-database rdf:resource="https://github.com/jeff-net52/MaerChat/issues"/>
+    <license rdf:resource="https://github.com/jeff-net52/MaerChat/blob/main/LICENSE"/>
+    <schema:isBasedOn rdf:resource="https://codeberg.org/iNPUTmice/Conversations"/>
 
     <!-- See https://github.com/ewilderj/doap/issues/49 -->
+    <language>fr</language>
     <language>en</language>
-
-    <schema:logo rdf:resource="https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/art/ic_launcher.svg"/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/01.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/02.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/03.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/04.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/05.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/06.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/07.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/08.png'/>
-    <schema:screenshot rdf:resource='https://codeberg.org/iNPUTmice/Conversations/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/09.png'/>
 
     <programming-language>Java</programming-language>
 
@@ -44,19 +29,12 @@
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-jabber"/>
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client"/>
 
-    <maintainer>
-        <foaf:Person>
-            <foaf:name>Daniel Gultsch</foaf:name>
-            <foaf:homepage rdf:resource="https://gultsch.de/"/>
-        </foaf:Person>
-    </maintainer>
-
     <repository>
         <GitRepository>
-            <browse rdf:resource="https://codeberg.org/iNPUTmice/Conversations"/>
-            <location rdf:resource="https://codeberg.org/iNPUTmice/Conversations.git"/>
+            <browse rdf:resource="https://github.com/jeff-net52/MaerChat"/>
+            <location rdf:resource="https://github.com/jeff-net52/MaerChat.git"/>
         </GitRepository>
-    </repository> 
+    </repository>
 
     <implements rdf:resource="https://xmpp.org/rfcs/rfc6120.html"/>
     <implements rdf:resource="https://xmpp.org/rfcs/rfc6121.html"/>
@@ -589,9 +567,8 @@
 
     <release>
         <Version>
-            <revision>2.17.10</revision>
-            <created>2025-02-04</created>
-            <file-release rdf:resource="https://codeberg.org/iNPUTmice/Conversations/archive/2.17.10.tar.gz"/>
+            <revision>0.5.0</revision>
+            <created>2026-08-24</created>
         </Version>
     </release>
 </Project>

@@ -1,6 +1,6 @@
 # Dossier de conformité de publication — Maer Chat 0.5.0
 
-> État au 24 août 2026. Ce dossier organise les preuves techniques et les
+> État au 27 août 2026. Ce dossier organise les preuves techniques et les
 > décisions restant à prendre. Il ne remplace pas une consultation juridique et
 > n’autorise pas à présenter la version comme juridiquement validée tant que les
 > blocages indiqués ci-dessous ne sont pas levés.
@@ -30,6 +30,9 @@
 | Source correspondant au binaire | **Bloquant avant APK publique** | publier l’APK avec le tag immuable `v0.5.0` pointant sur son source exact |
 | Inventaire transitif des licences | **À finaliser avant APK publique** | conserver le rapport de dépendances résolues et les avis de chaque artefact distribué |
 | Droits sur le logo Maer Chat | **À confirmer** | documenter l’auteur, la cession ou licence et le titulaire de la marque |
+| Artefacts présents ou historiques | **Non publiables** | APK Debug et anciennes signatures de développement ; voir `dist/0.5.0/MANIFEST.md` |
+| Clé et certificat de production | **Bloquant avant APK publique** | établir la clé pérenne hors dépôt et archiver son empreinte publique |
+| Qualité Spotless/Lint | **Bloquant avant APK publique** | 14 fichiers Java à reformater avec revue et 8 erreurs Lint hors baseline à traiter |
 
 La GPLv3, section 6, impose que la distribution de l’objet compilé donne un
 accès équivalent au code source correspondant exact. Le dépôt d’une version
