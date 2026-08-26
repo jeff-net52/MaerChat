@@ -11,7 +11,7 @@ Ce dépôt ne prouve pas que la configuration publique décrite ci-dessous a dé
 été déployée. La production ne doit être modifiée qu’après identification de la
 version installée, sauvegarde complète et validation sur une préproduction.
 
-## Observations publiques du 24 août 2026
+## Observations publiques du 26 août 2026
 
 Ces vérifications ne nécessitent ni compte ni mot de passe.
 
@@ -22,27 +22,27 @@ Ces vérifications ne nécessitent ni compte ni mot de passe.
 | IPv6 | aucune adresse AAAA annoncée |
 | SRV client STARTTLS | aucun enregistrement `_xmpp-client._tcp` |
 | SRV client TLS direct | aucun enregistrement `_xmpps-client._tcp` |
-| Ports contrôlés | 5222, 5223 et 5269 inaccessibles à 19 h 50 CEST depuis le poste de test |
-| HTTPS | port 443 accessible |
-| TLS XMPP et certificat | non vérifiables tant qu’un port XMPP ne répond pas |
-| SASL et création de compte | non vérifiables avant mise en service XMPP |
+| Ports contrôlés | 5222 et 5269 accessibles ; 5223 inaccessible depuis le poste de test |
+| TLS XMPP | STARTTLS sur 5222 négocié en TLS 1.3 |
+| Certificat XMPP | nom `xmpp.maer.fr` validé par OpenSSL sans contournement |
+| HTTPS | certificat présenté avec `CN=chaumont.me`, refusé pour `xmpp.maer.fr` (`SEC_E_WRONG_PRINCIPAL`) |
+| SASL et authentification | non vérifiés faute de compte de test dédié |
 
-Le port 5222 a brièvement répondu pendant le déploiement, mais le virtual host
-retournait alors `host-unknown`; les ports ont ensuite été fermés pendant le
-redémarrage. Le domaine est désormais la cible configurée dans Maer Chat, mais
-l’observation publique ne permet donc pas encore de considérer le service de
-messagerie comme opérationnel. Publier le SRV client après ouverture et
-validation du port 5222,
-par exemple :
+Le port 5222 et son STARTTLS sont désormais joignables, ce qui lève le blocage
+de transport observé le 24 août. Cela ne valide toutefois ni le virtual host
+après authentification, ni le mot de passe, ni les capacités XMPP du compte.
+L’absence de SRV oblige en outre le client à utiliser son repli vers le domaine
+et le port standard. Publier un SRV client explicite après validation complète,
+par exemple :
 
 ```dns
 _xmpp-client._tcp.xmpp.maer.fr. 3600 IN SRV 0 5 5222 xmpp.maer.fr.
 ```
 
 Ne publiez cette valeur qu’après vérification qu’elle correspond réellement au
-service exploité. Le certificat présenté par ejabberd devra couvrir
-`xmpp.maer.fr` et la connexion STARTTLS devra être testée avant distribution du
-client configuré pour la production.
+service exploité. Le certificat STARTTLS couvre actuellement `xmpp.maer.fr`,
+mais le vhost HTTPS utilisé par le client Windows présente encore un mauvais
+nom de certificat et doit être corrigé séparément.
 
 ## Capacités après authentification
 
