@@ -6,6 +6,13 @@ la licence GPLv3+ et ne doit pas annoncer une conformité juridique non validée
 
 ## Maer Chat
 
+### Version 0.5.3 — 27 août 2026
+
+* Correction de la contraction répétée des bulles sur les petits écrans.
+* Largeur maximale stable à 82 % et respect des contraintes Android exactes.
+* Avatars masqués par défaut dans les échanges directs et regroupés dans les
+  salons, tout en restant configurables.
+
 ### Version 0.5.2 — 27 août 2026
 
 * Confidentialité renforcée des notifications sur l’écran verrouillé.

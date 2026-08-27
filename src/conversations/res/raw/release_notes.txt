@@ -1,7 +1,9 @@
 MAER CHAT — RELEASE NOTES
 
-VERSION 0.5.2 — 27 AUGUST 2026
+VERSION 0.5.3 — 27 AUGUST 2026
 
+- Fixed message bubbles collapsing after repeated Android layout passes.
+- Kept direct-chat avatars in the header by default and grouped room avatars.
 - Protected lock-screen notifications with a generic public version.
 - Added linked-device retry, expiration, replay protection and precise errors.
 - Added interoperable MAER call invitations restricted to meet.jit.si.

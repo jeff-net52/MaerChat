@@ -1,6 +1,7 @@
 package eu.siacs.conversations;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -67,6 +68,15 @@ public class ThemeConfigurationTest {
         assertNotEquals(
                 themedColor(day, R.attr.maerChatBackground),
                 themedColor(night, R.attr.maerChatBackground));
+    }
+
+    @Test
+    public void directConversationAvatarsAreDisabledByDefault() {
+        final Context application = RuntimeEnvironment.getApplication();
+
+        assertFalse(application.getResources().getBoolean(R.bool.show_avatars));
+        assertFalse(application.getResources().getBoolean(R.bool.show_avatars_accounts));
+        assertEquals("grouped", application.getString(R.string.default_avatar_display));
     }
 
     private static Context configuredContext(final int nightMode, final int orientation) {

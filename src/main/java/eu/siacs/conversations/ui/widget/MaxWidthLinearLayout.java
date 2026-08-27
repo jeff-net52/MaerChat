@@ -3,12 +3,13 @@ package eu.siacs.conversations.ui.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 /**
- * A {@link LinearLayout} that stays wrap-content while capping long content at 82 percent of the
- * width offered by its parent.
+ * A {@link LinearLayout} that stays wrap-content while capping long content at 82 percent of a
+ * stable ancestor width.
  */
 public class MaxWidthLinearLayout extends LinearLayout {
 
@@ -38,25 +39,37 @@ public class MaxWidthLinearLayout extends LinearLayout {
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int availableWidth = MeasureSpec.getSize(widthMeasureSpec);
-
-        if (widthMode == MeasureSpec.UNSPECIFIED && getParent() instanceof View) {
-            final View parent = (View) getParent();
-            availableWidth =
-                    Math.max(
-                            0,
-                            parent.getMeasuredWidth()
-                                    - parent.getPaddingStart()
-                                    - parent.getPaddingEnd());
+        if (widthMode == MeasureSpec.EXACTLY) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
         }
 
+        final int availableWidth = findMeasuredAncestorWidth();
         if (availableWidth > 0) {
             final int maximumWidth = Math.round(availableWidth * MAX_WIDTH_FRACTION);
+            final int constrainedWidth =
+                    widthMode == MeasureSpec.AT_MOST
+                            ? Math.min(MeasureSpec.getSize(widthMeasureSpec), maximumWidth)
+                            : maximumWidth;
             super.onMeasure(
-                    MeasureSpec.makeMeasureSpec(maximumWidth, MeasureSpec.AT_MOST),
+                    MeasureSpec.makeMeasureSpec(constrainedWidth, MeasureSpec.AT_MOST),
                     heightMeasureSpec);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
+    }
+
+    private int findMeasuredAncestorWidth() {
+        ViewParent ancestor = getParent();
+        while (ancestor instanceof View) {
+            final View ancestorView = (View) ancestor;
+            final int width = Math.max(ancestorView.getWidth(), ancestorView.getMeasuredWidth());
+            if (width > 0) {
+                return Math.max(
+                        0, width - ancestorView.getPaddingStart() - ancestorView.getPaddingEnd());
+            }
+            ancestor = ancestorView.getParent();
+        }
+        return 0;
     }
 }
