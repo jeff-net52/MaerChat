@@ -1190,10 +1190,8 @@ public class NotificationService {
     }
 
     private Builder buildMultipleConversation(final boolean notify) {
-        final Builder mBuilder =
-                new NotificationCompat.Builder(
-                        mXmppConnectionService,
-                        notify ? MESSAGES_NOTIFICATION_CHANNEL : "silent_messages");
+        final String channelId = notify ? MESSAGES_NOTIFICATION_CHANNEL : "silent_messages";
+        final Builder mBuilder = new NotificationCompat.Builder(mXmppConnectionService, channelId);
         final NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         style.setBigContentTitle(
                 mXmppConnectionService
@@ -1254,6 +1252,9 @@ public class NotificationService {
         mBuilder.setGroup(MESSAGES_GROUP);
         mBuilder.setDeleteIntent(createDeleteIntent(null));
         mBuilder.setSmallIcon(R.drawable.ic_app_icon_notification);
+        final int messageCount = notifications.values().stream().mapToInt(List::size).sum();
+        NotificationPrivacy.protectMessage(
+                mXmppConnectionService, mBuilder, channelId, messageCount);
         return mBuilder;
     }
 
@@ -1420,6 +1421,8 @@ public class NotificationService {
                         .pushDynamicShortcut(info.toShortcutInfo());
             }
         }
+        NotificationPrivacy.protectMessage(
+                mXmppConnectionService, notificationBuilder, channel, messages.size());
         return notificationBuilder;
     }
 

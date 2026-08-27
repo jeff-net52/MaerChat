@@ -1,6 +1,8 @@
 package eu.siacs.conversations.xmpp.jingle;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.projection.MediaProjection;
 import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -217,6 +219,8 @@ public class WebRTCWrapper {
     private Context context = null;
     private EglBase eglBase = null;
     private VideoSourceWrapper videoSourceWrapper;
+    private final ScreenSharingLifecycle screenSharingLifecycle = new ScreenSharingLifecycle();
+    @Nullable private MediaProjection.Callback screenSharingCallback;
 
     WebRTCWrapper(final EventCallback eventCallback) {
         this.eventCallback = eventCallback;
@@ -459,6 +463,8 @@ public class WebRTCWrapper {
     }
 
     synchronized void close() {
+        final boolean stoppedScreenSharing = screenSharingLifecycle.close();
+        screenSharingCallback = null;
         final PeerConnection peerConnection = this.peerConnection;
         final PeerConnectionFactory peerConnectionFactory = this.peerConnectionFactory;
         final VideoSourceWrapper videoSourceWrapper = this.videoSourceWrapper;
@@ -485,6 +491,9 @@ public class WebRTCWrapper {
         if (peerConnectionFactory != null) {
             this.peerConnectionFactory = null;
             peerConnectionFactory.dispose();
+        }
+        if (stoppedScreenSharing) {
+            eventCallback.onScreenSharingStopped(false);
         }
     }
 
@@ -517,6 +526,89 @@ public class WebRTCWrapper {
                     new IllegalStateException("VideoSourceWrapper has not been initialized"));
         }
         return videoSourceWrapper.switchCamera();
+    }
+
+    void startScreenSharing(final Intent permissionData) throws InterruptedException {
+        synchronized (this) {
+            final VideoSourceWrapper source = this.videoSourceWrapper;
+            if (source == null || this.localVideoTrack == null) {
+                throw new IllegalStateException("A video call is required to share the screen");
+            }
+            if (!screenSharingLifecycle.beginStart()) {
+                if (screenSharingLifecycle.isSharing()) {
+                    return;
+                }
+                throw new IllegalStateException("Screen sharing lifecycle is closed");
+            }
+            final MediaProjection.Callback callback =
+                    new MediaProjection.Callback() {
+                        @Override
+                        public void onStop() {
+                            handleMediaProjectionStopped(this);
+                        }
+                    };
+            screenSharingCallback = callback;
+            try {
+                source.switchToScreenCapture(permissionData, callback);
+                screenSharingLifecycle.started();
+            } catch (final InterruptedException | RuntimeException e) {
+                screenSharingCallback = null;
+                screenSharingLifecycle.startFailed();
+                throw e;
+            }
+        }
+    }
+
+    void stopScreenSharing() throws InterruptedException {
+        synchronized (this) {
+            if (!screenSharingLifecycle.beginStop()) {
+                return;
+            }
+            final VideoSourceWrapper source = this.videoSourceWrapper;
+            try {
+                if (source != null) {
+                    source.switchToCameraCapture();
+                }
+                // Keep the MediaProjection callback owned until camera restoration commits. If
+                // restoration fails, the still-live projection may subsequently invoke onStop();
+                // that callback must be able to finish lifecycle and foreground-service cleanup.
+                screenSharingCallback = null;
+                screenSharingLifecycle.stopped();
+            } catch (final InterruptedException | RuntimeException e) {
+                screenSharingLifecycle.stopFailed();
+                throw e;
+            }
+        }
+        eventCallback.onScreenSharingStopped(true);
+    }
+
+    boolean isScreenSharing() {
+        return screenSharingLifecycle.isSharing();
+    }
+
+    private void handleMediaProjectionStopped(final MediaProjection.Callback callback) {
+        boolean cameraRestored = false;
+        synchronized (this) {
+            if (screenSharingCallback != callback || !screenSharingLifecycle.beginStop()) {
+                return;
+            }
+            screenSharingCallback = null;
+            try {
+                final VideoSourceWrapper source = this.videoSourceWrapper;
+                if (source != null) {
+                    source.switchToCameraCapture();
+                    cameraRestored = true;
+                }
+            } catch (final InterruptedException e) {
+                Thread.currentThread().interrupt();
+                Log.e(Config.LOGTAG, "unable to restore camera after MediaProjection stopped", e);
+            } catch (final RuntimeException e) {
+                Log.e(Config.LOGTAG, "unable to restore camera after MediaProjection stopped", e);
+            } finally {
+                screenSharingLifecycle.stopped();
+            }
+        }
+        eventCallback.onScreenSharingStopped(cameraRestored);
     }
 
     boolean isMicrophoneEnabled() {
@@ -772,6 +864,8 @@ public class WebRTCWrapper {
         void onConnectionChange(PeerConnection.PeerConnectionState newState);
 
         void onRenegotiationNeeded();
+
+        void onScreenSharingStopped(boolean cameraRestored);
     }
 
     public abstract static class SetSdpObserver implements SdpObserver {

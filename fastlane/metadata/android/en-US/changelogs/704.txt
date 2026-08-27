@@ -1,0 +1,4 @@
+* Private notifications on the lock screen
+* More reliable linked devices with replay protection
+* MAER call invitations and Android screen sharing
+* Improved accessibility and navigation

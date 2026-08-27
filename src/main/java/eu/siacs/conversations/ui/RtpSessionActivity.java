@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.media.projection.MediaProjectionManager;
 import android.opengl.GLException;
 import android.os.Build;
 import android.os.Bundle;
@@ -127,6 +128,7 @@ public class RtpSessionActivity extends XmppActivity
     private static final int REQUEST_ACCEPT_CALL = 0x1111;
     private static final int REQUEST_ACCEPT_CONTENT = 0x1112;
     private static final int REQUEST_ADD_CONTENT = 0x1113;
+    private static final int REQUEST_SCREEN_CAPTURE = 0x1114;
     private WeakReference<JingleRtpConnection> rtpConnectionReference;
 
     private ActivityRtpSessionBinding binding;
@@ -215,9 +217,15 @@ public class RtpSessionActivity extends XmppActivity
         final MenuItem help = menu.findItem(R.id.action_help);
         final MenuItem gotoChat = menu.findItem(R.id.action_goto_chat);
         final MenuItem switchToVideo = menu.findItem(R.id.action_switch_to_video);
+        final MenuItem shareScreen = menu.findItem(R.id.action_share_screen);
         help.setVisible(Config.HELP != null && isHelpButtonVisible());
         gotoChat.setVisible(isSwitchToConversationVisible());
         switchToVideo.setVisible(isSwitchToVideoVisible());
+        final JingleRtpConnection connection =
+                this.rtpConnectionReference == null ? null : this.rtpConnectionReference.get();
+        final boolean sharing = connection != null && connection.isScreenSharing();
+        shareScreen.setVisible(isInConnectedVideoCall());
+        shareScreen.setTitle(sharing ? R.string.stop_sharing_screen : R.string.share_screen);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -283,8 +291,78 @@ public class RtpSessionActivity extends XmppActivity
         } else if (itemItem == R.id.action_switch_to_video) {
             requestPermissionAndSwitchToVideo();
             return true;
+        } else if (itemItem == R.id.action_share_screen) {
+            toggleScreenSharing();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void toggleScreenSharing() {
+        final JingleRtpConnection connection;
+        try {
+            connection = requireRtpConnection();
+        } catch (final IllegalStateException e) {
+            Toast.makeText(this, R.string.screen_sharing_requires_video_call, Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        if (connection.isScreenSharing()) {
+            stopScreenSharing();
+            return;
+        }
+        if (!isInConnectedVideoCall()) {
+            Toast.makeText(this, R.string.screen_sharing_requires_video_call, Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        final MediaProjectionManager manager = getSystemService(MediaProjectionManager.class);
+        if (manager == null) {
+            Toast.makeText(this, R.string.screen_sharing_failed, Toast.LENGTH_LONG).show();
+            return;
+        }
+        startActivityForResult(manager.createScreenCaptureIntent(), REQUEST_SCREEN_CAPTURE);
+    }
+
+    @Override
+    protected void onActivityResult(
+            final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != REQUEST_SCREEN_CAPTURE) {
+            return;
+        }
+        if (resultCode != RESULT_OK || data == null || !isInConnectedVideoCall()) {
+            return;
+        }
+        final JingleRtpConnection connection = requireRtpConnection();
+        try {
+            connection.startScreenSharing(new Intent(data));
+            binding.localVideo.setMirror(false);
+            Toast.makeText(this, R.string.screen_sharing_started, Toast.LENGTH_LONG).show();
+        } catch (final RuntimeException | InterruptedException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            Log.e(Config.LOGTAG, "unable to start screen sharing", e);
+            Toast.makeText(this, R.string.screen_sharing_failed, Toast.LENGTH_LONG).show();
+        }
+        invalidateOptionsMenu();
+    }
+
+    private void stopScreenSharing() {
+        final JingleRtpConnection connection = requireRtpConnection();
+        try {
+            connection.stopScreenSharing();
+            binding.localVideo.setMirror(connection.isFrontCamera());
+            Toast.makeText(this, R.string.screen_sharing_stopped, Toast.LENGTH_SHORT).show();
+        } catch (final InterruptedException | RuntimeException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            Log.e(Config.LOGTAG, "unable to stop screen sharing", e);
+        } finally {
+            invalidateOptionsMenu();
         }
     }
 

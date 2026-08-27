@@ -63,11 +63,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:accessibilityLiveRegion="polite"
                     android:padding="24dp"
                     android:text="@string/choose_account_for_linked_devices"
                     android:textAppearance="?textAppearanceBodyLarge" />
 
             </FrameLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/retry_linked_devices"
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/associate"

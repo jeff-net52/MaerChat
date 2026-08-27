@@ -2492,6 +2492,17 @@ public class JingleRtpConnection extends AbstractJingleConnection
         this.webRTCWrapper.execute(this::renegotiate);
     }
 
+    @Override
+    public void onScreenSharingStopped(final boolean cameraRestored) {
+        xmppConnectionService.setScreenCaptureActive(false);
+        if (!cameraRestored) {
+            Log.w(Config.LOGTAG, "screen sharing stopped without restoring the camera");
+        }
+        if (!isTerminated()) {
+            updateEndUserState();
+        }
+    }
+
     private synchronized void renegotiate() {
         final SessionDescription sessionDescription;
         try {
@@ -2729,6 +2740,27 @@ public class JingleRtpConnection extends AbstractJingleConnection
 
     public ListenableFuture<Boolean> switchCamera() {
         return webRTCWrapper.switchCamera();
+    }
+
+    public void startScreenSharing(final Intent permissionData) throws InterruptedException {
+        if (!xmppConnectionService.setScreenCaptureActive(true)) {
+            throw new SecurityException("Unable to start media-projection foreground service");
+        }
+        try {
+            webRTCWrapper.startScreenSharing(permissionData);
+            updateEndUserState();
+        } catch (final InterruptedException | RuntimeException e) {
+            xmppConnectionService.setScreenCaptureActive(false);
+            throw e;
+        }
+    }
+
+    public void stopScreenSharing() throws InterruptedException {
+        webRTCWrapper.stopScreenSharing();
+    }
+
+    public boolean isScreenSharing() {
+        return webRTCWrapper.isScreenSharing();
     }
 
     @Override

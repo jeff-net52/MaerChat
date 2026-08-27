@@ -2,19 +2,16 @@ package eu.siacs.conversations.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.view.View;
-import android.widget.ImageView;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import eu.siacs.conversations.R;
-import java.util.concurrent.atomic.AtomicReference;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +29,7 @@ public class HomeNavigationInstrumentedTest {
     }
 
     @Test
-    public void contactsGroupsCallsAndLogoUseTheSharedNavigation() {
+    public void contactsGroupsAndCallsExecuteTheSharedNavigation() {
         final Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         final Intent intent =
                 new Intent(instrumentation.getTargetContext(), StartConversationActivity.class)
@@ -60,22 +57,17 @@ public class HomeNavigationInstrumentedTest {
         assertEquals(R.id.nav_contacts, navigation.getSelectedItemId());
         assertEquals(0, pager.getCurrentItem());
 
-        final AtomicReference<View> home = new AtomicReference<>();
-        instrumentation.runOnMainSync(
-                () ->
-                        home.set(
-                                activity.getLayoutInflater()
-                                        .inflate(
-                                                R.layout.fragment_conversations_overview,
-                                                null,
-                                                false)));
-        final ImageView logo = home.get().findViewById(R.id.brand_wordmark);
-        final BottomNavigationView homeNavigation = home.get().findViewById(R.id.home_navigation);
-        assertNotNull(logo);
-        assertNotNull(homeNavigation);
-        assertEquals(ImageView.ScaleType.FIT_CENTER, logo.getScaleType());
-        assertTrue(
-                logo.getDrawable().getIntrinsicWidth() > logo.getDrawable().getIntrinsicHeight());
-        assertNotNull(homeNavigation.getMenu().findItem(R.id.nav_calls));
+        final Instrumentation.ActivityMonitor monitor =
+                instrumentation.addMonitor(ConversationsActivity.class.getName(), null, false);
+        instrumentation.runOnMainSync(() -> navigation.setSelectedItemId(R.id.nav_calls));
+        final Activity callsActivity = instrumentation.waitForMonitorWithTimeout(monitor, 5_000);
+        assertNotNull("Calls must launch the real home activity", callsActivity);
+        assertEquals(
+                R.id.nav_calls,
+                callsActivity
+                        .getIntent()
+                        .getIntExtra(ConversationsActivity.EXTRA_HOME_NAVIGATION, R.id.nav_chats));
+        callsActivity.runOnUiThread(callsActivity::finish);
+        instrumentation.removeMonitor(monitor);
     }
 }

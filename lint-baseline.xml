@@ -215,68 +215,13 @@
     </issue>
 
     <issue
-        id="UnusedAttribute"
-        message="Attribute `allow` is only used in API level 35 and higher (current min is 33)"
-        errorLine1="                &lt;uri-relative-filter-group android:allow=&quot;true&quot;>"
-        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="249"
-            column="44"/>
-    </issue>
-
-    <issue
-        id="UnusedAttribute"
-        message="Attribute `fragmentPattern` is only used in API level 35 and higher (current min is 33)"
-        errorLine1="                    &lt;data android:fragmentPattern=&quot;.*&quot; />"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="251"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="UnusedAttribute"
-        message="Attribute `allow` is only used in API level 35 and higher (current min is 33)"
-        errorLine1="                &lt;uri-relative-filter-group android:allow=&quot;true&quot;>"
-        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="264"
-            column="44"/>
-    </issue>
-
-    <issue
-        id="UnusedAttribute"
-        message="Attribute `fragmentPattern` is only used in API level 35 and higher (current min is 33)"
-        errorLine1="                    &lt;data android:fragmentPattern=&quot;.*&quot; />"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="266"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="AppLinkWarning"
-        message="This intent filter has the format of an Android App Link but is missing the `autoVerify` attribute; add `android:autoVerify=&quot;true&quot;` to ensure your domain will be validated and enable App Link-related Lint warnings. If you do not want clicked URLs to bring the user to your app, remove the `android.intent.category.BROWSABLE` category, or set `android:autoVerify=&quot;false&quot;` to make it clear this is not intended to be an Android App Link."
-        errorLine1="            &lt;intent-filter>"
-        errorLine2="             ~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="239"
-            column="14"/>
-    </issue>
-
-    <issue
         id="BatteryLife"
         message="Use of `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` violates the Play Store Content Policy regarding acceptable use cases, as described in https://developer.android.com/training/monitoring-device-state/doze-standby.html"
         errorLine1="                                new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);"
         errorLine2="                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationsActivity.java"
-            line="208"
+            line="250"
             column="53"/>
     </issue>
 
@@ -430,7 +375,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="736"
+            line="741"
             column="30"/>
     </issue>
 
@@ -441,7 +386,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="741"
+            line="746"
             column="30"/>
     </issue>
 
@@ -452,7 +397,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="744"
+            line="749"
             column="30"/>
     </issue>
 
@@ -463,7 +408,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="749"
+            line="754"
             column="30"/>
     </issue>
 
@@ -474,7 +419,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="754"
+            line="759"
             column="30"/>
     </issue>
 
@@ -485,7 +430,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="757"
+            line="762"
             column="30"/>
     </issue>
 
@@ -496,7 +441,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="760"
+            line="765"
             column="30"/>
     </issue>
 
@@ -507,7 +452,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="763"
+            line="768"
             column="30"/>
     </issue>
 
@@ -518,7 +463,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="770"
+            line="775"
             column="30"/>
     </issue>
 
@@ -529,7 +474,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="773"
+            line="778"
             column="30"/>
     </issue>
 
@@ -540,7 +485,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="776"
+            line="781"
             column="30"/>
     </issue>
 
@@ -551,7 +496,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="779"
+            line="784"
             column="30"/>
     </issue>
 
@@ -562,7 +507,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1697"
+            line="1705"
             column="18"/>
     </issue>
 
@@ -573,7 +518,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1701"
+            line="1709"
             column="18"/>
     </issue>
 
@@ -584,7 +529,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1705"
+            line="1713"
             column="18"/>
     </issue>
 
@@ -595,7 +540,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1709"
+            line="1717"
             column="18"/>
     </issue>
 
@@ -606,7 +551,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1713"
+            line="1721"
             column="18"/>
     </issue>
 
@@ -617,7 +562,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1717"
+            line="1725"
             column="18"/>
     </issue>
 
@@ -628,7 +573,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1721"
+            line="1729"
             column="18"/>
     </issue>
 
@@ -639,7 +584,7 @@
         errorLine2="                 ~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1725"
+            line="1733"
             column="18"/>
     </issue>
 
@@ -650,7 +595,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1729"
+            line="1737"
             column="18"/>
     </issue>
 
@@ -661,7 +606,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1733"
+            line="1741"
             column="18"/>
     </issue>
 
@@ -672,7 +617,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1737"
+            line="1745"
             column="18"/>
     </issue>
 
@@ -683,7 +628,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1741"
+            line="1749"
             column="18"/>
     </issue>
 
@@ -694,7 +639,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1745"
+            line="1753"
             column="18"/>
     </issue>
 
@@ -705,7 +650,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1749"
+            line="1757"
             column="18"/>
     </issue>
 
@@ -716,7 +661,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1753"
+            line="1761"
             column="18"/>
     </issue>
 
@@ -727,7 +672,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1757"
+            line="1765"
             column="18"/>
     </issue>
 
@@ -738,7 +683,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1761"
+            line="1769"
             column="18"/>
     </issue>
 
@@ -749,7 +694,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1765"
+            line="1773"
             column="18"/>
     </issue>
 
@@ -760,7 +705,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1944"
+            line="1952"
             column="18"/>
     </issue>
 
@@ -771,7 +716,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1948"
+            line="1956"
             column="18"/>
     </issue>
 
@@ -782,7 +727,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1967"
+            line="1975"
             column="18"/>
     </issue>
 
@@ -793,7 +738,7 @@
         errorLine2="                             ~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="3140"
+            line="3170"
             column="30"/>
     </issue>
 
@@ -804,7 +749,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="3146"
+            line="3176"
             column="30"/>
     </issue>
 
@@ -815,7 +760,7 @@
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="4112"
+            line="4158"
             column="38"/>
     </issue>
 
@@ -826,7 +771,7 @@
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="4117"
+            line="4163"
             column="38"/>
     </issue>
 
@@ -837,7 +782,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="4134"
+            line="4180"
             column="34"/>
     </issue>
 
@@ -848,7 +793,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="4137"
+            line="4183"
             column="34"/>
     </issue>
 
@@ -859,7 +804,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="4143"
+            line="4189"
             column="34"/>
     </issue>
 
@@ -991,7 +936,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="174"
+            line="172"
             column="18"/>
     </issue>
 
@@ -1002,7 +947,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="177"
+            line="175"
             column="18"/>
     </issue>
 
@@ -1013,7 +958,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="180"
+            line="178"
             column="18"/>
     </issue>
 
@@ -1024,7 +969,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="183"
+            line="181"
             column="18"/>
     </issue>
 
@@ -1035,18 +980,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="186"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NonConstantResourceId"
-        message="Resource IDs will be non-final by default in Android Gradle Plugin version 8.0, avoid using them in switch case statements"
-        errorLine1="            case R.id.action_add_account:"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="206"
+            line="184"
             column="18"/>
     </issue>
 
@@ -1057,7 +991,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="209"
+            line="204"
             column="18"/>
     </issue>
 
@@ -1068,7 +1002,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="214"
+            line="209"
             column="18"/>
     </issue>
 
@@ -1079,7 +1013,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="217"
+            line="212"
             column="18"/>
     </issue>
 
@@ -1090,7 +1024,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="220"
+            line="215"
             column="18"/>
     </issue>
 
@@ -1255,7 +1189,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="368"
+            line="370"
             column="30"/>
     </issue>
 
@@ -1266,7 +1200,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="376"
+            line="378"
             column="30"/>
     </issue>
 
@@ -1277,7 +1211,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="379"
+            line="381"
             column="30"/>
     </issue>
 
@@ -1288,7 +1222,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="382"
+            line="384"
             column="30"/>
     </issue>
 
@@ -1299,7 +1233,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="385"
+            line="387"
             column="30"/>
     </issue>
 
@@ -1310,7 +1244,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="787"
+            line="813"
             column="18"/>
     </issue>
 
@@ -1321,7 +1255,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1390"
+            line="1416"
             column="22"/>
     </issue>
 
@@ -1332,7 +1266,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1393"
+            line="1419"
             column="22"/>
     </issue>
 
@@ -1343,7 +1277,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1396"
+            line="1422"
             column="22"/>
     </issue>
 
@@ -1354,7 +1288,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1399"
+            line="1425"
             column="22"/>
     </issue>
 
@@ -1365,7 +1299,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1402"
+            line="1428"
             column="22"/>
     </issue>
 
@@ -1376,7 +1310,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="1405"
+            line="1431"
             column="22"/>
     </issue>
 
@@ -1388,39 +1322,6 @@
         <location
             file="src/main/java/eu/siacs/conversations/ui/TrustKeysActivity.java"
             line="122"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NonConstantResourceId"
-        message="Resource IDs will be non-final by default in Android Gradle Plugin version 8.0, avoid using them in switch case statements"
-        errorLine1="            case R.id.action_import_backup:"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/conversations/java/eu/siacs/conversations/ui/WelcomeActivity.java"
-            line="457"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NonConstantResourceId"
-        message="Resource IDs will be non-final by default in Android Gradle Plugin version 8.0, avoid using them in switch case statements"
-        errorLine1="            case R.id.action_scan_qr_code:"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/conversations/java/eu/siacs/conversations/ui/WelcomeActivity.java"
-            line="462"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="NonConstantResourceId"
-        message="Resource IDs will be non-final by default in Android Gradle Plugin version 8.0, avoid using them in switch case statements"
-        errorLine1="            case R.id.action_add_account_with_cert:"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/conversations/java/eu/siacs/conversations/ui/WelcomeActivity.java"
-            line="465"
             column="18"/>
     </issue>
 
@@ -1475,7 +1376,7 @@
         errorLine2="     ~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="90"
+            line="91"
             column="6"/>
     </issue>
 
@@ -1499,127 +1400,6 @@
             file="src/main/java/eu/siacs/conversations/services/AppRTCBluetoothManager.java"
             line="281"
             column="9"/>
-    </issue>
-
-    <issue
-        id="AndroidGradlePluginVersion"
-        message="A newer version of com.android.tools.build:gradle than 9.2.1 is available: 9.3.1"
-        errorLine1="        classpath &apos;com.android.tools.build:gradle:9.2.1&apos;"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="9"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of androidx.appcompat:appcompat than 1.7.1 is available: 1.8.0"
-        errorLine1="    implementation &apos;androidx.appcompat:appcompat:1.7.1&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="53"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of com.google.android.gms:play-services-auth-api-phone than 18.3.0 is available: 18.3.1"
-        errorLine1="    quicksyPlaystoreImplementation &apos;com.google.android.gms:play-services-auth-api-phone:18.3.0&apos;"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="93"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of com.diffplug.spotless:spotless-plugin-gradle than 8.6.0 is available: 8.10.0"
-        errorLine1="        classpath &apos;com.diffplug.spotless:spotless-plugin-gradle:8.6.0&apos;"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="10"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of com.google.guava:guava than 33.6.0-android is available: 33.7.1-android"
-        errorLine1="    implementation &apos;com.google.guava:guava:33.6.0-android&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="69"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of com.squareup.okhttp3:okhttp than 5.3.2 is available: 5.5.0"
-        errorLine1="    implementation &apos;com.squareup.okhttp3:okhttp:5.3.2&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="72"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of org.bouncycastle:bcmail-jdk18on than 1.84 is available: 1.85"
-        errorLine1="    implementation &apos;org.bouncycastle:bcmail-jdk18on:1.84&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="81"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of org.conscrypt:conscrypt-android than 2.5.3 is available: 2.6.3"
-        errorLine1="    implementation &apos;org.conscrypt:conscrypt-android:2.5.3&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="82"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of org.hsluv:hsluv than 1.0 is available: 1.0.2"
-        errorLine1="    implementation &apos;org.hsluv:hsluv:1.0&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="83"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of org.whispersystems:signal-protocol-java than 2.6.2 is available: 2.8.1"
-        errorLine1="    implementation &apos;org.whispersystems:signal-protocol-java:2.6.2&apos;"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="89"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="NewerVersionAvailable"
-        message="A newer version of io.michaelrocks:libphonenumber-android than 9.0.31 is available: 9.0.36"
-        errorLine1="    quicksyImplementation &apos;io.michaelrocks:libphonenumber-android:9.0.31&apos;"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="91"
-            column="27"/>
     </issue>
 
     <issue
@@ -1651,7 +1431,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/RtpSessionActivity.java"
-            line="444"
+            line="553"
             column="13"/>
     </issue>
 
@@ -1662,7 +1442,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/WelcomeActivity.java"
-            line="175"
+            line="165"
             column="13"/>
     </issue>
 
@@ -1673,7 +1453,7 @@
         errorLine2="                                        ~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationsOverviewFragment.java"
-            line="305"
+            line="389"
             column="41"/>
     </issue>
 
@@ -1684,7 +1464,7 @@
         errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationsOverviewFragment.java"
-            line="306"
+            line="390"
             column="50"/>
     </issue>
 
@@ -1695,7 +1475,7 @@
         errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationsOverviewFragment.java"
-            line="307"
+            line="391"
             column="50"/>
     </issue>
 
@@ -1981,7 +1761,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="930"
+            line="945"
             column="9"/>
     </issue>
 
@@ -2091,7 +1871,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="289"
+            line="302"
             column="5"/>
     </issue>
 
@@ -2102,7 +1882,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="529"
+            line="542"
             column="5"/>
     </issue>
 
@@ -2240,23 +2020,23 @@
 
     <issue
         id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;toast_delete_certificates&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="435"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
         message="For language &quot;ca&quot; (Catalan) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;x_messages&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-ca/strings.xml"
             line="447"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;toast_delete_certificates&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="448"
             column="5"/>
     </issue>
 
@@ -2300,7 +2080,7 @@
         errorLine2="    ^">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="486"
+            line="499"
             column="5"/>
     </issue>
 
@@ -2526,17 +2306,6 @@
 
     <issue
         id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;seconds&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="607"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
         message="For language &quot;es&quot; (Spanish) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;weeks&quot;>"
         errorLine2="    ^">
@@ -2565,17 +2334,6 @@
         <location
             file="src/main/res/values-it/strings.xml"
             line="610"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;minutes&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="612"
             column="5"/>
     </issue>
 
@@ -2615,22 +2373,11 @@
     <issue
         id="UnusedQuantity"
         message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;hours&quot;>"
+        errorLine1="    &lt;plurals name=&quot;seconds&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="617"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;days&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="622"
+            line="620"
             column="5"/>
     </issue>
 
@@ -2648,11 +2395,11 @@
     <issue
         id="UnusedQuantity"
         message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;weeks&quot;>"
+        errorLine1="    &lt;plurals name=&quot;minutes&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="627"
+            line="625"
             column="5"/>
     </issue>
 
@@ -2670,11 +2417,11 @@
     <issue
         id="UnusedQuantity"
         message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;months&quot;>"
+        errorLine1="    &lt;plurals name=&quot;hours&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="632"
+            line="630"
             column="5"/>
     </issue>
 
@@ -2691,12 +2438,45 @@
 
     <issue
         id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;days&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="635"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
         message="For language &quot;pt&quot; (Portuguese) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;months&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-pt/strings.xml"
             line="638"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;weeks&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="640"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;months&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="645"
             column="5"/>
     </issue>
 
@@ -2856,17 +2636,6 @@
 
     <issue
         id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;view_users&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="924"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
         message="For language &quot;it&quot; (Italian) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;view_users&quot;>"
         errorLine2="    ^">
@@ -2884,17 +2653,6 @@
         <location
             file="src/main/res/values-es/strings.xml"
             line="928"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;some_messages_could_not_be_delivered&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="929"
             column="5"/>
     </issue>
 
@@ -2922,6 +2680,17 @@
 
     <issue
         id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;view_users&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="939"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
         message="For language &quot;pt&quot; (Portuguese) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_x&quot;>"
         errorLine2="    ^">
@@ -2934,11 +2703,11 @@
     <issue
         id="UnusedQuantity"
         message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;n_missed_calls&quot;>"
+        errorLine1="    &lt;plurals name=&quot;some_messages_could_not_be_delivered&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-fr/strings.xml"
-            line="943"
+            line="944"
             column="5"/>
     </issue>
 
@@ -2955,23 +2724,23 @@
 
     <issue
         id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;n_missed_calls&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="958"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
         message="For language &quot;pt&quot; (Portuguese) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;some_messages_could_not_be_delivered&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-pt/strings.xml"
             line="963"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_m_contacts&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="971"
             column="5"/>
     </issue>
 
@@ -2999,23 +2768,23 @@
 
     <issue
         id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_x&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="982"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
         message="For language &quot;ca&quot; (Catalan) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_x&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-ca/strings.xml"
             line="985"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_m_contacts&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="986"
             column="5"/>
     </issue>
 
@@ -3038,6 +2807,17 @@
         <location
             file="src/main/res/values-ca/strings.xml"
             line="995"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;n_missed_calls_from_x&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="997"
             column="5"/>
     </issue>
 
@@ -3131,23 +2911,23 @@
 
     <issue
         id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;x_participants&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
-            line="1150"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
         message="For language &quot;pt&quot; (Portuguese) the following quantities are not relevant: `many`"
         errorLine1="    &lt;plurals name=&quot;delete_n_messages&quot;>"
         errorLine2="    ^">
         <location
             file="src/main/res/values-pt-rBR/strings.xml"
             line="1151"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;x_participants&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="1165"
             column="5"/>
     </issue>
 
@@ -3202,17 +2982,6 @@
         errorLine2="    ^">
         <location
             file="src/main/res/values-es/strings.xml"
-            line="1181"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="UnusedQuantity"
-        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
-        errorLine1="    &lt;plurals name=&quot;delete_n_messages&quot;>"
-        errorLine2="    ^">
-        <location
-            file="src/main/res/values-fr/strings.xml"
             line="1181"
             column="5"/>
     </issue>
@@ -3295,13 +3064,24 @@
     </issue>
 
     <issue
+        id="UnusedQuantity"
+        message="For language &quot;fr&quot; (French) the following quantities are not relevant: `many`"
+        errorLine1="    &lt;plurals name=&quot;delete_n_messages&quot;>"
+        errorLine2="    ^">
+        <location
+            file="src/main/res/values-fr/strings.xml"
+            line="1196"
+            column="5"/>
+    </issue>
+
+    <issue
         id="UnusedTranslation"
         message="The language `eo (Esperanto)` is present in this project, but not declared in the `localeConfig` resource"
         errorLine1="        android:localeConfig=&quot;@xml/locales_config&quot;"
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3312,7 +3092,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3323,7 +3103,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3334,7 +3114,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3345,7 +3125,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3356,7 +3136,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="101"
+            line="102"
             column="31"/>
     </issue>
 
@@ -3396,7 +3176,7 @@
         errorLine2="         ~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="166"
+            line="167"
             column="10"/>
     </issue>
 
@@ -3440,7 +3220,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/adapter/ConversationAdapter.java"
-            line="301"
+            line="322"
             column="9"/>
     </issue>
 
@@ -3451,7 +3231,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1279"
+            line="1284"
             column="21"/>
     </issue>
 
@@ -3462,7 +3242,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationsOverviewFragment.java"
-            line="709"
+            line="1093"
             column="13"/>
     </issue>
 
@@ -3561,7 +3341,7 @@
         errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/eu/siacs/conversations/ui/StartConversationActivity.java"
-            line="973"
+            line="999"
             column="21"/>
     </issue>
 
@@ -3777,7 +3557,7 @@
     <issue
         id="UnusedResources"
         message="The resource `R.color.md_theme_light_surfaceTint` appears to be unused"
-        errorLine1="    &lt;color name=&quot;md_theme_light_surfaceTint&quot;>#7A3557&lt;/color>"
+        errorLine1="    &lt;color name=&quot;md_theme_light_surfaceTint&quot;>#0057B8&lt;/color>"
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/res/values/colors-themed.xml"
@@ -3810,7 +3590,7 @@
     <issue
         id="UnusedResources"
         message="The resource `R.color.md_theme_dark_surfaceTint` appears to be unused"
-        errorLine1="    &lt;color name=&quot;md_theme_dark_surfaceTint&quot;>#FFAFD0&lt;/color>"
+        errorLine1="    &lt;color name=&quot;md_theme_dark_surfaceTint&quot;>#A7C8FF&lt;/color>"
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/res/values/colors-themed.xml"
@@ -3836,7 +3616,7 @@
         errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/defaults.xml"
-            line="38"
+            line="42"
             column="11"/>
     </issue>
 
@@ -4001,18 +3781,7 @@
         errorLine2="            ~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="72"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.attach_file` appears to be unused"
-        errorLine1="    &lt;string name=&quot;attach_file&quot;>Attach file&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="87"
+            line="83"
             column="13"/>
     </issue>
 
@@ -4023,7 +3792,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="90"
+            line="101"
             column="13"/>
     </issue>
 
@@ -4034,7 +3803,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="92"
+            line="103"
             column="13"/>
     </issue>
 
@@ -4045,7 +3814,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="93"
+            line="104"
             column="13"/>
     </issue>
 
@@ -4056,7 +3825,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="123"
+            line="136"
             column="13"/>
     </issue>
 
@@ -4067,7 +3836,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="124"
+            line="137"
             column="13"/>
     </issue>
 
@@ -4078,7 +3847,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="125"
+            line="138"
             column="13"/>
     </issue>
 
@@ -4089,7 +3858,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="130"
+            line="143"
             column="13"/>
     </issue>
 
@@ -4100,7 +3869,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="131"
+            line="144"
             column="13"/>
     </issue>
 
@@ -4111,7 +3880,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="132"
+            line="145"
             column="13"/>
     </issue>
 
@@ -4122,7 +3891,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="145"
+            line="158"
             column="13"/>
     </issue>
 
@@ -4133,7 +3902,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="150"
+            line="163"
             column="13"/>
     </issue>
 
@@ -4144,7 +3913,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="151"
+            line="164"
             column="13"/>
     </issue>
 
@@ -4155,7 +3924,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="152"
+            line="165"
             column="13"/>
     </issue>
 
@@ -4166,7 +3935,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="154"
+            line="167"
             column="13"/>
     </issue>
 
@@ -4177,7 +3946,7 @@
         errorLine2="            ~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="156"
+            line="169"
             column="13"/>
     </issue>
 
@@ -4188,7 +3957,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="157"
+            line="170"
             column="13"/>
     </issue>
 
@@ -4199,7 +3968,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="281"
+            line="294"
             column="13"/>
     </issue>
 
@@ -4210,7 +3979,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="315"
+            line="328"
             column="13"/>
     </issue>
 
@@ -4221,7 +3990,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="318"
+            line="331"
             column="13"/>
     </issue>
 
@@ -4232,7 +4001,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="319"
+            line="332"
             column="13"/>
     </issue>
 
@@ -4243,7 +4012,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="321"
+            line="334"
             column="13"/>
     </issue>
 
@@ -4254,7 +4023,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="322"
+            line="335"
             column="13"/>
     </issue>
 
@@ -4265,7 +4034,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="323"
+            line="336"
             column="13"/>
     </issue>
 
@@ -4276,7 +4045,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="324"
+            line="337"
             column="13"/>
     </issue>
 
@@ -4287,7 +4056,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="325"
+            line="338"
             column="13"/>
     </issue>
 
@@ -4298,7 +4067,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="326"
+            line="339"
             column="13"/>
     </issue>
 
@@ -4309,7 +4078,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="327"
+            line="340"
             column="13"/>
     </issue>
 
@@ -4320,7 +4089,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="328"
+            line="341"
             column="13"/>
     </issue>
 
@@ -4331,7 +4100,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="390"
+            line="403"
             column="13"/>
     </issue>
 
@@ -4342,7 +4111,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="393"
+            line="406"
             column="13"/>
     </issue>
 
@@ -4353,7 +4122,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="417"
+            line="430"
             column="13"/>
     </issue>
 
@@ -4364,7 +4133,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="418"
+            line="431"
             column="13"/>
     </issue>
 
@@ -4375,7 +4144,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="421"
+            line="434"
             column="13"/>
     </issue>
 
@@ -4386,7 +4155,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="470"
+            line="483"
             column="13"/>
     </issue>
 
@@ -4397,7 +4166,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="471"
+            line="484"
             column="13"/>
     </issue>
 
@@ -4408,7 +4177,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="535"
+            line="548"
             column="13"/>
     </issue>
 
@@ -4419,7 +4188,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="536"
+            line="549"
             column="13"/>
     </issue>
 
@@ -4430,7 +4199,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="537"
+            line="550"
             column="13"/>
     </issue>
 
@@ -4441,7 +4210,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="538"
+            line="551"
             column="13"/>
     </issue>
 
@@ -4452,7 +4221,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="551"
+            line="564"
             column="13"/>
     </issue>
 
@@ -4463,7 +4232,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="558"
+            line="571"
             column="13"/>
     </issue>
 
@@ -4474,7 +4243,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="560"
+            line="573"
             column="13"/>
     </issue>
 
@@ -4485,7 +4254,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="566"
+            line="579"
             column="13"/>
     </issue>
 
@@ -4496,7 +4265,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="569"
+            line="582"
             column="13"/>
     </issue>
 
@@ -4507,7 +4276,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="570"
+            line="583"
             column="13"/>
     </issue>
 
@@ -4518,7 +4287,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="571"
+            line="584"
             column="13"/>
     </issue>
 
@@ -4529,7 +4298,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="601"
+            line="614"
             column="13"/>
     </issue>
 
@@ -4540,7 +4309,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="602"
+            line="615"
             column="13"/>
     </issue>
 
@@ -4551,7 +4320,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="627"
+            line="640"
             column="13"/>
     </issue>
 
@@ -4562,7 +4331,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="628"
+            line="641"
             column="13"/>
     </issue>
 
@@ -4573,7 +4342,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="629"
+            line="642"
             column="13"/>
     </issue>
 
@@ -4584,7 +4353,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="651"
+            line="664"
             column="13"/>
     </issue>
 
@@ -4595,7 +4364,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="652"
+            line="665"
             column="13"/>
     </issue>
 
@@ -4606,7 +4375,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="653"
+            line="666"
             column="13"/>
     </issue>
 
@@ -4617,7 +4386,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="654"
+            line="667"
             column="13"/>
     </issue>
 
@@ -4628,7 +4397,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="690"
+            line="703"
             column="13"/>
     </issue>
 
@@ -4639,7 +4408,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="700"
+            line="713"
             column="13"/>
     </issue>
 
@@ -4650,7 +4419,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="711"
+            line="724"
             column="13"/>
     </issue>
 
@@ -4661,7 +4430,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="712"
+            line="725"
             column="13"/>
     </issue>
 
@@ -4672,7 +4441,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="718"
+            line="731"
             column="13"/>
     </issue>
 
@@ -4683,7 +4452,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="721"
+            line="734"
             column="13"/>
     </issue>
 
@@ -4694,7 +4463,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="722"
+            line="735"
             column="13"/>
     </issue>
 
@@ -4705,7 +4474,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="756"
+            line="769"
             column="13"/>
     </issue>
 
@@ -4716,7 +4485,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="766"
+            line="779"
             column="13"/>
     </issue>
 
@@ -4727,7 +4496,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="767"
+            line="780"
             column="13"/>
     </issue>
 
@@ -4738,7 +4507,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="776"
+            line="789"
             column="13"/>
     </issue>
 
@@ -4749,7 +4518,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="804"
+            line="817"
             column="13"/>
     </issue>
 
@@ -4760,7 +4529,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="812"
+            line="825"
             column="13"/>
     </issue>
 
@@ -4771,7 +4540,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="817"
+            line="830"
             column="13"/>
     </issue>
 
@@ -4782,7 +4551,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="820"
+            line="833"
             column="13"/>
     </issue>
 
@@ -4793,7 +4562,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="821"
+            line="834"
             column="13"/>
     </issue>
 
@@ -4804,7 +4573,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="822"
+            line="835"
             column="13"/>
     </issue>
 
@@ -4815,7 +4584,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="823"
+            line="836"
             column="13"/>
     </issue>
 
@@ -4826,7 +4595,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="824"
+            line="837"
             column="13"/>
     </issue>
 
@@ -4837,7 +4606,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="825"
+            line="838"
             column="13"/>
     </issue>
 
@@ -4848,7 +4617,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="826"
+            line="839"
             column="13"/>
     </issue>
 
@@ -4859,7 +4628,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="827"
+            line="840"
             column="13"/>
     </issue>
 
@@ -4870,7 +4639,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="828"
+            line="841"
             column="13"/>
     </issue>
 
@@ -4881,7 +4650,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="829"
+            line="842"
             column="13"/>
     </issue>
 
@@ -4892,7 +4661,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="830"
+            line="843"
             column="13"/>
     </issue>
 
@@ -4903,7 +4672,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="831"
+            line="844"
             column="13"/>
     </issue>
 
@@ -4914,7 +4683,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="832"
+            line="845"
             column="13"/>
     </issue>
 
@@ -4925,7 +4694,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="833"
+            line="846"
             column="13"/>
     </issue>
 
@@ -4936,7 +4705,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="834"
+            line="847"
             column="13"/>
     </issue>
 
@@ -4947,7 +4716,7 @@
         errorLine2="            ~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="835"
+            line="848"
             column="13"/>
     </issue>
 
@@ -4958,7 +4727,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="837"
+            line="850"
             column="13"/>
     </issue>
 
@@ -4969,7 +4738,7 @@
         errorLine2="            ~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="838"
+            line="851"
             column="13"/>
     </issue>
 
@@ -4980,7 +4749,7 @@
         errorLine2="            ~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="839"
+            line="852"
             column="13"/>
     </issue>
 
@@ -4991,7 +4760,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="840"
+            line="853"
             column="13"/>
     </issue>
 
@@ -5002,7 +4771,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="841"
+            line="854"
             column="13"/>
     </issue>
 
@@ -5013,7 +4782,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="842"
+            line="855"
             column="13"/>
     </issue>
 
@@ -5024,7 +4793,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="843"
+            line="856"
             column="13"/>
     </issue>
 
@@ -5035,7 +4804,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="844"
+            line="857"
             column="13"/>
     </issue>
 
@@ -5046,7 +4815,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="845"
+            line="858"
             column="13"/>
     </issue>
 
@@ -5057,7 +4826,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="846"
+            line="859"
             column="13"/>
     </issue>
 
@@ -5068,7 +4837,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="847"
+            line="860"
             column="13"/>
     </issue>
 
@@ -5079,7 +4848,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="848"
+            line="861"
             column="13"/>
     </issue>
 
@@ -5090,7 +4859,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="849"
+            line="862"
             column="13"/>
     </issue>
 
@@ -5101,7 +4870,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="850"
+            line="863"
             column="13"/>
     </issue>
 
@@ -5112,7 +4881,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="851"
+            line="864"
             column="13"/>
     </issue>
 
@@ -5123,7 +4892,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="852"
+            line="865"
             column="13"/>
     </issue>
 
@@ -5134,7 +4903,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="853"
+            line="866"
             column="13"/>
     </issue>
 
@@ -5145,7 +4914,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="854"
+            line="867"
             column="13"/>
     </issue>
 
@@ -5156,7 +4925,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="855"
+            line="868"
             column="13"/>
     </issue>
 
@@ -5167,7 +4936,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="856"
+            line="869"
             column="13"/>
     </issue>
 
@@ -5178,7 +4947,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="857"
+            line="870"
             column="13"/>
     </issue>
 
@@ -5189,7 +4958,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="858"
+            line="871"
             column="13"/>
     </issue>
 
@@ -5200,7 +4969,7 @@
         errorLine2="            ~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="859"
+            line="872"
             column="13"/>
     </issue>
 
@@ -5211,7 +4980,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="860"
+            line="873"
             column="13"/>
     </issue>
 
@@ -5222,7 +4991,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="861"
+            line="874"
             column="13"/>
     </issue>
 
@@ -5233,7 +5002,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="863"
+            line="876"
             column="13"/>
     </issue>
 
@@ -5244,7 +5013,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="884"
+            line="897"
             column="13"/>
     </issue>
 
@@ -5255,7 +5024,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="885"
+            line="898"
             column="13"/>
     </issue>
 
@@ -5266,7 +5035,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="896"
+            line="909"
             column="13"/>
     </issue>
 
@@ -5277,7 +5046,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="918"
+            line="931"
             column="13"/>
     </issue>
 
@@ -5288,7 +5057,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="942"
+            line="957"
             column="13"/>
     </issue>
 
@@ -5299,7 +5068,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="995"
+            line="1010"
             column="13"/>
     </issue>
 
@@ -5310,7 +5079,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="1032"
+            line="1047"
             column="13"/>
     </issue>
 
@@ -5321,7 +5090,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="1038"
+            line="1053"
             column="13"/>
     </issue>
 
@@ -5332,7 +5101,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="1172"
+            line="1187"
             column="13"/>
     </issue>
 
@@ -5371,17 +5140,6 @@
 
     <issue
         id="UselessParent"
-        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary; transfer the `background` attribute to the other view"
-        errorLine1="            &lt;LinearLayout"
-        errorLine2="             ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/item_message_end.xml"
-            line="36"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="UselessParent"
         message="This `LinearLayout` layout or its `RelativeLayout` parent is possibly unnecessary; transfer the `background` attribute to the other view"
         errorLine1="        &lt;LinearLayout"
         errorLine2="         ~~~~~~~~~~~~">
@@ -5389,17 +5147,6 @@
             file="src/main/res/layout/item_message_rtp_session.xml"
             line="12"
             column="10"/>
-    </issue>
-
-    <issue
-        id="UselessParent"
-        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary; transfer the `background` attribute to the other view"
-        errorLine1="            &lt;LinearLayout"
-        errorLine2="             ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/item_message_start.xml"
-            line="37"
-            column="14"/>
     </issue>
 
     <issue
@@ -6481,40 +6228,6 @@
     </issue>
 
     <issue
-        id="IconXmlAndPng"
-        message="The following images appear both as density independent `.xml` files and as bitmap files: src/conversations/res/mipmap-anydpi/new_launcher.xml, src/conversations/res/mipmap-hdpi/new_launcher.png">
-        <location
-            file="src/conversations/res/mipmap-xxxhdpi/new_launcher.png"/>
-        <location
-            file="src/conversations/res/mipmap-xxhdpi/new_launcher.png"/>
-        <location
-            file="src/conversations/res/mipmap-xhdpi/new_launcher.png"/>
-        <location
-            file="src/conversations/res/mipmap-mdpi/new_launcher.png"/>
-        <location
-            file="src/conversations/res/mipmap-hdpi/new_launcher.png"/>
-        <location
-            file="src/conversations/res/mipmap-anydpi/new_launcher.xml"/>
-    </issue>
-
-    <issue
-        id="IconXmlAndPng"
-        message="The following images appear both as density independent `.xml` files and as bitmap files: src/conversations/res/mipmap-anydpi/new_launcher_round.xml, src/conversations/res/mipmap-hdpi/new_launcher_round.png">
-        <location
-            file="src/conversations/res/mipmap-xxxhdpi/new_launcher_round.png"/>
-        <location
-            file="src/conversations/res/mipmap-xxhdpi/new_launcher_round.png"/>
-        <location
-            file="src/conversations/res/mipmap-xhdpi/new_launcher_round.png"/>
-        <location
-            file="src/conversations/res/mipmap-mdpi/new_launcher_round.png"/>
-        <location
-            file="src/conversations/res/mipmap-hdpi/new_launcher_round.png"/>
-        <location
-            file="src/conversations/res/mipmap-anydpi/new_launcher_round.xml"/>
-    </issue>
-
-    <issue
         id="IconDensities"
         message="Missing the following drawables in `drawable-mdpi`: play_gif_black.png, play_gif_white.png, play_video_black.png, play_video_white.png">
         <location
@@ -6583,7 +6296,7 @@
         errorLine2="                                                               ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/conversations/java/eu/siacs/conversations/ui/ManageAccountActivity.java"
-            line="158"
+            line="156"
             column="64"/>
     </issue>
 
@@ -6643,7 +6356,7 @@
             column="9"/>
         <location
             file="src/main/res/menu/fragment_conversation.xml"
-            line="32"
+            line="21"
             column="9"/>
     </issue>
 
@@ -6654,7 +6367,7 @@
         errorLine2="        ^">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1410"
+            line="1418"
             column="9"/>
     </issue>
 
@@ -6665,7 +6378,7 @@
         errorLine2="                ^">
         <location
             file="src/main/java/eu/siacs/conversations/ui/ConversationFragment.java"
-            line="1411"
+            line="1419"
             column="17"/>
     </issue>
 
@@ -6727,55 +6440,11 @@
     <issue
         id="ContentDescription"
         message="Missing `contentDescription` attribute on image"
-        errorLine1="            &lt;ImageView"
-        errorLine2="             ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/activity_rtp_session.xml"
-            line="29"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                    &lt;ImageView"
-        errorLine2="                     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/activity_rtp_session.xml"
-            line="97"
-            column="22"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="        &lt;ImageView"
-        errorLine2="         ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/activity_rtp_session.xml"
-            line="167"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="        &lt;ImageView"
-        errorLine2="         ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/activity_rtp_session.xml"
-            line="179"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
         errorLine1="                &lt;com.google.android.material.floatingactionbutton.FloatingActionButton"
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="205"
+            line="212"
             column="18"/>
     </issue>
 
@@ -6786,7 +6455,7 @@
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="220"
+            line="227"
             column="18"/>
     </issue>
 
@@ -6797,7 +6466,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="238"
+            line="245"
             column="14"/>
     </issue>
 
@@ -6808,7 +6477,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="248"
+            line="255"
             column="14"/>
     </issue>
 
@@ -6819,7 +6488,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="262"
+            line="269"
             column="14"/>
     </issue>
 
@@ -6830,7 +6499,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="272"
+            line="279"
             column="14"/>
     </issue>
 
@@ -6863,7 +6532,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/fragment_conversation.xml"
-            line="44"
+            line="66"
             column="14"/>
     </issue>
 
@@ -7006,7 +6675,7 @@
         errorLine2="                     ~~~~~~~~~">
         <location
             file="src/main/res/layout/item_message_start.xml"
-            line="67"
+            line="66"
             column="22"/>
     </issue>
 
@@ -7017,7 +6686,7 @@
         errorLine2="                     ~~~~~~~~~">
         <location
             file="src/main/res/layout/item_message_start.xml"
-            line="89"
+            line="88"
             column="22"/>
     </issue>
 
@@ -7028,7 +6697,7 @@
         errorLine2="                     ~~~~~~~~~">
         <location
             file="src/main/res/layout/item_message_start.xml"
-            line="99"
+            line="98"
             column="22"/>
     </issue>
 
@@ -7138,7 +6807,7 @@
         errorLine2="             ~~~~~~">
         <location
             file="src/main/res/layout/activity_publish_profile_picture.xml"
-            line="109"
+            line="112"
             column="14"/>
     </issue>
 
@@ -7160,7 +6829,7 @@
         errorLine2="         ~~~~~~~~">
         <location
             file="src/main/res/layout/activity_rtp_session.xml"
-            line="283"
+            line="290"
             column="10"/>
     </issue>
 
@@ -7193,7 +6862,7 @@
         errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/fragment_conversation.xml"
-            line="44"
+            line="66"
             column="14"/>
     </issue>
 

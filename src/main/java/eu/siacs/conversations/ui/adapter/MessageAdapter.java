@@ -85,6 +85,8 @@ import eu.siacs.conversations.ui.widget.ClickableMovementMethod;
 import eu.siacs.conversations.utils.CryptoHelper;
 import eu.siacs.conversations.utils.Emoticons;
 import eu.siacs.conversations.utils.GeoHelper;
+import eu.siacs.conversations.utils.MaerCallInvite;
+import eu.siacs.conversations.utils.MaerMeetingLinkPolicy;
 import eu.siacs.conversations.utils.MessageUtils;
 import eu.siacs.conversations.utils.StylingHelper;
 import eu.siacs.conversations.utils.TimeFrameUtils;
@@ -596,6 +598,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         StylingHelper.format(body, viewHolder.messageBody().getCurrentTextColor());
         Linkify.addLinks(body);
+        for (final android.text.style.URLSpan span :
+                body.getSpans(0, body.length(), android.text.style.URLSpan.class)) {
+            if (MaerMeetingLinkPolicy.mustSuppressRawLink(span.getURL())) {
+                body.removeSpan(span);
+            }
+        }
         FixedURLSpan.fix(body);
         if (highlightedTerm != null) {
             StylingHelper.highlight(viewHolder.messageBody(), body, highlightedTerm);
@@ -603,6 +611,54 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         viewHolder.messageBody().setAutoLinkMask(0);
         viewHolder.messageBody().setText(body);
         viewHolder.messageBody().setMovementMethod(ClickableMovementMethod.getInstance());
+        MaerCallInvite.parse(rawBody, Instant.now())
+                .ifPresent(invite -> configureCallInvite(viewHolder, invite));
+    }
+
+    private void configureCallInvite(
+            final BubbleMessageItemViewHolder viewHolder, final MaerCallInvite invite) {
+        viewHolder.downloadButton().setVisibility(View.VISIBLE);
+        final int label =
+                switch (invite.getMode()) {
+                    case AUDIO -> R.string.join_maer_audio_call;
+                    case VIDEO -> R.string.join_maer_video_call;
+                    case SCREEN -> R.string.join_maer_screen_share;
+                };
+        viewHolder.downloadButton().setText(label);
+        viewHolder
+                .downloadButton()
+                .setIconResource(
+                        invite.getMode() == MaerCallInvite.Mode.AUDIO
+                                ? R.drawable.ic_call_24dp
+                                : invite.getMode() == MaerCallInvite.Mode.SCREEN
+                                        ? R.drawable.ic_screen_share_24dp
+                                        : R.drawable.ic_videocam_24dp);
+        viewHolder
+                .downloadButton()
+                .setOnClickListener(
+                        view -> {
+                            if (!invite.isJoinableAt(Instant.now())) {
+                                Toast.makeText(
+                                                activity,
+                                                R.string.maer_call_invitation_expired,
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                return;
+                            }
+                            final Intent intent =
+                                    new Intent(
+                                            Intent.ACTION_VIEW,
+                                            android.net.Uri.parse(invite.getJoinUri().toString()));
+                            try {
+                                activity.startActivity(intent);
+                            } catch (final ActivityNotFoundException e) {
+                                Toast.makeText(
+                                                activity,
+                                                R.string.no_application_found_to_open_link,
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
     }
 
     private void displayDownloadableMessage(

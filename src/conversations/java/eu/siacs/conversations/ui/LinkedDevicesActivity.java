@@ -19,8 +19,12 @@ import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.ui.adapter.LinkedDeviceAdapter;
 import eu.siacs.conversations.ui.widget.AccountPickerDialog;
 import eu.siacs.conversations.utils.MaerPairingUri;
+import eu.siacs.conversations.utils.PairingReplayGuard;
 import eu.siacs.conversations.xmpp.manager.LinkedDevicesManager;
+import im.conversations.android.xmpp.IqErrorException;
+import im.conversations.android.xmpp.model.error.Condition;
 import java.text.DateFormat;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +55,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         binding.devices.setAdapter(adapter);
         binding.account.setOnClickListener(view -> chooseAccount());
         binding.associate.setOnClickListener(view -> requestPermissionAndScanQrCode());
+        binding.retry.setOnClickListener(view -> loadDevices());
         renderState();
     }
 
@@ -175,6 +180,10 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
             Toast.makeText(this, R.string.invalid_pairing_qr_code, Toast.LENGTH_LONG).show();
             return;
         }
+        if (PairingReplayGuard.isConsumed(this, pairingUri.getSessionId(), Instant.now())) {
+            Toast.makeText(this, R.string.pairing_request_already_used, Toast.LENGTH_LONG).show();
+            return;
+        }
         inspect(pairingUri);
     }
 
@@ -208,7 +217,9 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
-                                        R.string.could_not_inspect_pairing_request,
+                                        pairingError(
+                                                throwable,
+                                                R.string.could_not_inspect_pairing_request),
                                         Toast.LENGTH_LONG)
                                 .show();
                     }
@@ -235,13 +246,19 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                 .setNegativeButton(R.string.cancel, (dialog, which) -> finishOperation())
                 .setOnCancelListener(dialog -> finishOperation())
                 .setPositiveButton(
-                        R.string.link_device, (dialog, which) -> approve(account, pairingUri))
+                        R.string.link_device, (dialog, which) -> approve(account, pairingUri, info))
                 .show();
     }
 
-    private void approve(final Account account, final MaerPairingUri pairingUri) {
+    private void approve(
+            final Account account, final MaerPairingUri pairingUri, final PairingRequestInfo info) {
         if (account != selectedAccount || !isSelectedAccountAvailable()) {
             finishOperation();
+            return;
+        }
+        if (!info.getExpiresAt().isAfter(Instant.now())) {
+            finishOperation();
+            Toast.makeText(this, R.string.pairing_request_expired, Toast.LENGTH_LONG).show();
             return;
         }
         final var future =
@@ -258,6 +275,11 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                             return;
                         }
                         operationFuture = null;
+                        PairingReplayGuard.markConsumed(
+                                LinkedDevicesActivity.this,
+                                pairingUri.getSessionId(),
+                                info.getExpiresAt(),
+                                Instant.now());
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
@@ -276,7 +298,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
-                                        R.string.could_not_link_device,
+                                        pairingError(throwable, R.string.could_not_link_device),
                                         Toast.LENGTH_LONG)
                                 .show();
                     }
@@ -335,7 +357,8 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
-                                        R.string.could_not_revoke_linked_device,
+                                        pairingError(
+                                                throwable, R.string.could_not_revoke_linked_device),
                                         Toast.LENGTH_LONG)
                                 .show();
                     }
@@ -384,11 +407,42 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
             status = 0;
         }
         binding.progress.setVisibility(devicesLoading ? View.VISIBLE : View.GONE);
+        binding.retry.setVisibility(devicesError && accountAvailable ? View.VISIBLE : View.GONE);
         binding.status.setVisibility(status == 0 || devicesLoading ? View.GONE : View.VISIBLE);
         if (status != 0) {
             binding.status.setText(status);
         }
         binding.devices.setVisibility(status == 0 && !devicesLoading ? View.VISIBLE : View.GONE);
+    }
+
+    static int pairingError(final Throwable throwable, final int fallback) {
+        if (!(throwable instanceof IqErrorException iqError)) {
+            return fallback;
+        }
+        return pairingError(iqError.getErrorCondition(), fallback);
+    }
+
+    static int pairingError(final Condition condition, final int fallback) {
+        if (condition instanceof Condition.ItemNotFound) {
+            return R.string.pairing_request_expired;
+        }
+        if (condition instanceof Condition.Conflict) {
+            return R.string.pairing_request_already_used;
+        }
+        if (condition instanceof Condition.ResourceConstraint) {
+            return R.string.pairing_device_limit_reached;
+        }
+        if (condition instanceof Condition.PolicyViolation) {
+            return R.string.pairing_too_many_attempts;
+        }
+        if (condition instanceof Condition.Forbidden
+                || condition instanceof Condition.NotAuthorized) {
+            return R.string.pairing_request_not_authorized;
+        }
+        if (condition instanceof Condition.BadRequest) {
+            return R.string.invalid_pairing_qr_code;
+        }
+        return fallback;
     }
 
     private static String format(final java.time.Instant instant) {

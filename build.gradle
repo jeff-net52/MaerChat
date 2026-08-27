@@ -11,6 +11,34 @@ buildscript {
     }
 }
 
+// Android Gradle Plugin connected tests uninstall the target package during cleanup. That
+// destroys its private data, so a user phone must never be selected accidentally.
+gradle.taskGraph.whenReady { graph ->
+    def runsConnectedAndroidTests = graph.allTasks.any {
+        it.name.startsWith('connected') && it.name.endsWith('AndroidTest')
+    }
+    if (!runsConnectedAndroidTests) {
+        return
+    }
+    def serial = System.getenv('ANDROID_SERIAL') ?: ''
+    def emulator = serial.startsWith('emulator-')
+    def disposablePhysicalDevice =
+            providers.gradleProperty('allowDisposableConnectedTests')
+                    .map { it.toBoolean() }
+                    .getOrElse(false)
+    if (serial.isBlank()) {
+        throw new GradleException(
+                'ANDROID_SERIAL is required for connected tests. Use an emulator or the safe '
+                        + 'tools/run-connected-tests.ps1 wrapper.')
+    }
+    if (!emulator && !disposablePhysicalDevice) {
+        throw new GradleException(
+                "Refusing connected tests on physical device ${serial}: AGP uninstalls the "
+                        + 'target app and deletes its private data. Use a disposable device and '
+                        + '-PallowDisposableConnectedTests=true only after explicit approval.')
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.diffplug.spotless'
 
@@ -112,8 +140,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 37
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionCode 5
-        versionName "0.5.0"
+        versionCode 7
+        versionName "0.5.2"
         applicationId "fr.maer.chat"
         resValue "string", "applicationId", applicationId
         def appName = "Maer Chat"

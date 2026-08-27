@@ -25,12 +25,20 @@ L’APK universel se trouve dans
 `build/outputs/apk/conversationsFree/debug/`. Pour l’installer :
 
 ```shell
-adb install -r chemin/vers/fr.maer.chat-0.5.0-conversations-free-arm64-v8a-debug.apk
+adb install -r chemin/vers/fr.maer.chat-0.5.2-conversations-free-arm64-v8a-debug.apk
 ```
 
 Le paquet `fr.maer.chat` peut cohabiter avec Conversations. Une installation
 `-r` ne fonctionne qu’avec une APK signée par la même clé que la version déjà
 installée.
+
+> **Attention aux tests instrumentés :** Android Gradle Plugin désinstalle
+> l’application cible lors du nettoyage de `connected*AndroidTest`, ce qui
+> supprime ses données privées. Ces tâches sont interdites sur un téléphone
+> utilisateur. Le build les refuse par défaut sur un serial physique. Utilisez
+> `tools/run-connected-tests.ps1 -Serial emulator-5554` avec un émulateur ;
+> l’option `-AllowDisposablePhysicalDevice` est réservée à un appareil jetable
+> dont l’effacement a été explicitement accepté.
 
 ## Release signable ou signée
 
@@ -64,19 +72,16 @@ posséder sa propre configuration applicative et un relais push compatible ; voi
 ## État du build validé
 
 Le build courant utilise `compileSdk` et `targetSdk` 37. Sa suite unitaire
-compte **178 tests réussis**, sans échec. L’assemblage
-`conversationsFreeRelease` minifié réussit et produit cinq APK dont le nom se
-termine explicitement par `release-unsigned`.
+compte **199 tests réussis**, sans échec, erreur ni test ignoré.
+`compileConversationsFreeDebugAndroidTestJavaWithJavac`,
+`lintConversationsFreeDebug`, `assembleConversationsFreeDebug` et
+`spotlessJavaCheck` réussissent.
+Lint ne signale aucun nouveau problème ; 626 constats historiques restent
+explicitement filtrés par la baseline. La qualification d’une Release signée
+reste un contrôle distinct avant publication publique.
 
-Le portail de publication reste toutefois rouge : `spotlessCheck` signale des
-écarts préexistants dans 14 fichiers Java, et `lintConversationsFreeDebug`
-signale 8 erreurs hors baseline (une mise à niveau disponible d’AGP et sept
-ressources MAER devenues inutilisées). Les 645 constats amont restants sont
-filtrés par la baseline. Ces contrôles doivent passer sans régénération aveugle
-de la baseline avant toute livraison.
-
-Le test instrumenté de navigation passe également sur l’émulateur Android
-API 31 : **1 test réussi**, sans échec ni erreur.
+Les sources des tests instrumentés compilent. Aucun test `connected*` n’a été
+exécuté pour qualifier ce binaire final.
 
 Une APK Debug ARM64 0.5.0 antérieure a été installée sur un Samsung XCover 7
 SM-G556B sous Android 16/API 36. Cette validation historique démontre la
@@ -95,7 +100,7 @@ leurs anciennes empreintes comme s’il s’agissait d’une livraison. Le fichi
 à produire pour une future Release.
 
 L’identité de l’application candidate reste `fr.maer.chat`, avec `minSdk` 23 et
-`targetSdk` 37. Les codes de version attendus sont `500` pour l’APK universelle
-et `504` pour l’APK ARM64. Une clé privée de production pérenne, distincte de
+`targetSdk` 37. Les codes de version 0.5.2 sont `700` pour l’APK universelle
+et `704` pour l’APK ARM64. Une clé privée de production pérenne, distincte de
 toute clé Debug ou de développement historique, doit être établie avant toute
 publication sur un magasin d’applications.

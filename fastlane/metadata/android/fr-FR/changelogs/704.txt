@@ -1,0 +1,4 @@
+* Notifications privées sur l’écran verrouillé
+* Appareils liés plus fiables et protégés contre le rejeu
+* Invitations d’appel MAER et partage d’écran Android
+* Accessibilité et navigation renforcées

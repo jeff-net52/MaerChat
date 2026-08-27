@@ -1248,6 +1248,27 @@
     <string name="revoke_linked_device_message">Révoquer l’accès de %1$s ?</string>
     <string name="linked_device_revoked">Appareil révoqué</string>
     <string name="could_not_revoke_linked_device">Impossible de révoquer cet appareil.</string>
+    <string name="pairing_request_expired">Cette demande d’association a expiré. Créez un nouveau QR code sur l’ordinateur.</string>
+    <string name="pairing_request_already_used">Cette demande d’association a déjà été utilisée. Créez un nouveau QR code sur l’ordinateur.</string>
+    <string name="pairing_device_limit_reached">La limite d’appareils liés est atteinte. Révoquez un ancien appareil puis réessayez.</string>
+    <string name="pairing_request_not_authorized">Ce compte n’est pas autorisé à gérer cette demande d’association.</string>
+    <string name="retry_linked_devices">Réessayer</string>
+    <string name="pairing_too_many_attempts">Trop de tentatives d’association. Réessayez plus tard.</string>
+    <string name="maer_call_invitation_expired">Cette invitation d’appel a expiré.</string>
+    <string name="share_screen">Partager l’écran</string>
+    <string name="stop_sharing_screen">Arrêter le partage d’écran</string>
+    <string name="screen_sharing_requires_video_call">Le partage d’écran est disponible pendant un appel vidéo connecté.</string>
+    <string name="screen_sharing_started">Votre écran est maintenant partagé. Utilisez l’indicateur système ou ce menu pour l’arrêter.</string>
+    <string name="screen_sharing_stopped">Partage d’écran arrêté.</string>
+    <string name="screen_sharing_failed">Impossible de démarrer le partage d’écran.</string>
+    <string name="join_maer_audio_call">Rejoindre l’appel audio</string>
+    <string name="join_maer_video_call">Rejoindre l’appel vidéo</string>
+    <string name="join_maer_screen_share">Voir l’écran partagé</string>
+    <string name="call_connection_warning">Avertissement de connexion de l’appel</string>
+    <string name="remote_video_description">Vidéo du participant distant</string>
+    <string name="local_video_description">Votre aperçu vidéo ou votre écran partagé</string>
+    <string name="verified_call_description">Appel chiffré vérifié</string>
+    <string name="microphone_muted_description">Votre microphone est coupé</string>
     <string name="linked_device_never_seen">Jamais</string>
     <string name="linked_device_details">%1$s · Associé le %2$s\nDernière activité %3$s · Expire le %4$s</string>
 </resources>

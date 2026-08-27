@@ -419,8 +419,10 @@ public class WelcomeActivity extends QrCodeProcessingActivity
         final int itemId = item.getItemId();
         if (itemId == R.id.action_scan_qr_code) {
             requestPermissionAndScanQrCode();
+            return true;
         } else if (itemId == R.id.action_legal_information) {
             startActivity(new Intent(this, MaerLegalActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

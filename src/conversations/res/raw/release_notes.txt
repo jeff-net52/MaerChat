@@ -1,12 +1,12 @@
 MAER CHAT — RELEASE NOTES
 
-VERSION 0.5.0 — 24 AUGUST 2026
+VERSION 0.5.2 — 27 AUGUST 2026
 
-- Added a “Start a call” button to the Calls tab.
-- Added an explicit choice between audio and video calls.
-- Added contact selection and just-in-time microphone, camera and Bluetooth
-  permissions.
-- Updated open-source notices, provenance and release-compliance documentation.
+- Protected lock-screen notifications with a generic public version.
+- Added linked-device retry, expiration, replay protection and precise errors.
+- Added interoperable MAER call invitations restricted to meet.jit.si.
+- Added real Android screen capture through the existing WebRTC video track.
+- Tightened deep links, accessibility and navigation tests.
 
 The Maer Chat client remains free software under GNU GPL version 3 or any later
 version and can be used with compatible XMPP servers. An active paid account is

@@ -6,6 +6,14 @@ la licence GPLv3+ et ne doit pas annoncer une conformité juridique non validée
 
 ## Maer Chat
 
+### Version 0.5.2 — 27 août 2026
+
+* Confidentialité renforcée des notifications sur l’écran verrouillé.
+* Appareils liés : nouvelle tentative, expiration, anti-rejeu et erreurs précises.
+* Invitations d’appel MAER interopérables et limitées à `meet.jit.si`.
+* Partage d’écran Android via la piste vidéo WebRTC existante.
+* Liens profonds, accessibilité et tests de navigation renforcés.
+
 ### Version 0.5.0 — 24 août 2026
 
 * Ajout du bouton « Lancer un appel » dans l’onglet Appels.

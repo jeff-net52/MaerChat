@@ -43,6 +43,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <!-- this foreground service type permission is exclusively used for import and export backup -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -114,7 +115,7 @@
         <service
             android:name=".services.XmppConnectionService"
             android:exported="false"
-            android:foregroundServiceType="specialUse|systemExempted|microphone|camera"
+            android:foregroundServiceType="specialUse|systemExempted|microphone|camera|mediaProjection"
             tools:ignore="ForegroundServicePermission">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
@@ -224,63 +225,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="xmpp" />
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="conversations.im" />
-                <data android:pathPrefix="/i/" />
-                <data android:pathPrefix="/j/" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="invite.joinjabber.org"
-                    android:scheme="https" />
-
-                <uri-relative-filter-group android:allow="true">
-                    <data android:path="/" />
-                    <data android:fragmentPattern=".*" />
-                </uri-relative-filter-group>
-            </intent-filter>
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="xmpp.link"
-                    android:scheme="https" />
-
-                <uri-relative-filter-group android:allow="true">
-                    <data android:path="/" />
-                    <data android:fragmentPattern=".*" />
-                </uri-relative-filter-group>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SENDTO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="imto" />
-                <data android:host="jabber" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SENDTO" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="imto" />
-                <data android:host="xmpp" />
             </intent-filter>
         </activity>
         <activity

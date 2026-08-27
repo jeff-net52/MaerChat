@@ -198,27 +198,26 @@ public class ManageAccountActivity extends XmppActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (MenuDoubleTabUtil.shouldIgnoreTap()) {
-            return false;
+            return true;
         }
         switch (item.getItemId()) {
             case R.id.action_import_backup:
                 if (hasStoragePermission(REQUEST_IMPORT_BACKUP)) {
                     startActivity(new Intent(this, ImportBackupActivity.class));
                 }
-                break;
+                return true;
             case R.id.action_disable_all:
                 disableAllAccounts();
-                break;
+                return true;
             case R.id.action_enable_all:
                 enableAllAccounts();
-                break;
+                return true;
             case R.id.action_add_account_with_cert:
                 addAccountFromKey();
-                break;
+                return true;
             default:
-                break;
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

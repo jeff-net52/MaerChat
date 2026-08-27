@@ -31,17 +31,17 @@ nécessitent aucun identifiant :
 
 ## État de la validation locale
 
-La suite unitaire complète compte **178 tests réussis** avec `compileSdk` et
+La suite unitaire complète compte **199 tests réussis**, sans échec, erreur ni
+test ignoré, avec `compileSdk` et
 `targetSdk` réglés sur l’API 37. Les tests Android hors appareil s’exécutent avec
 un runtime Robolectric API 36 ; ce niveau de runtime ne modifie pas la cible API
 37 de l’application.
 
-`lintConversationsFreeDebug` échoue actuellement sur **8 erreurs hors
-baseline** : une alerte de version AGP et sept chaînes MAER inutilisées après la
-simplification de la connexion. **645 constats amont** restent filtrés par la
-baseline. `spotlessCheck` échoue également sur le format de 14 fichiers Java
-préexistants. Ces dettes ne sont pas masquées et restent bloquantes pour la
-publication, même si `lintVitalConversationsFreeRelease` est vert.
+`spotlessJavaCheck` et `lintConversationsFreeDebug` réussissent sans nouveau
+constat. **626 constats
+historiques** restent explicitement filtrés par la baseline. La Release signée
+et `spotlessCheck` n’ont pas été qualifiés par cette passe Debug et restent à
+contrôler avant publication publique.
 
 Une APK Debug de validation, non publiable, a été installée et démarrée sur un
 émulateur Android API 31.
@@ -50,18 +50,17 @@ l’échec est affiché proprement, sans fermeture inattendue. Une capture deman
 avec `adb` sur ce build a produit **zéro octet**, ce qui confirme l’application
 de `FLAG_SECURE` sur cet écran.
 
-Un test instrumenté supplémentaire s’exécute sur l’AVD
-`RTM_Tablet_API31` sous Android 12/API 31. Il lance réellement l’écran
-Contacts, vérifie la présence des quatre entrées de navigation, bascule entre
-Contacts et Groupes, contrôle la présence d’Appels sur l’accueil et confirme
-que le logo emploie `FIT_CENTER`. Le dernier passage compte **1 test réussi**,
-sans échec ni erreur.
+Les tests instrumentés compilent, mais aucune tâche `connected*` n’a été
+exécutée après les dernières corrections. Un ancien passage sur Samsung
+avait réussi 2 tests, puis le nettoyage Android Gradle Plugin avait désinstallé
+l’application et supprimé ses données. Ce résultat historique ne qualifie donc
+ni les sources finales, ni l’APK livrée ici.
 
-Pour la version 0.5.0, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
-et `targetSdk` 37. Le code visible attendu est `500` pour l’APK universelle et
-`504` pour l’APK ARM64 : Gradle multiplie le `versionCode` 5 par 100 puis ajoute
+Pour la version 0.5.2, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
+et `targetSdk` 37. Le code visible attendu est `700` pour l’APK universelle et
+`704` pour l’APK ARM64 : Gradle multiplie le `versionCode` 7 par 100 puis ajoute
 le suffixe propre à l’ABI. Les anciennes APK 0.4.0 signées avec une clé de
-développement et les APK 0.5.0 Debug sont explicitement **non publiables** ;
+développement et toutes les APK Debug sont explicitement **non publiables** ;
 leurs anciennes empreintes ne constituent pas une preuve de Release.
 
 Le désassemblage des deux DEX de la Release 0.2.0 après R8 ne contient aucun
@@ -78,9 +77,15 @@ dans l’APK livrée.
 Avec un téléphone ou émulateur détecté :
 
 ```shell
-./gradlew connectedConversationsFreeDebugAndroidTest
+./tools/run-connected-tests.ps1 -Serial emulator-5554
 adb install -r build/outputs/apk/conversationsFree/debug/*universal-debug.apk
 ```
+
+N’exécutez jamais directement `connected*AndroidTest` sur un appareil
+utilisateur : le nettoyage Android Gradle Plugin désinstalle le paquet cible et
+supprime ses données privées. Le garde-fou Gradle exige `ANDROID_SERIAL`, accepte
+les serials `emulator-*` et refuse un appareil physique sauf opt-in explicite
+`-PallowDisposableConnectedTests=true` pour un appareil jetable.
 
 ## Matrice fonctionnelle
 

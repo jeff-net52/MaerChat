@@ -1278,6 +1278,27 @@
     <string name="revoke_linked_device_message">Revoke access for %1$s?</string>
     <string name="linked_device_revoked">Device revoked</string>
     <string name="could_not_revoke_linked_device">Could not revoke this device.</string>
+    <string name="pairing_request_expired">This pairing request has expired. Create a new QR code on the computer.</string>
+    <string name="pairing_request_already_used">This pairing request has already been used. Create a new QR code on the computer.</string>
+    <string name="pairing_device_limit_reached">The linked device limit has been reached. Revoke an old device and try again.</string>
+    <string name="pairing_request_not_authorized">This account is not allowed to manage that pairing request.</string>
+    <string name="retry_linked_devices">Try again</string>
+    <string name="pairing_too_many_attempts">Too many pairing attempts. Try again later.</string>
+    <string name="maer_call_invitation_expired">This call invitation has expired.</string>
+    <string name="share_screen">Share screen</string>
+    <string name="stop_sharing_screen">Stop sharing screen</string>
+    <string name="screen_sharing_requires_video_call">Screen sharing is available during a connected video call.</string>
+    <string name="screen_sharing_started">Your screen is now shared. Use the system sharing indicator or this menu to stop.</string>
+    <string name="screen_sharing_stopped">Screen sharing stopped.</string>
+    <string name="screen_sharing_failed">Could not start screen sharing.</string>
+    <string name="join_maer_audio_call">Join audio call</string>
+    <string name="join_maer_video_call">Join video call</string>
+    <string name="join_maer_screen_share">View shared screen</string>
+    <string name="call_connection_warning">Call connection warning</string>
+    <string name="remote_video_description">Remote participant video</string>
+    <string name="local_video_description">Your video preview or shared screen</string>
+    <string name="verified_call_description">Verified encrypted call</string>
+    <string name="microphone_muted_description">Your microphone is muted</string>
     <string name="linked_device_never_seen">Never</string>
     <string name="linked_device_details">%1$s · Linked %2$s\nLast active %3$s · Expires %4$s</string>
 </resources>

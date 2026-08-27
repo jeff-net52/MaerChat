@@ -232,6 +232,7 @@ public class XmppConnectionService extends Service {
     private final ShortcutService mShortcutService = new ShortcutService(this);
     private final AtomicBoolean mInitialAddressbookSyncCompleted = new AtomicBoolean(false);
     private final AtomicBoolean mOngoingVideoTranscoding = new AtomicBoolean(false);
+    private final AtomicBoolean mScreenCaptureActive = new AtomicBoolean(false);
     private final AtomicBoolean mForceDuringOnCreate = new AtomicBoolean(false);
     private final AtomicReference<OngoingCall> ongoingCall = new AtomicReference<>();
     private final MessageGenerator mMessageGenerator = new MessageGenerator(this);
@@ -307,6 +308,19 @@ public class XmppConnectionService extends Service {
     public void stopOngoingVideoTranscodingForegroundNotification() {
         mOngoingVideoTranscoding.set(false);
         toggleForegroundService();
+    }
+
+    public boolean setScreenCaptureActive(final boolean active) {
+        if (mScreenCaptureActive.getAndSet(active) == active) {
+            return true;
+        }
+        final boolean foregroundUpdated = toggleForegroundService(false);
+        if (active && !foregroundUpdated) {
+            mScreenCaptureActive.set(false);
+            toggleForegroundService(false);
+            return false;
+        }
+        return foregroundUpdated;
     }
 
     public boolean areMessagesInitialized() {
@@ -1310,10 +1324,11 @@ public class XmppConnectionService extends Service {
 
     public void removeOngoingCall() {
         ongoingCall.set(null);
+        mScreenCaptureActive.set(false);
         toggleForegroundService(false);
     }
 
-    private void toggleForegroundService(final boolean force) {
+    private boolean toggleForegroundService(final boolean force) {
         final boolean status;
         final OngoingCall ongoing = ongoingCall.get();
         final boolean ongoingVideoTranscoding = mOngoingVideoTranscoding.get();
@@ -1327,15 +1342,21 @@ public class XmppConnectionService extends Service {
             if (ongoing != null) {
                 notification = this.mNotificationService.getOngoingCallNotification(ongoing);
                 id = NotificationService.ONGOING_CALL_NOTIFICATION_ID;
-                startForegroundOrCatch(id, notification, true);
+                if (!startForegroundOrCatch(id, notification, true)) {
+                    return false;
+                }
             } else if (ongoingVideoTranscoding) {
                 notification = this.mNotificationService.getIndeterminateVideoTranscoding();
                 id = NotificationService.ONGOING_VIDEO_TRANSCODING_NOTIFICATION_ID;
-                startForegroundOrCatch(id, notification, false);
+                if (!startForegroundOrCatch(id, notification, false)) {
+                    return false;
+                }
             } else {
                 notification = this.mNotificationService.createForegroundNotification();
                 id = NotificationService.FOREGROUND_NOTIFICATION_ID;
-                startForegroundOrCatch(id, notification, false);
+                if (!startForegroundOrCatch(id, notification, false)) {
+                    return false;
+                }
             }
             mNotificationService.notify(id, notification);
             status = true;
@@ -1357,14 +1378,24 @@ public class XmppConnectionService extends Service {
         Log.d(
                 Config.LOGTAG,
                 "ForegroundService: " + (status ? "on" : "off") + ", notification: " + id);
+        return true;
     }
 
-    private void startForegroundOrCatch(
+    private boolean startForegroundOrCatch(
             final int id, final Notification notification, final boolean requireMicrophone) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 final int foregroundServiceType;
-                if (requireMicrophone
+                if (mScreenCaptureActive.get()) {
+                    foregroundServiceType =
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
+                                    | (ContextCompat.checkSelfPermission(
+                                                            this, Manifest.permission.RECORD_AUDIO)
+                                                    == PackageManager.PERMISSION_GRANTED
+                                            ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+                                            : 0);
+                    Log.d(Config.LOGTAG, "using media projection foreground service type");
+                } else if (requireMicrophone
                         && ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                                 == PackageManager.PERMISSION_GRANTED) {
                     foregroundServiceType = ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE;
@@ -1386,8 +1417,10 @@ public class XmppConnectionService extends Service {
             } else {
                 startForeground(id, notification);
             }
+            return true;
         } catch (final IllegalStateException | SecurityException e) {
             Log.e(Config.LOGTAG, "Could not start foreground service", e);
+            return false;
         }
     }
 

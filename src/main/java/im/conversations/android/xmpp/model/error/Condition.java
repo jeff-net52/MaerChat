@@ -23,6 +23,7 @@ public abstract sealed class Condition extends Extension {
                     .put(NotAllowed.class, new ErrorTypeCode(Error.Type.CANCEL, 405))
                     .put(NotAuthorized.class, new ErrorTypeCode(Error.Type.AUTH, 401))
                     .put(PaymentRequired.class, new ErrorTypeCode(Error.Type.AUTH, 402))
+                    .put(PolicyViolation.class, new ErrorTypeCode(Error.Type.WAIT, 500))
                     .put(RecipientUnavailable.class, new ErrorTypeCode(Error.Type.WAIT, 404))
                     .put(Redirect.class, new ErrorTypeCode(Error.Type.MODIFY, 302))
                     .put(RegistrationRequired.class, new ErrorTypeCode(Error.Type.AUTH, 407))
@@ -132,6 +133,14 @@ public abstract sealed class Condition extends Extension {
 
         public PaymentRequired() {
             super(PaymentRequired.class);
+        }
+    }
+
+    @XmlElement(namespace = Namespace.XMPP_STANZAS)
+    public static final class PolicyViolation extends Condition {
+
+        public PolicyViolation() {
+            super(PolicyViolation.class);
         }
     }
 

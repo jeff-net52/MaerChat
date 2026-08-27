@@ -81,7 +81,10 @@ public class LinkedDevicesManagerTest {
         session.setAttribute("expires", "2026-08-26T13:00:00Z");
 
         final var result =
-                LinkedDevicesManager.parseSession(new Iq(Iq.Type.RESULT, session), SESSION);
+                LinkedDevicesManager.parseSession(
+                        new Iq(Iq.Type.RESULT, session),
+                        SESSION,
+                        Instant.parse("2026-08-26T12:55:00Z"));
 
         assertEquals("PC Atelier", result.getLabel());
         assertEquals("windows", result.getPlatform());
@@ -159,6 +162,33 @@ public class LinkedDevicesManagerTest {
                 () ->
                         LinkedDevicesManager.parseSession(
                                 new Iq(Iq.Type.RESULT, wrongSession), SESSION));
+    }
+
+    @Test
+    public void rejectsExpiredAndUnreasonablyLongPairingSessions() {
+        final Instant now = Instant.parse("2026-08-26T12:55:00Z");
+        final var expired = session("2026-08-26T12:54:59Z");
+        assertThrows(
+                LinkedDevicesManager.MalformedResponseException.class,
+                () ->
+                        LinkedDevicesManager.parseSession(
+                                new Iq(Iq.Type.RESULT, expired), SESSION, now));
+
+        final var excessive = session("2026-08-26T13:30:00Z");
+        assertThrows(
+                LinkedDevicesManager.MalformedResponseException.class,
+                () ->
+                        LinkedDevicesManager.parseSession(
+                                new Iq(Iq.Type.RESULT, excessive), SESSION, now));
+    }
+
+    private static Session session(final String expires) {
+        final var session = new Session();
+        session.setAttribute("id", SESSION);
+        session.setAttribute("label", "PC Atelier");
+        session.setAttribute("platform", "windows");
+        session.setAttribute("expires", expires);
+        return session;
     }
 
     private static Device device(final String id) {

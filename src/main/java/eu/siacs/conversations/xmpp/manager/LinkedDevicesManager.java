@@ -20,6 +20,7 @@ import im.conversations.android.xmpp.model.maerpairing.Revoked;
 import im.conversations.android.xmpp.model.maerpairing.Session;
 import im.conversations.android.xmpp.model.stanza.Iq;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
 public class LinkedDevicesManager extends AbstractManager {
 
     private static final int MAX_DEVICES = 100;
+    private static final long MAX_PAIRING_LIFETIME_SECONDS = 600;
     private static final Pattern OPAQUE_ID = Pattern.compile("[A-Za-z0-9_-]{16,128}");
     private static final Pattern PLATFORM = Pattern.compile("[A-Za-z0-9._-]{1,32}");
 
@@ -48,7 +50,7 @@ public class LinkedDevicesManager extends AbstractManager {
                 connection.sendIqPacket(buildInspect(getAccount().getDomain(), pairingUri)),
                 response -> {
                     ensureAuthenticatedResponse(response);
-                    return parseSession(response, pairingUri.getSessionId());
+                    return parseSession(response, pairingUri.getSessionId(), Instant.now());
                 },
                 MoreExecutors.directExecutor());
     }
@@ -146,6 +148,11 @@ public class LinkedDevicesManager extends AbstractManager {
     }
 
     static PairingRequestInfo parseSession(final Iq response, final String expectedSessionId) {
+        return parseSession(response, expectedSessionId, Instant.now());
+    }
+
+    static PairingRequestInfo parseSession(
+            final Iq response, final String expectedSessionId, final Instant now) {
         requireResult(response);
         final var session = response.getOnlyExtension(Session.class);
         if (session == null
@@ -156,7 +163,9 @@ public class LinkedDevicesManager extends AbstractManager {
         final String label = requireDisplayText(session.getLabel(), 128);
         final String platform = requirePlatform(session.getPlatform());
         final Instant expiresAt = session.getExpiresAt();
-        if (expiresAt == null) {
+        if (expiresAt == null
+                || !expiresAt.isAfter(now)
+                || expiresAt.isAfter(now.plus(MAX_PAIRING_LIFETIME_SECONDS, ChronoUnit.SECONDS))) {
             throw malformed();
         }
         return new PairingRequestInfo(label, platform, expiresAt);

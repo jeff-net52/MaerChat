@@ -36,6 +36,7 @@ public class NotificationManifestConfigurationTest {
         assertTrue(permissions.contains(Manifest.permission.POST_NOTIFICATIONS));
         assertTrue(permissions.contains(Manifest.permission.RECEIVE_BOOT_COMPLETED));
         assertTrue(permissions.contains(Manifest.permission.FOREGROUND_SERVICE));
+        assertTrue(permissions.contains(Manifest.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION));
     }
 
     @Test
@@ -50,5 +51,9 @@ public class NotificationManifestConfigurationTest {
                         0);
 
         assertFalse(serviceInfo.exported);
+        assertTrue(
+                (serviceInfo.getForegroundServiceType()
+                                & ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+                        != 0);
     }
 }
