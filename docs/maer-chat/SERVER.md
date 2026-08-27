@@ -25,7 +25,7 @@ Ces vérifications ne nécessitent ni compte ni mot de passe.
 | Ports contrôlés | 5222 et 5269 accessibles ; 5223 inaccessible depuis le poste de test |
 | TLS XMPP | STARTTLS sur 5222 négocié en TLS 1.3 |
 | Certificat XMPP | nom `xmpp.maer.fr` validé par OpenSSL sans contournement |
-| HTTPS | certificat présenté avec `CN=chaumont.me`, refusé pour `xmpp.maer.fr` (`SEC_E_WRONG_PRINCIPAL`) |
+| HTTPS | ancien certificat ne couvrant pas `xmpp.maer.fr`, refusé avec `SEC_E_WRONG_PRINCIPAL` |
 | SASL et authentification | non vérifiés faute de compte de test dédié |
 
 Le port 5222 et son STARTTLS sont désormais joignables, ce qui lève le blocage
