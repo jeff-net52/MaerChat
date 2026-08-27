@@ -4,8 +4,8 @@ set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$project_dir"
 
-version_name="$(sed -n 's/^[[:space:]]*versionName "\([^"]*\)"/\1/p' build.gradle | head -n 1)"
-version_code="$(sed -n 's/^[[:space:]]*versionCode \([0-9][0-9]*\)/\1/p' build.gradle | head -n 1)"
+version_name="$(sed -n 's/^[[:space:]]*versionName "\([^"]*\)"/\1/p' build.gradle | head -n 1 | tr -d '\r')"
+version_code="$(sed -n 's/^[[:space:]]*versionCode \([0-9][0-9]*\)/\1/p' build.gradle | head -n 1 | tr -d '\r')"
 fastlane_code="${version_code}04"
 errors=0
 
