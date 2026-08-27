@@ -87,6 +87,22 @@ supprime ses données privées. Le garde-fou Gradle exige `ANDROID_SERIAL`, acce
 les serials `emulator-*` et refuse un appareil physique sauf opt-in explicite
 `-PallowDisposableConnectedTests=true` pour un appareil jetable.
 
+## Réunion MAER entre Android et Windows
+
+L’onglet **Appels**, puis le bouton **Lancer un appel**, conserve les choix
+Jingle natifs « Appel audio » et « Appel vidéo ». Les deux choix supplémentaires
+« Réunion audio MAER » et « Réunion vidéo MAER » sélectionnent un contact,
+envoient dans sa conversation une invitation stricte `MAER-CALL/1`, puis ouvrent
+la même salle sur `https://meet.jit.si`.
+
+Pour un essai croisé, connectez deux comptes de test distincts sur Android et
+Windows, lancez une réunion MAER depuis Android et vérifiez côté Windows que le
+bouton de l’invitation ouvre exactement la même salle. Répétez depuis Windows
+vers Android, puis pour les modes audio et vidéo. Une réunion audio démarre avec
+la caméra coupée. Le **partage d’écran de ces réunions interopérables est fourni
+par la fenêtre Jitsi** : une fois dans la salle, utilisez son bouton de partage.
+Le partage d’écran natif Android reste réservé aux appels vidéo Jingle.
+
 ## Matrice fonctionnelle
 
 | Domaine | Validation attendue |

@@ -2,9 +2,11 @@ package eu.siacs.conversations.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import eu.siacs.conversations.R;
+import eu.siacs.conversations.utils.MaerCallInvite;
 import org.junit.Test;
 
 public class ConversationsOverviewFilterTest {
@@ -105,12 +107,26 @@ public class ConversationsOverviewFilterTest {
     }
 
     @Test
-    public void callTypeChoicesMapToAudioAndVideoActions() {
+    public void callTypeChoicesKeepNativeJingleAndAddMaerMeetings() {
         assertEquals(
                 RtpSessionActivity.ACTION_MAKE_VOICE_CALL,
                 ConversationsOverviewFragment.callActionForChoice(0));
         assertEquals(
                 RtpSessionActivity.ACTION_MAKE_VIDEO_CALL,
                 ConversationsOverviewFragment.callActionForChoice(1));
+        assertEquals(
+                MaerCallInvite.Mode.AUDIO,
+                ConversationsOverviewFragment.maerMeetingModeForAction(
+                        ConversationsOverviewFragment.callActionForChoice(2)));
+        assertEquals(
+                MaerCallInvite.Mode.VIDEO,
+                ConversationsOverviewFragment.maerMeetingModeForAction(
+                        ConversationsOverviewFragment.callActionForChoice(3)));
+        assertFalse(
+                ConversationsOverviewFragment.isMaerMeetingAction(
+                        RtpSessionActivity.ACTION_MAKE_VIDEO_CALL));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> ConversationsOverviewFragment.callActionForChoice(4));
     }
 }

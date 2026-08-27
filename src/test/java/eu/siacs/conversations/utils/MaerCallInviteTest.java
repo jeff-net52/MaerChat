@@ -74,6 +74,43 @@ public class MaerCallInviteTest {
         assertFalse(invite.isJoinableAt(null));
     }
 
+    @Test
+    public void emitsCanonicalMessagesAcceptedByTheStrictWindowsContract() {
+        for (final MaerCallInvite.Mode mode : MaerCallInvite.Mode.values()) {
+            final MaerCallInvite emitted = MaerCallInvite.create(mode, NOW, ROOM);
+            final MaerCallInvite reparsed =
+                    MaerCallInvite.parse(emitted.getMessageBody(), NOW).orElseThrow();
+            assertEquals(mode, reparsed.getMode());
+            assertEquals(emitted.getJoinUri(), reparsed.getJoinUri());
+            assertEquals(Instant.parse("2026-08-27T14:00:00.000Z"), reparsed.getExpiresAt());
+        }
+        assertTrue(
+                MaerCallInvite.create(MaerCallInvite.Mode.AUDIO, NOW, ROOM)
+                        .getJoinUri()
+                        .toString()
+                        .endsWith("#config.startWithVideoMuted=true"));
+        assertFalse(
+                MaerCallInvite.create(MaerCallInvite.Mode.VIDEO, NOW, ROOM)
+                        .getJoinUri()
+                        .toString()
+                        .contains("#"));
+    }
+
+    @Test
+    public void normalizesIssuedTimeAndRejectsUnsafeRooms() {
+        final MaerCallInvite invite =
+                MaerCallInvite.create(
+                        MaerCallInvite.Mode.VIDEO,
+                        Instant.parse("2026-08-27T12:00:00.987654321Z"),
+                        ROOM);
+        assertTrue(invite.getMessageBody().contains("issued=2026-08-27T12:00:00.987Z"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        MaerCallInvite.create(
+                                MaerCallInvite.Mode.VIDEO, NOW, "MAER-../../evil-room-123456789"));
+    }
+
     private static void assertVector(final String mode, final String label, final String fragment) {
         final MaerCallInvite invite =
                 MaerCallInvite.parse(vector(mode, label, fragment), NOW).orElseThrow();

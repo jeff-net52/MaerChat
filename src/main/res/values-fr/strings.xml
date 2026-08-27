@@ -1264,6 +1264,9 @@
     <string name="join_maer_audio_call">Rejoindre l’appel audio</string>
     <string name="join_maer_video_call">Rejoindre l’appel vidéo</string>
     <string name="join_maer_screen_share">Voir l’écran partagé</string>
+    <string name="maer_audio_meeting">Réunion audio MAER (compatible Windows)</string>
+    <string name="maer_video_meeting">Réunion vidéo MAER (Windows, partage d’écran dans Jitsi)</string>
+    <string name="maer_meeting_invitation_sent">Invitation MAER envoyée. Le partage d’écran est disponible dans Jitsi.</string>
     <string name="call_connection_warning">Avertissement de connexion de l’appel</string>
     <string name="remote_video_description">Vidéo du participant distant</string>
     <string name="local_video_description">Votre aperçu vidéo ou votre écran partagé</string>

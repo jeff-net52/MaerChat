@@ -85,6 +85,7 @@ import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Conversational;
+import eu.siacs.conversations.entities.Message;
 import eu.siacs.conversations.services.CallIntegrationConnectionService;
 import eu.siacs.conversations.services.QuickConversationsService;
 import eu.siacs.conversations.ui.activity.SettingsActivity;
@@ -100,6 +101,7 @@ import eu.siacs.conversations.ui.util.ScrollState;
 import eu.siacs.conversations.ui.widget.AccountPickerDialog;
 import eu.siacs.conversations.utils.AccountUtils;
 import eu.siacs.conversations.utils.CharSequences;
+import eu.siacs.conversations.utils.MaerCallInvite;
 import eu.siacs.conversations.utils.XmppUriLauncher;
 import eu.siacs.conversations.xmpp.Jid;
 import eu.siacs.conversations.xmpp.jingle.RtpCapability;
@@ -108,6 +110,7 @@ import eu.siacs.conversations.xmpp.manager.JingleManager;
 import eu.siacs.conversations.xmpp.manager.RosterManager;
 import im.conversations.android.model.SearchSuggestion;
 import im.conversations.android.provider.SearchSuggestionProvider;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -126,6 +129,10 @@ public class ConversationsOverviewFragment extends XmppFragment {
             ConversationsOverviewFragment.class.getName() + ".pending_call_account";
     private static final String STATE_PENDING_CALL_CONTACT =
             ConversationsOverviewFragment.class.getName() + ".pending_call_contact";
+    static final String ACTION_START_MAER_AUDIO_MEETING =
+            ConversationsOverviewFragment.class.getName() + ".start_maer_audio_meeting";
+    static final String ACTION_START_MAER_VIDEO_MEETING =
+            ConversationsOverviewFragment.class.getName() + ".start_maer_video_meeting";
 
     enum ConversationFilter {
         ALL,
@@ -165,7 +172,11 @@ public class ConversationsOverviewFragment extends XmppFragment {
                         }
                         this.pendingCallAccount = account;
                         this.pendingCallContact = contacts.get(0).asBareJid();
-                        requestPendingCallPermissions();
+                        if (isMaerMeetingAction(this.pendingCallAction)) {
+                            placePendingMaerMeeting();
+                        } else {
+                            requestPendingCallPermissions();
+                        }
                     });
 
     private final ActivityResultLauncher<String[]> callPermissionLauncher =
@@ -664,7 +675,10 @@ public class ConversationsOverviewFragment extends XmppFragment {
                 .setTitle(R.string.start_call)
                 .setItems(
                         new CharSequence[] {
-                            getString(R.string.audio_call), getString(R.string.video_call)
+                            getString(R.string.audio_call),
+                            getString(R.string.video_call),
+                            getString(R.string.maer_audio_meeting),
+                            getString(R.string.maer_video_meeting)
                         },
                         (dialog, which) -> launchCallContactChooser(callActionForChoice(which)))
                 .setNegativeButton(R.string.cancel, null)
@@ -697,6 +711,62 @@ public class ConversationsOverviewFragment extends XmppFragment {
             permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
         }
         this.callPermissionLauncher.launch(permissions.toArray(new String[0]));
+    }
+
+    private void placePendingMaerMeeting() {
+        final var service = getXmppConnectionService();
+        final String accountAddress = this.pendingCallAccount;
+        final Jid contactAddress = this.pendingCallContact;
+        final MaerCallInvite.Mode mode = maerMeetingModeForAction(this.pendingCallAction);
+        clearPendingCall();
+        if (service == null || accountAddress == null || contactAddress == null || mode == null) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        final Account account;
+        try {
+            account = service.findAccountByJid(Jid.of(accountAddress));
+        } catch (final IllegalArgumentException e) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (account == null) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.problem_connecting_to_account,
+                            Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (account.setOption(Account.OPTION_SOFT_DISABLED, false)) {
+            service.updateAccount(account);
+        }
+        final MaerCallInvite invite = MaerCallInvite.create(mode, Instant.now());
+        final Conversation conversation =
+                service.findOrCreateConversation(account, contactAddress, false, true);
+        service.sendMessage(
+                new Message(conversation, invite.getMessageBody(), Message.ENCRYPTION_NONE));
+        Toast.makeText(requireContext(), R.string.maer_meeting_invitation_sent, Toast.LENGTH_LONG)
+                .show();
+        final Intent intent =
+                new Intent(Intent.ACTION_VIEW, Uri.parse(invite.getJoinUri().toString()));
+        try {
+            startActivity(intent);
+        } catch (final ActivityNotFoundException e) {
+            Toast.makeText(
+                            requireContext(),
+                            R.string.no_application_found_to_open_link,
+                            Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
     private boolean isPermissionGranted(
@@ -800,9 +870,27 @@ public class ConversationsOverviewFragment extends XmppFragment {
     }
 
     static String callActionForChoice(final int choice) {
-        return choice == 0
-                ? RtpSessionActivity.ACTION_MAKE_VOICE_CALL
-                : RtpSessionActivity.ACTION_MAKE_VIDEO_CALL;
+        return switch (choice) {
+            case 0 -> RtpSessionActivity.ACTION_MAKE_VOICE_CALL;
+            case 1 -> RtpSessionActivity.ACTION_MAKE_VIDEO_CALL;
+            case 2 -> ACTION_START_MAER_AUDIO_MEETING;
+            case 3 -> ACTION_START_MAER_VIDEO_MEETING;
+            default -> throw new IllegalArgumentException("Unknown call type choice: " + choice);
+        };
+    }
+
+    static boolean isMaerMeetingAction(@Nullable final String action) {
+        return maerMeetingModeForAction(action) != null;
+    }
+
+    static @Nullable MaerCallInvite.Mode maerMeetingModeForAction(@Nullable final String action) {
+        if (ACTION_START_MAER_AUDIO_MEETING.equals(action)) {
+            return MaerCallInvite.Mode.AUDIO;
+        }
+        if (ACTION_START_MAER_VIDEO_MEETING.equals(action)) {
+            return MaerCallInvite.Mode.VIDEO;
+        }
+        return null;
     }
 
     private void startSearch(final String term) {
