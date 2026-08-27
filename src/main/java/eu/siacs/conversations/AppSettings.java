@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.BoolRes;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.StyleRes;
 import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 import com.google.common.base.Joiner;
@@ -231,8 +231,7 @@ public class AppSettings {
             editor.putString(MESSAGE_FONT, context.getString(R.string.default_message_font));
         }
         if (!sharedPreferences.contains(CHAT_BACKGROUND)) {
-            editor.putString(
-                    CHAT_BACKGROUND, context.getString(R.string.default_chat_background));
+            editor.putString(CHAT_BACKGROUND, context.getString(R.string.default_chat_background));
         }
         if (!sharedPreferences.contains(AVATAR_DISPLAY)) {
             editor.putString(AVATAR_DISPLAY, context.getString(R.string.default_avatar_display));

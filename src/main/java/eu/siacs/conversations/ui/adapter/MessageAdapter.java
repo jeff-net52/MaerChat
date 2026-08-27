@@ -122,8 +122,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     private OnContactPictureClicked mOnContactPictureClickedListener;
     private OnContactPictureLongClicked mOnContactPictureLongClickedListener;
     private BubbleDesign bubbleDesign =
-            new BubbleDesign(
-                    false, false, false, true, true, AppSettings.AvatarDisplay.ALWAYS);
+            new BubbleDesign(false, false, false, true, true, AppSettings.AvatarDisplay.ALWAYS);
     private String messageFontFamily = "sans-serif";
     private final boolean mForceNames;
 

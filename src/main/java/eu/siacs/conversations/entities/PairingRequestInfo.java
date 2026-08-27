@@ -9,8 +9,7 @@ public final class PairingRequestInfo {
     private final String platform;
     private final Instant expiresAt;
 
-    public PairingRequestInfo(
-            final String label, final String platform, final Instant expiresAt) {
+    public PairingRequestInfo(final String label, final String platform, final Instant expiresAt) {
         this.label = Objects.requireNonNull(label);
         this.platform = Objects.requireNonNull(platform);
         this.expiresAt = Objects.requireNonNull(expiresAt);

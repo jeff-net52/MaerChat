@@ -129,9 +129,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         devicesError = false;
         renderState();
         final var future =
-                account.getXmppConnection()
-                        .getManager(LinkedDevicesManager.class)
-                        .getDevices();
+                account.getXmppConnection().getManager(LinkedDevicesManager.class).getDevices();
         devicesFuture = future;
         Futures.addCallback(
                 future,
@@ -219,9 +217,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
     }
 
     private void showApprovalConfirmation(
-            final Account account,
-            final MaerPairingUri pairingUri,
-            final PairingRequestInfo info) {
+            final Account account, final MaerPairingUri pairingUri, final PairingRequestInfo info) {
         if (destroyed || isFinishing()) {
             finishOperation();
             return;
@@ -236,12 +232,10 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                                 account.getJid().asBareJid(),
                                 pairingUri.getVerificationCode(),
                                 format(info.getExpiresAt())))
-                .setNegativeButton(
-                        R.string.cancel, (dialog, which) -> finishOperation())
+                .setNegativeButton(R.string.cancel, (dialog, which) -> finishOperation())
                 .setOnCancelListener(dialog -> finishOperation())
                 .setPositiveButton(
-                        R.string.link_device,
-                        (dialog, which) -> approve(account, pairingUri))
+                        R.string.link_device, (dialog, which) -> approve(account, pairingUri))
                 .show();
     }
 
@@ -300,8 +294,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                 .setMessage(getString(R.string.revoke_linked_device_message, device.getLabel()))
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(
-                        R.string.revoke_linked_device,
-                        (dialog, which) -> revoke(device.getId()))
+                        R.string.revoke_linked_device, (dialog, which) -> revoke(device.getId()))
                 .show();
     }
 
@@ -313,9 +306,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         operationInFlight = true;
         renderState();
         final var future =
-                account.getXmppConnection()
-                        .getManager(LinkedDevicesManager.class)
-                        .revoke(deviceId);
+                account.getXmppConnection().getManager(LinkedDevicesManager.class).revoke(deviceId);
         operationFuture = future;
         Futures.addCallback(
                 future,
@@ -361,8 +352,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         return !destroyed && account == selectedAccount && future == devicesFuture;
     }
 
-    private boolean isCurrentOperation(
-            final Account account, final ListenableFuture<?> future) {
+    private boolean isCurrentOperation(final Account account, final ListenableFuture<?> future) {
         return !destroyed && account == selectedAccount && future == operationFuture;
     }
 
@@ -398,8 +388,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         if (status != 0) {
             binding.status.setText(status);
         }
-        binding.devices.setVisibility(
-                status == 0 && !devicesLoading ? View.VISIBLE : View.GONE);
+        binding.devices.setVisibility(status == 0 && !devicesLoading ? View.VISIBLE : View.GONE);
     }
 
     private static String format(final java.time.Instant instant) {

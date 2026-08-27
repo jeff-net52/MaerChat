@@ -17,11 +17,7 @@ public class BackupFileHeaderTest {
             throws Exception {
         final var header =
                 new BackupFileHeader(
-                        "Maer Chat",
-                        Jid.of("alice@xmpp.maer.fr"),
-                        42L,
-                        new byte[12],
-                        new byte[16]);
+                        "Maer Chat", Jid.of("alice@xmpp.maer.fr"), 42L, new byte[12], new byte[16]);
         final var output = new ByteArrayOutputStream();
         header.write(new DataOutputStream(output));
 

@@ -133,8 +133,7 @@ public class ConversationsActivity extends QrCodeProcessingActivity
         return intent;
     }
 
-    public static void launchHomeSection(
-            final Context context, final @IdRes int navigationItemId) {
+    public static void launchHomeSection(final Context context, final @IdRes int navigationItemId) {
         final Intent intent = createLauncherIntent(context);
         intent.putExtra(EXTRA_HOME_NAVIGATION, navigationItemId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -152,19 +151,15 @@ public class ConversationsActivity extends QrCodeProcessingActivity
         if (intent == null || !intent.hasExtra(EXTRA_HOME_NAVIGATION)) {
             return;
         }
-        this.pendingHomeNavigation =
-                intent.getIntExtra(EXTRA_HOME_NAVIGATION, R.id.nav_chats);
-        Fragment fragment =
-                getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        this.pendingHomeNavigation = intent.getIntExtra(EXTRA_HOME_NAVIGATION, R.id.nav_chats);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_fragment);
         if (!(fragment instanceof ConversationsOverviewFragment)
                 && binding.secondaryFragment == null) {
             final FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate(
-                    null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragment = fragmentManager.findFragmentById(R.id.main_fragment);
             if (!(fragment instanceof ConversationsOverviewFragment)) {
-                final ConversationsOverviewFragment overview =
-                        new ConversationsOverviewFragment();
+                final ConversationsOverviewFragment overview = new ConversationsOverviewFragment();
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.main_fragment, overview)

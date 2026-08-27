@@ -89,10 +89,7 @@ public final class MaerPairingUri {
     }
 
     private static boolean isKnownParameter(final String name) {
-        return "v".equals(name)
-                || "host".equals(name)
-                || "sid".equals(name)
-                || "code".equals(name);
+        return "v".equals(name) || "host".equals(name) || "sid".equals(name) || "code".equals(name);
     }
 
     private static IllegalArgumentException invalidUri() {

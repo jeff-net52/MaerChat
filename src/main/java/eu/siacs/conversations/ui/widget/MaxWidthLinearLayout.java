@@ -4,12 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import androidx.annotation.Nullable;
 
 /**
- * A {@link LinearLayout} that stays wrap-content while capping long content at 82 percent of
- * the width offered by its parent.
+ * A {@link LinearLayout} that stays wrap-content while capping long content at 82 percent of the
+ * width offered by its parent.
  */
 public class MaxWidthLinearLayout extends LinearLayout {
 
@@ -19,15 +18,12 @@ public class MaxWidthLinearLayout extends LinearLayout {
         super(context);
     }
 
-    public MaxWidthLinearLayout(
-            final Context context, @Nullable final AttributeSet attrs) {
+    public MaxWidthLinearLayout(final Context context, @Nullable final AttributeSet attrs) {
         super(context, attrs);
     }
 
     public MaxWidthLinearLayout(
-            final Context context,
-            @Nullable final AttributeSet attrs,
-            final int defStyleAttr) {
+            final Context context, @Nullable final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

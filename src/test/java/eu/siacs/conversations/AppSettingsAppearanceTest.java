@@ -8,19 +8,13 @@ public class AppSettingsAppearanceTest {
 
     @Test
     public void avatarDisplayParsesEverySupportedMode() {
-        assertEquals(
-                AppSettings.AvatarDisplay.ALWAYS, AppSettings.AvatarDisplay.of("always"));
-        assertEquals(
-                AppSettings.AvatarDisplay.GROUPED,
-                AppSettings.AvatarDisplay.of("grouped"));
-        assertEquals(
-                AppSettings.AvatarDisplay.NEVER, AppSettings.AvatarDisplay.of("never"));
+        assertEquals(AppSettings.AvatarDisplay.ALWAYS, AppSettings.AvatarDisplay.of("always"));
+        assertEquals(AppSettings.AvatarDisplay.GROUPED, AppSettings.AvatarDisplay.of("grouped"));
+        assertEquals(AppSettings.AvatarDisplay.NEVER, AppSettings.AvatarDisplay.of("never"));
     }
 
     @Test
     public void unknownAvatarDisplayFallsBackToAlways() {
-        assertEquals(
-                AppSettings.AvatarDisplay.ALWAYS,
-                AppSettings.AvatarDisplay.of("unsupported"));
+        assertEquals(AppSettings.AvatarDisplay.ALWAYS, AppSettings.AvatarDisplay.of("unsupported"));
     }
 }

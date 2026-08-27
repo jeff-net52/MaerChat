@@ -14,22 +14,19 @@ import java.text.DateFormat;
 import java.time.Instant;
 import java.util.Date;
 
-public class LinkedDeviceAdapter
-        extends ListAdapter<LinkedDevice, LinkedDeviceAdapter.ViewHolder> {
+public class LinkedDeviceAdapter extends ListAdapter<LinkedDevice, LinkedDeviceAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<LinkedDevice> DIFF =
             new DiffUtil.ItemCallback<>() {
                 @Override
                 public boolean areItemsTheSame(
-                        @NonNull final LinkedDevice first,
-                        @NonNull final LinkedDevice second) {
+                        @NonNull final LinkedDevice first, @NonNull final LinkedDevice second) {
                     return first.getId().equals(second.getId());
                 }
 
                 @Override
                 public boolean areContentsTheSame(
-                        @NonNull final LinkedDevice first,
-                        @NonNull final LinkedDevice second) {
+                        @NonNull final LinkedDevice first, @NonNull final LinkedDevice second) {
                     return first.equals(second);
                 }
             };

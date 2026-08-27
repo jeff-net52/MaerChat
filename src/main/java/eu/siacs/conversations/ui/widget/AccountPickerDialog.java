@@ -100,9 +100,7 @@ public class AccountPickerDialog {
             super(
                     xmppActivity,
                     xmppConnection ->
-                            xmppConnection
-                                    .getManager(LinkedDevicesManager.class)
-                                    .isAvailable());
+                            xmppConnection.getManager(LinkedDevicesManager.class).isAvailable());
         }
     }
 }

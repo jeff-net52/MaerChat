@@ -26,8 +26,7 @@ public class OrganizationCatalogTest {
 
         assertEquals("maer-engineering", catalog.defaultOrganization().id());
         assertEquals("xmpp.maer.fr", catalog.defaultOrganization().xmppDomain());
-        assertEquals(
-                catalog.defaultOrganization(), catalog.findByDomain("XMPP.MAER.FR"));
+        assertEquals(catalog.defaultOrganization(), catalog.findByDomain("XMPP.MAER.FR"));
     }
 
     @Test
@@ -38,8 +37,7 @@ public class OrganizationCatalogTest {
 
         assertEquals("maer-engineering", OrganizationSelection.selected(context, catalog).id());
         assertEquals(
-                "client-demo",
-                OrganizationSelection.select(context, catalog, "client-demo").id());
+                "client-demo", OrganizationSelection.select(context, catalog, "client-demo").id());
         assertEquals("client-demo", OrganizationSelection.selected(context, catalog).id());
         assertEquals(
                 "client-demo",
@@ -143,23 +141,23 @@ public class OrganizationCatalogTest {
 
     private static String twoOrganizationCatalogue() {
         return """
-                {
-                  "schema_version": 1,
-                  "organizations": [
-                    {
-                      "id": "maer-engineering",
-                      "display_name": "MAER Engineering",
-                      "xmpp_domain": "xmpp.maer.fr",
-                      "default": true
-                    },
-                    {
-                      "id": "client-demo",
-                      "display_name": "Client Démo",
-                      "xmpp_domain": "chat.client.example",
-                      "default": false
-                    }
-                  ]
-                }
-                """;
+        {
+          "schema_version": 1,
+          "organizations": [
+            {
+              "id": "maer-engineering",
+              "display_name": "MAER Engineering",
+              "xmpp_domain": "xmpp.maer.fr",
+              "default": true
+            },
+            {
+              "id": "client-demo",
+              "display_name": "Client Démo",
+              "xmpp_domain": "chat.client.example",
+              "default": false
+            }
+          ]
+        }
+        """;
     }
 }

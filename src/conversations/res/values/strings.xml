@@ -13,14 +13,7 @@
     <string name="if_contact_is_nearby_use_qr">If your contact is nearby, they can also scan the code below to accept your invitation.</string>
     <string name="share_invite_with">Share invite with…</string>
     <string name="maer_login_subtitle">Sign in with your existing messaging account.</string>
-    <string name="maer_organization">Organization</string>
-    <string name="maer_organization_summary">Your organization determines the private messaging server used by your account.</string>
-    <string name="maer_unknown_organization">This XMPP domain is not in the organization catalogue. Complete-JID mode remains enabled.</string>
-    <string name="maer_login_complete_jid">Complete XMPP address</string>
     <string name="maer_login_server_summary">Secure connection to %1$s</string>
-    <string name="maer_login_advanced_summary">The server is selected from the complete XMPP address.</string>
-    <string name="maer_login_use_complete_jid">Advanced: use a complete JID</string>
-    <string name="maer_login_use_default_server">Use the default server</string>
     <string name="maer_login_security_notice">Your password is hidden and is never included in application logs.</string>
     <string name="maer_login_error_initializing">The application is getting ready. Please try again in a moment.</string>
     <string name="maer_login_error_authentication">The username or password is incorrect.</string>

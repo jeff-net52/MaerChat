@@ -2921,8 +2921,7 @@ public class ConversationFragment extends XmppFragment
         this.binding.textInput.setKeyboardListener(this);
         this.messageListAdapter.updatePreferences();
         final var appSettings = new AppSettings(requireContext());
-        this.binding.messagesView.setBackgroundResource(
-                appSettings.getChatBackgroundDrawable());
+        this.binding.messagesView.setBackgroundResource(appSettings.getChatBackgroundDrawable());
         this.inputSettings =
                 new InputSettings(
                         appSettings.isColorfulChatBubbles(),
@@ -2984,7 +2983,8 @@ public class ConversationFragment extends XmppFragment
                         this.binding.cameraButton, bubbleColor));
         MessageAdapter.setBackgroundTint(this.binding.inputLayout, bubbleColor);
         final var color =
-                ContextCompat.getColorStateList(requireContext(), R.color.hint_on_maer_chat_composer);
+                ContextCompat.getColorStateList(
+                        requireContext(), R.color.hint_on_maer_chat_composer);
         this.binding.textInput.setHintTextColor(color);
         setTextCursorDrawable(this.binding.textInput, R.drawable.cursor_on_maer_chat_composer);
     }
@@ -2993,8 +2993,7 @@ public class ConversationFragment extends XmppFragment
         hideSoftKeyboard(requireActivity());
         final var dialog = new BottomSheetDialog(requireContext());
         final var picker = new EmojiPickerView(requireContext());
-        final int pickerHeight =
-                Math.round(360 * getResources().getDisplayMetrics().density);
+        final int pickerHeight = Math.round(360 * getResources().getDisplayMetrics().density);
         picker.setLayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pickerHeight));
         picker.setOnEmojiPickedListener(
@@ -3003,7 +3002,8 @@ public class ConversationFragment extends XmppFragment
                     if (editable == null) {
                         return;
                     }
-                    final int selectionStart = Math.max(0, this.binding.textInput.getSelectionStart());
+                    final int selectionStart =
+                            Math.max(0, this.binding.textInput.getSelectionStart());
                     final int selectionEnd = Math.max(0, this.binding.textInput.getSelectionEnd());
                     editable.replace(
                             Math.min(selectionStart, selectionEnd),

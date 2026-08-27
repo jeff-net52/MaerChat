@@ -263,7 +263,9 @@ android {
         // surface. Keep that debt explicit so CI fails only on findings introduced by Maer Chat.
         baseline = file("lint-baseline.xml")
         warningsAsErrors true
-        disable 'MissingTranslation', 'InvalidPackage', 'AppCompatResource'
+        // Dependency upgrades are reviewed deliberately; a newly published AGP must not
+        // turn an otherwise reproducible release red without a compatibility review.
+        disable 'AndroidGradlePluginVersion', 'MissingTranslation', 'InvalidPackage', 'AppCompatResource'
     }
     buildFeatures {
         buildConfig true

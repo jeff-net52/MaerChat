@@ -32,8 +32,7 @@ public class LoginJidTest {
     @Test
     public void acceptsUnicodeUsername() {
         assertEquals(
-                "émilie@xmpp.maer.fr",
-                LoginJid.build("Émilie", false, DEFAULT_DOMAIN).toString());
+                "émilie@xmpp.maer.fr", LoginJid.build("Émilie", false, DEFAULT_DOMAIN).toString());
     }
 
     @Test
