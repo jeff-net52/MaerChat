@@ -60,9 +60,9 @@ avait réussi 2 tests, puis le nettoyage Android Gradle Plugin avait désinstall
 l’application et supprimé ses données. Ce résultat historique ne qualifie donc
 ni les sources finales, ni l’APK livrée ici.
 
-Pour la version 0.5.3, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
-et `targetSdk` 37. Le code visible attendu est `800` pour l’APK universelle et
-`804` pour l’APK ARM64 : Gradle multiplie le `versionCode` 8 par 100 puis ajoute
+Pour la version 0.5.4, l’identité Android reste `fr.maer.chat`, avec `minSdk` 23
+et `targetSdk` 37. Le code visible attendu est `900` pour l’APK universelle et
+`904` pour l’APK ARM64 : Gradle multiplie le `versionCode` 9 par 100 puis ajoute
 le suffixe propre à l’ABI. Les anciennes APK 0.4.0 signées avec une clé de
 développement et toutes les APK Debug sont explicitement **non publiables** ;
 leurs anciennes empreintes ne constituent pas une preuve de Release.

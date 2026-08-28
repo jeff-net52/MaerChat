@@ -6,6 +6,15 @@ la licence GPLv3+ et ne doit pas annoncer une conformité juridique non validée
 
 ## Maer Chat
 
+### Version 0.5.4 — 28 août 2026
+
+* Association d’un ordinateur : erreur explicite si le compte Android se
+  déconnecte pendant l’inspection ou l’approbation.
+* Journaux de diagnostic ajoutés aux étapes d’inspection et d’approbation, sans
+  exposer le contenu du QR code ni les identifiants secrets.
+* Le scanner affiche désormais une erreur caméra claire et une action
+  « Réessayer » dans le thème Maer Chat.
+
 ### Version 0.5.3 — 27 août 2026
 
 * Correction de la contraction répétée des bulles sur les petits écrans.

@@ -1282,8 +1282,12 @@
     <string name="pairing_request_already_used">This pairing request has already been used. Create a new QR code on the computer.</string>
     <string name="pairing_device_limit_reached">The linked device limit has been reached. Revoke an old device and try again.</string>
     <string name="pairing_request_not_authorized">This account is not allowed to manage that pairing request.</string>
+    <string name="pairing_account_went_offline">The MAER account went offline during pairing. Reconnect it, create a new QR code on the computer, and try again.</string>
     <string name="retry_linked_devices">Try again</string>
     <string name="pairing_too_many_attempts">Too many pairing attempts. Try again later.</string>
+    <string name="camera_unavailable_title">Camera unavailable</string>
+    <string name="camera_unavailable_message">MAER Chat could not start the camera. Close any other app using it, then try again.</string>
+    <string name="retry_camera">Try again</string>
     <string name="maer_call_invitation_expired">This call invitation has expired.</string>
     <string name="share_screen">Share screen</string>
     <string name="stop_sharing_screen">Stop sharing screen</string>

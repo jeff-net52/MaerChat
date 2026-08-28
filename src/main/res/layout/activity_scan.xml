@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -13,5 +14,56 @@
         android:id="@+id/scan_activity_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/scan_activity_camera_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:accessibilityLiveRegion="assertive"
+        android:background="?colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_error_24dp"
+            app:tint="?colorError" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/camera_unavailable_title"
+            android:textAppearance="?textAppearanceHeadlineSmall"
+            android:textColor="?colorOnSurface" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/camera_unavailable_message"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="?colorOnSurfaceVariant" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scan_activity_retry_camera"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:minHeight="48dp"
+            android:text="@string/retry_camera"
+            app:icon="@drawable/ic_refresh_24dp" />
+
+    </LinearLayout>
 
 </merge>

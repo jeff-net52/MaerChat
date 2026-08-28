@@ -1,15 +1,18 @@
 package eu.siacs.conversations.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityLinkedDevicesBinding;
 import eu.siacs.conversations.entities.Account;
@@ -32,17 +35,26 @@ import java.util.List;
 public class LinkedDevicesActivity extends QrCodeScanningActivity
         implements XmppConnectionService.OnAccountUpdate, LinkedDeviceAdapter.Listener {
 
+    enum PairingStage {
+        NONE,
+        INSPECTING,
+        AWAITING_APPROVAL,
+        APPROVING
+    }
+
     private final LinkedDeviceAdapter adapter = new LinkedDeviceAdapter(this);
 
     private ActivityLinkedDevicesBinding binding;
     private Account selectedAccount;
     private ListenableFuture<?> devicesFuture;
     private ListenableFuture<?> operationFuture;
+    private AlertDialog approvalDialog;
     private boolean devicesLoaded;
     private boolean devicesLoading;
     private boolean devicesError;
     private boolean operationInFlight;
     private boolean destroyed;
+    private PairingStage pairingStage = PairingStage.NONE;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -71,6 +83,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
 
     @Override
     protected void refreshUiReal() {
+        abortPairingIfAccountUnavailable();
         if (isSelectedAccountAvailable()
                 && !devicesLoaded
                 && !devicesLoading
@@ -170,6 +183,13 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
     @Override
     void onQrCodeScanned(final String rawValue) {
         if (!isSelectedAccountAvailable() || operationInFlight) {
+            if (!isSelectedAccountAvailable()) {
+                Log.w(
+                        Config.LOGTAG,
+                        "MAER pairing scan rejected: the selected account is unavailable");
+                Toast.makeText(this, R.string.pairing_account_went_offline, Toast.LENGTH_LONG)
+                        .show();
+            }
             renderState();
             return;
         }
@@ -177,10 +197,12 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
         try {
             pairingUri = MaerPairingUri.parse(rawValue);
         } catch (final IllegalArgumentException e) {
+            Log.w(Config.LOGTAG, "MAER pairing scan rejected: invalid QR payload", e);
             Toast.makeText(this, R.string.invalid_pairing_qr_code, Toast.LENGTH_LONG).show();
             return;
         }
         if (PairingReplayGuard.isConsumed(this, pairingUri.getSessionId(), Instant.now())) {
+            Log.w(Config.LOGTAG, "MAER pairing scan rejected: request already consumed locally");
             Toast.makeText(this, R.string.pairing_request_already_used, Toast.LENGTH_LONG).show();
             return;
         }
@@ -190,6 +212,8 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
     private void inspect(final MaerPairingUri pairingUri) {
         final Account account = selectedAccount;
         operationInFlight = true;
+        pairingStage = PairingStage.INSPECTING;
+        Log.i(Config.LOGTAG, "MAER pairing: inspecting scanned request");
         renderState();
         final var future =
                 account.getXmppConnection()
@@ -205,6 +229,12 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                             return;
                         }
                         operationFuture = null;
+                        if (!isSelectedAccountAvailable()) {
+                            abortPairingBecauseAccountIsUnavailable(PairingStage.INSPECTING);
+                            return;
+                        }
+                        pairingStage = PairingStage.AWAITING_APPROVAL;
+                        Log.i(Config.LOGTAG, "MAER pairing: inspection succeeded");
                         showApprovalConfirmation(account, pairingUri, info);
                     }
 
@@ -214,6 +244,11 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                             return;
                         }
                         operationFuture = null;
+                        if (!isSelectedAccountAvailable()) {
+                            abortPairingBecauseAccountIsUnavailable(PairingStage.INSPECTING);
+                            return;
+                        }
+                        Log.w(Config.LOGTAG, "MAER pairing: inspection failed", throwable);
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
@@ -233,27 +268,45 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
             finishOperation();
             return;
         }
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.confirm_link_device)
-                .setMessage(
-                        getString(
-                                R.string.confirm_link_device_message,
-                                info.getLabel(),
-                                info.getPlatform(),
-                                account.getJid().asBareJid(),
-                                pairingUri.getVerificationCode(),
-                                format(info.getExpiresAt())))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> finishOperation())
-                .setOnCancelListener(dialog -> finishOperation())
-                .setPositiveButton(
-                        R.string.link_device, (dialog, which) -> approve(account, pairingUri, info))
-                .show();
+        if (!isSelectedAccountAvailable()) {
+            abortPairingBecauseAccountIsUnavailable(PairingStage.AWAITING_APPROVAL);
+            return;
+        }
+        approvalDialog =
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.confirm_link_device)
+                        .setMessage(
+                                getString(
+                                        R.string.confirm_link_device_message,
+                                        info.getLabel(),
+                                        info.getPlatform(),
+                                        account.getJid().asBareJid(),
+                                        pairingUri.getVerificationCode(),
+                                        format(info.getExpiresAt())))
+                        .setNegativeButton(
+                                R.string.cancel,
+                                (dialog, which) -> {
+                                    approvalDialog = null;
+                                    finishOperation();
+                                })
+                        .setOnCancelListener(
+                                dialog -> {
+                                    approvalDialog = null;
+                                    finishOperation();
+                                })
+                        .setPositiveButton(
+                                R.string.link_device,
+                                (dialog, which) -> {
+                                    approvalDialog = null;
+                                    approve(account, pairingUri, info);
+                                })
+                        .show();
     }
 
     private void approve(
             final Account account, final MaerPairingUri pairingUri, final PairingRequestInfo info) {
         if (account != selectedAccount || !isSelectedAccountAvailable()) {
-            finishOperation();
+            abortPairingBecauseAccountIsUnavailable(PairingStage.AWAITING_APPROVAL);
             return;
         }
         if (!info.getExpiresAt().isAfter(Instant.now())) {
@@ -261,6 +314,8 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
             Toast.makeText(this, R.string.pairing_request_expired, Toast.LENGTH_LONG).show();
             return;
         }
+        pairingStage = PairingStage.APPROVING;
+        Log.i(Config.LOGTAG, "MAER pairing: approval requested");
         final var future =
                 account.getXmppConnection()
                         .getManager(LinkedDevicesManager.class)
@@ -280,6 +335,7 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                                 pairingUri.getSessionId(),
                                 info.getExpiresAt(),
                                 Instant.now());
+                        Log.i(Config.LOGTAG, "MAER pairing: approval succeeded");
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
@@ -295,6 +351,11 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
                             return;
                         }
                         operationFuture = null;
+                        if (!isSelectedAccountAvailable()) {
+                            abortPairingBecauseAccountIsUnavailable(PairingStage.APPROVING);
+                            return;
+                        }
+                        Log.w(Config.LOGTAG, "MAER pairing: approval failed", throwable);
                         finishOperation();
                         Toast.makeText(
                                         LinkedDevicesActivity.this,
@@ -368,7 +429,38 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
 
     private void finishOperation() {
         operationInFlight = false;
+        pairingStage = PairingStage.NONE;
         renderState();
+    }
+
+    private void abortPairingIfAccountUnavailable() {
+        if (shouldAbortPairing(operationInFlight, pairingStage, isSelectedAccountAvailable())) {
+            abortPairingBecauseAccountIsUnavailable(pairingStage);
+        }
+    }
+
+    private void abortPairingBecauseAccountIsUnavailable(final PairingStage interruptedStage) {
+        Log.w(
+                Config.LOGTAG,
+                "MAER pairing aborted at "
+                        + interruptedStage.name().toLowerCase(java.util.Locale.ROOT)
+                        + ": the selected account went offline");
+        cancelFuture(operationFuture);
+        operationFuture = null;
+        if (approvalDialog != null) {
+            final AlertDialog dialog = approvalDialog;
+            approvalDialog = null;
+            dialog.dismiss();
+        }
+        finishOperation();
+        Toast.makeText(this, R.string.pairing_account_went_offline, Toast.LENGTH_LONG).show();
+    }
+
+    static boolean shouldAbortPairing(
+            final boolean operationInFlight,
+            final PairingStage pairingStage,
+            final boolean accountAvailable) {
+        return operationInFlight && pairingStage != PairingStage.NONE && !accountAvailable;
     }
 
     private boolean isCurrent(final Account account, final ListenableFuture<?> future) {
@@ -459,6 +551,11 @@ public class LinkedDevicesActivity extends QrCodeScanningActivity
     @Override
     protected void onDestroy() {
         destroyed = true;
+        if (approvalDialog != null) {
+            final AlertDialog dialog = approvalDialog;
+            approvalDialog = null;
+            dialog.dismiss();
+        }
         cancelFuture(devicesFuture);
         cancelFuture(operationFuture);
         devicesFuture = null;

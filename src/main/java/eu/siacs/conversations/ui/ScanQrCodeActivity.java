@@ -90,7 +90,9 @@ public final class ScanQrCodeActivity extends AppCompatActivity
             };
     private ScannerView scannerView;
     private TextureView previewView;
+    private View cameraErrorView;
     private volatile boolean surfaceCreated = false;
+    private volatile boolean activityResumed = false;
     private Vibrator vibrator;
     private HandlerThread cameraThread;
     private volatile Handler cameraHandler;
@@ -138,6 +140,9 @@ public final class ScanQrCodeActivity extends AppCompatActivity
             new Runnable() {
                 @Override
                 public void run() {
+                    if (!canOpenCamera()) {
+                        return;
+                    }
                     try {
                         final Camera camera =
                                 cameraManager.open(
@@ -154,13 +159,16 @@ public final class ScanQrCodeActivity extends AppCompatActivity
                         final int cameraRotation = cameraManager.getOrientation();
 
                         runOnUiThread(
-                                () ->
-                                        scannerView.setFraming(
-                                                framingRect,
-                                                framingRectInPreview,
-                                                displayRotation(),
-                                                cameraRotation,
-                                                cameraFlip));
+                                () -> {
+                                    hideCameraError();
+                                    scannerView.setVisibility(View.VISIBLE);
+                                    scannerView.setFraming(
+                                            framingRect,
+                                            framingRectInPreview,
+                                            displayRotation(),
+                                            cameraRotation,
+                                            cameraFlip);
+                                });
 
                         final String focusMode = camera.getParameters().getFocusMode();
                         final boolean nonContinuousAutoFocus =
@@ -172,7 +180,9 @@ public final class ScanQrCodeActivity extends AppCompatActivity
 
                         cameraHandler.post(fetchAndDecodeRunnable);
                     } catch (final Exception x) {
-                        Log.d(Config.LOGTAG, "problem opening camera", x);
+                        Log.e(Config.LOGTAG, "MAER QR scanner could not open the camera", x);
+                        cameraManager.close();
+                        showCameraError();
                     }
                 }
 
@@ -195,6 +205,8 @@ public final class ScanQrCodeActivity extends AppCompatActivity
         setContentView(R.layout.activity_scan);
         scannerView = findViewById(R.id.scan_activity_mask);
         previewView = findViewById(R.id.scan_activity_preview);
+        cameraErrorView = findViewById(R.id.scan_activity_camera_error);
+        findViewById(R.id.scan_activity_retry_camera).setOnClickListener(view -> retryCamera());
         previewView.setSurfaceTextureListener(this);
 
         cameraThread = new HandlerThread("cameraThread", Process.THREAD_PRIORITY_BACKGROUND);
@@ -206,11 +218,13 @@ public final class ScanQrCodeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        activityResumed = true;
         maybeOpenCamera();
     }
 
     @Override
     protected void onPause() {
+        activityResumed = false;
         cameraHandler.post(closeRunnable);
 
         super.onPause();
@@ -218,6 +232,7 @@ public final class ScanQrCodeActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+        activityResumed = false;
         // cancel background thread
         cameraHandler.removeCallbacksAndMessages(null);
         cameraThread.quit();
@@ -228,9 +243,50 @@ public final class ScanQrCodeActivity extends AppCompatActivity
     }
 
     private void maybeOpenCamera() {
-        if (surfaceCreated
+        if (canOpenCamera()) {
+            cameraHandler.post(openRunnable);
+        }
+    }
+
+    private boolean canOpenCamera() {
+        return activityResumed
+                && surfaceCreated
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_GRANTED) cameraHandler.post(openRunnable);
+                        == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void retryCamera() {
+        Log.i(Config.LOGTAG, "MAER QR scanner: retrying camera initialization");
+        if (!canOpenCamera()) {
+            Log.w(Config.LOGTAG, "MAER QR scanner retry deferred: camera surface is unavailable");
+            showCameraError();
+            return;
+        }
+        hideCameraError();
+        final Handler handler = cameraHandler;
+        handler.post(
+                () -> {
+                    handler.removeCallbacksAndMessages(null);
+                    cameraManager.close();
+                    openRunnable.run();
+                });
+    }
+
+    void showCameraError() {
+        runOnUiThread(
+                () -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+                    scannerView.setVisibility(View.GONE);
+                    cameraErrorView.setVisibility(View.VISIBLE);
+                    cameraErrorView.announceForAccessibility(
+                            getString(R.string.camera_unavailable_title));
+                });
+    }
+
+    private void hideCameraError() {
+        cameraErrorView.setVisibility(View.GONE);
     }
 
     @Override

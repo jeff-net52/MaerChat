@@ -1252,8 +1252,12 @@
     <string name="pairing_request_already_used">Cette demande d’association a déjà été utilisée. Créez un nouveau QR code sur l’ordinateur.</string>
     <string name="pairing_device_limit_reached">La limite d’appareils liés est atteinte. Révoquez un ancien appareil puis réessayez.</string>
     <string name="pairing_request_not_authorized">Ce compte n’est pas autorisé à gérer cette demande d’association.</string>
+    <string name="pairing_account_went_offline">Le compte MAER s’est déconnecté pendant l’association. Reconnectez-le, créez un nouveau QR code sur l’ordinateur puis réessayez.</string>
     <string name="retry_linked_devices">Réessayer</string>
     <string name="pairing_too_many_attempts">Trop de tentatives d’association. Réessayez plus tard.</string>
+    <string name="camera_unavailable_title">Caméra indisponible</string>
+    <string name="camera_unavailable_message">MAER Chat ne peut pas démarrer la caméra. Fermez les autres applications qui l’utilisent puis réessayez.</string>
+    <string name="retry_camera">Réessayer</string>
     <string name="maer_call_invitation_expired">Cette invitation d’appel a expiré.</string>
     <string name="share_screen">Partager l’écran</string>
     <string name="stop_sharing_screen">Arrêter le partage d’écran</string>

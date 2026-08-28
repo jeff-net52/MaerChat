@@ -1,0 +1,1 @@
+Computer pairing now clearly reports when the account disconnects during the operation. Inspection and approval diagnostics are improved without exposing QR secrets. The scanner shows a MAER-styled camera error with a Try again action.

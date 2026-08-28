@@ -140,8 +140,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 37
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionCode 8
-        versionName "0.5.3"
+        versionCode 9
+        versionName "0.5.4"
         applicationId "fr.maer.chat"
         resValue "string", "applicationId", applicationId
         def appName = "Maer Chat"

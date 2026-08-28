@@ -8,7 +8,7 @@
 > été collectés. Les fichiers de licence et avis contenus dans chaque artefact
 > effectivement publié font foi.
 
-Cet état de travail concerne Maer Chat 0.5.0.
+Cet état de travail concerne Maer Chat 0.5.4.
 
 ## Base amont et licence du programme
 

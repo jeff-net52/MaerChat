@@ -25,7 +25,7 @@ L’APK universel se trouve dans
 `build/outputs/apk/conversationsFree/debug/`. Pour l’installer :
 
 ```shell
-adb install -r chemin/vers/fr.maer.chat-0.5.3-conversations-free-arm64-v8a-debug.apk
+adb install -r chemin/vers/fr.maer.chat-0.5.4-conversations-free-arm64-v8a-debug.apk
 ```
 
 Le paquet `fr.maer.chat` peut cohabiter avec Conversations. Une installation
@@ -72,7 +72,7 @@ posséder sa propre configuration applicative et un relais push compatible ; voi
 ## État du build validé
 
 Le build courant utilise `compileSdk` et `targetSdk` 37. Sa suite unitaire
-compte **204 tests réussis**, sans échec, erreur ni test ignoré.
+compte **206 tests réussis**, sans échec, erreur ni test ignoré.
 `compileConversationsFreeDebugAndroidTestJavaWithJavac`,
 `lintConversationsFreeDebug`, `assembleConversationsFreeDebug` et
 `spotlessJavaCheck` réussissent.
@@ -100,7 +100,7 @@ leurs anciennes empreintes comme s’il s’agissait d’une livraison. Le fichi
 à produire pour une future Release.
 
 L’identité de l’application candidate reste `fr.maer.chat`, avec `minSdk` 23 et
-`targetSdk` 37. Les codes de version 0.5.3 sont `800` pour l’APK universelle
-et `804` pour l’APK ARM64. Une clé privée de production pérenne, distincte de
+`targetSdk` 37. Les codes de version 0.5.4 sont `900` pour l’APK universelle
+et `904` pour l’APK ARM64. Une clé privée de production pérenne, distincte de
 toute clé Debug ou de développement historique, doit être établie avant toute
 publication sur un magasin d’applications.

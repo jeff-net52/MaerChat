@@ -1,6 +1,6 @@
 # Maer Chat — mentions et provenance
 
-Maer Chat 0.5.0 est un logiciel libre dérivé de
+Maer Chat 0.5.4 est un logiciel libre dérivé de
 [Conversations](https://codeberg.org/iNPUTmice/Conversations), créé et maintenu
 en amont par Daniel Gultsch et ses contributeurs.
 

@@ -1,6 +1,6 @@
-# Dossier de conformité de publication — Maer Chat 0.5.3
+# Dossier de conformité de publication — Maer Chat 0.5.4
 
-> État au 27 août 2026. Ce dossier organise les preuves techniques et les
+> État au 28 août 2026. Ce dossier organise les preuves techniques et les
 > décisions restant à prendre. Il ne remplace pas une consultation juridique et
 > n’autorise pas à présenter la version comme juridiquement validée tant que les
 > blocages indiqués ci-dessous ne sont pas levés.
@@ -22,17 +22,17 @@
 
 | Contrôle | État | Preuve ou action |
 | --- | --- | --- |
-| Version Android unique | Conforme dans les sources | `build.gradle`, version 0.5.3, code de base 8 (`800` universel, `804` ARM64) |
+| Version Android unique | Conforme dans les sources | `build.gradle`, version 0.5.4, code de base 9 (`900` universel, `904` ARM64) |
 | Notes propres au fork | Conforme dans les sources | `CHANGELOG.md` et notes hors ligne embarquées |
 | Historique amont séparé | Conforme dans les sources | section « Historique Conversations amont » du changelog |
 | Licence principale | Conforme dans les sources | `LICENSE` et copie GPLv3 embarquée |
 | Provenance Conversations | Conforme dans les sources | `NOTICE.md` et `UPSTREAM.md` |
-| Source correspondant au binaire | **Bloquant avant APK publique** | publier l’APK avec le tag immuable `v0.5.3` pointant sur son source exact |
+| Source correspondant au binaire | **Bloquant avant APK publique** | publier l’APK avec le tag immuable `v0.5.4` pointant sur son source exact |
 | Inventaire transitif des licences | **À finaliser avant APK publique** | conserver le rapport de dépendances résolues et les avis de chaque artefact distribué |
 | Droits sur le logo Maer Chat | **À confirmer** | documenter l’auteur, la cession ou licence et le titulaire de la marque |
 | Artefacts présents ou historiques | **Non publiables** | APK Debug et anciennes signatures de développement ; voir `dist/0.5.0/MANIFEST.md` |
 | Clé et certificat de production | **Bloquant avant APK publique** | établir la clé pérenne hors dépôt et archiver son empreinte publique |
-| Qualité Spotless/Lint | Partiel | Lint Debug sans nouveau constat ; 626 constats historiques restent documentés dans la baseline. Spotless et la Release signée restent à qualifier |
+| Qualité Spotless/Lint | Conforme pour Debug | 206 tests réussis ; Spotless et Lint Debug réussis sans nouveau constat. 626 constats historiques restent documentés dans la baseline ; la Release signée reste à qualifier |
 
 La GPLv3, section 6, impose que la distribution de l’objet compilé donne un
 accès équivalent au code source correspondant exact. Le dépôt d’une version
@@ -97,7 +97,7 @@ durable lorsque le droit applicable l’exige.
 2. résoudre tous les éléments marqués bloquants ;
 3. compiler la variante exacte et conserver le graphe de dépendances résolu ;
 4. signer avec la clé de production, jamais avec une clé de développement ;
-5. créer le tag signé `v0.5.3` sur le commit compilé ;
+5. créer le tag signé `v0.5.4` sur le commit compilé ;
 6. publier ensemble APK, SHA-256, tag source, `LICENSE`, `NOTICE.md`,
    `THIRD_PARTY_NOTICES.md` et notes de version ;
 7. archiver les résultats de tests, le SBOM ou inventaire de dépendances et la

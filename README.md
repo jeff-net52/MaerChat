@@ -15,7 +15,7 @@ nom ; l’application construit systématiquement l’adresse canonique
 </p>
 
 - Paquet Android : `fr.maer.chat`
-- Version Maer Chat : `0.5.0`
+- Version Maer Chat : `0.5.4`
 - Base amont : Conversations `2.20.1`, commit
   `9fdc9ed5b2e2e4981cf58fce871c2ed47623c2bc`
 - Android : API 23 minimum, API 37 cible

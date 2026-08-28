@@ -1,6 +1,10 @@
 MAER CHAT — RELEASE NOTES
 
-VERSION 0.5.3 — 27 AUGUST 2026
+VERSION 0.5.4 — 28 AUGUST 2026
+
+- Added a clear recovery message when an account disconnects during pairing.
+- Added privacy-safe inspection and approval diagnostics.
+- Added a MAER-styled camera error screen with a retry action.
 
 - Fixed message bubbles collapsing after repeated Android layout passes.
 - Kept direct-chat avatars in the header by default and grouped room avatars.

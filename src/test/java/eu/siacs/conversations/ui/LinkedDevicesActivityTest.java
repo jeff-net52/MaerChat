@@ -1,6 +1,8 @@
 package eu.siacs.conversations.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import eu.siacs.conversations.R;
 import im.conversations.android.xmpp.model.error.Condition;
@@ -26,5 +28,28 @@ public class LinkedDevicesActivityTest {
         assertEquals("policy-violation", new Condition.PolicyViolation().getName());
         assertEquals(Error.Type.WAIT, mapping.errorType());
         assertEquals(500, mapping.legacyErrorCode());
+    }
+
+    @Test
+    public void activePairingAbortsOnlyWhenTheAccountGoesOffline() {
+        assertTrue(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        true, LinkedDevicesActivity.PairingStage.INSPECTING, false));
+        assertTrue(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        true, LinkedDevicesActivity.PairingStage.AWAITING_APPROVAL, false));
+        assertTrue(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        true, LinkedDevicesActivity.PairingStage.APPROVING, false));
+
+        assertFalse(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        true, LinkedDevicesActivity.PairingStage.NONE, false));
+        assertFalse(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        false, LinkedDevicesActivity.PairingStage.INSPECTING, false));
+        assertFalse(
+                LinkedDevicesActivity.shouldAbortPairing(
+                        true, LinkedDevicesActivity.PairingStage.INSPECTING, true));
     }
 }

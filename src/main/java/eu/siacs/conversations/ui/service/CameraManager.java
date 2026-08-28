@@ -143,7 +143,9 @@ public final class CameraManager {
             return camera;
         } catch (final RuntimeException x) {
             Log.w(Config.LOGTAG, "something went wrong while starting camera preview", x);
-            camera.release();
+            final Camera failedCamera = camera;
+            camera = null;
+            failedCamera.release();
             throw x;
         }
     }
@@ -168,14 +170,20 @@ public final class CameraManager {
     }
 
     public void close() {
-        if (camera != null) {
+        final Camera currentCamera = camera;
+        camera = null;
+        if (currentCamera != null) {
             try {
-                camera.stopPreview();
+                currentCamera.stopPreview();
             } catch (final RuntimeException x) {
                 Log.w(Config.LOGTAG, "something went wrong while stopping camera preview", x);
             }
 
-            camera.release();
+            try {
+                currentCamera.release();
+            } catch (final RuntimeException x) {
+                Log.w(Config.LOGTAG, "something went wrong while releasing the camera", x);
+            }
         }
     }
 

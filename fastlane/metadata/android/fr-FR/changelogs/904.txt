@@ -1,0 +1,1 @@
+L’association d’un ordinateur indique maintenant clairement si le compte se déconnecte pendant l’opération. Les diagnostics d’inspection et d’approbation sont renforcés sans exposer les secrets du QR code. Le scanner affiche une erreur caméra dans le thème Maer Chat avec un bouton Réessayer.
